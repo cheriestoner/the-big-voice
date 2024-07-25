@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>keylab</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+        }
+        #controls {
+            margin-bottom: 20px;
+        }
+        canvas {
+            border: 1px solid #000;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <h1>录音和上传音频</h1>
+        <button id="startRecording">开始录音</button>
+        <button id="stopRecording" disabled>停止录音</button>
+        <audio id="audioPlayback" controls></audio>
+        <br>
+        <input type="file" id="uploadAudio" accept="audio/*" multiple>
+        <br>
+        <button id="submitAudio">上传音频</button>
+    </div>
+    <canvas id="mouseCanvas" width="400" height="400"></canvas>
+
+    <script src="audio.js"></script>
+    <script type="module" src="audioVisualizer.js"></script>
+    <script type="module" src="mouseTracker.js"></script>
+</body>
+</html>
