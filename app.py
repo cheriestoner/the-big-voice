@@ -17,7 +17,6 @@ CORS(app)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
-# UPLOAD_FOLDER = 'static/uploads/'
 # print('upload folder:', os.path.abspath(UPLOAD_FOLDER))
 ALLOWED_EXTENSIONS = set(['wav', 'mp3'])
 if not os.path.exists(UPLOAD_FOLDER):
@@ -30,17 +29,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # which URL is associated function 
 @app.route('/')      
 def index(): 
-    # if request.method == 'POST':
-    #     if 'audio' not in request.files:
-    #         return jsonify({"error": "No file part"}), 400
-        
-    #     file = request.files['audio']
-    #     if file.filename == '':
-    #         return jsonify({"error": "No selected file"}), 400
-
-    #     filename = os.path.join(UPLOAD_FOLDER, file.filename)
-    #     file.save(filename)
-    #     return jsonify({"message": "File uploaded successfully"}), 200
     return render_template('index.html')
 
 @app.route('/audio-files', methods=['POST'])
