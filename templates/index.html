@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>keylab</title>
+    <title>Welcome keylab Big Voice</title>
     <style>
         body {
             display: flex;
@@ -21,7 +21,10 @@
         }
     </style>
 </head>
+
 <body>
+    <h1>音频文件列表</h1>
+    <ul id="audioList"></ul>
     <div id="controls">
         <h1>录音和上传音频</h1>
         <button id="startRecording">开始录音</button>
@@ -33,9 +36,34 @@
         <button id="submitAudio">上传音频</button>
     </div>
     <canvas id="mouseCanvas" width="400" height="400"></canvas>
+    <ul id="audioList"></ul>
+
 
     <script src="audio.js"></script>
     <script type="module" src="audioVisualizer.js"></script>
     <script type="module" src="mouseTracker.js"></script>
+
+    <script>
+        async function fetchAudioFiles() {
+            try {
+                const response = await fetch('/audio-files');
+                const audioFiles = await response.json();
+                const audioList = document.getElementById('audioList');
+
+                audioFiles.forEach(file => {
+                    const listItem = document.createElement('li');
+                    const audio = document.createElement('audio');
+                    audio.controls = true;
+                    audio.src = `audio/${file}`;
+                    listItem.appendChild(audio);
+                    audioList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('获取音频文件时出错:', error);
+            }
+        }
+
+        window.onload = fetchAudioFiles;
+    </script>
 </body>
 </html>
