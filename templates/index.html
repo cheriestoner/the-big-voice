@@ -39,9 +39,9 @@
     <ul id="audioList"></ul>
 
 
-    <script src="audio.js"></script>
-    <script type="module" src="audioVisualizer.js"></script>
-    <script type="module" src="mouseTracker.js"></script>
+    <script src="{{ url_for('static', filename='audio.js') }}"></script>
+    <script type="module" src="static/audioVisualizer.js"></script>
+    <script type="module" src="static/mouseTracker.js"></script>
 
     <script>
         async function fetchAudioFiles() {

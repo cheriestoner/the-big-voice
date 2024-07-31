@@ -45,19 +45,25 @@ def RMS(samples, sample_rate, frame_size, hop_size):
     
     return rms
 
-def save_to_csv(df, file_name):
+def normalizeFeature(x):
+    x = np.asarray(x)
+    x = np.divide(x, np.absolute(x).max())
+    return x.tolist()
+
+def save_to_csv(df, file_name, header=True):
     # Check if the file already exists
     if os.path.isfile(file_name):
         # If it exists, append without writing the header
         df.to_csv(file_name, mode='a', header=False, index=False)
     else:
         # If it does not exist, create the file with the header
-        df.to_csv(file_name, mode='w', header=True, index=False)
+        df.to_csv(file_name, mode='w', header=header, index=False)
 
 
 ##################################################################
 # def main():
     # indent and include below
+    # todo: session
 
 # Importing the audiofile
 filename = "test_office.wav"
@@ -80,6 +86,9 @@ num_frames = int(np.ceil(len(samples)/(CHUNK_SIZE*sample_rate*1e-3)))
 spectral_centroids = extractSpectralCentroid(samples, sample_rate, CHUNK_SIZE, HOPPING)
 rms = RMS(samples, sample_rate, CHUNK_SIZE, HOPPING)
 
+spectral_centroids = normalizeFeature(spectral_centroids)
+rms = normalizeFeature(rms)
+
 # Save extracted features to dataframe
 # [filename, chunk number (file sub index), start time, end time, spec centroid, rms]
 
@@ -94,10 +103,14 @@ if not os.path.exists(data_dir):
     os.makedirs(data_dir)
 
 data = []
+xyz = []
 # for the same audio file
 for i in range(num_frames):
     data.append([filename, i, i*CHUNK_SIZE*1e-3, (i+1)*CHUNK_SIZE*1e-3, spectral_centroids[i], rms[i]])
+    xyz.append([spectral_centroids[i], rms[i], 0])
 
-df = pd.DataFrame(data, columns = ['filename', 'chunk index', 'start time sec', 'end time sec', 'centroid', 'rms'])
+data_df = pd.DataFrame(data, columns = ['filename', 'chunk index', 'start time sec', 'end time sec', 'centroid', 'rms'])
+xyz_df = pd.DataFrame(xyz)
 
-save_to_csv(df, data_file)
+save_to_csv(data_df, data_file)
+save_to_csv(xyz_df, 'data/xyz.csv', header=False)
