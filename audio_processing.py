@@ -29,7 +29,6 @@ def extractSpectralCentroid(samples, sample_rate, frame_size, hop_size):
         
         spectral_centroids.append(numerator//denominator)
         
-
     return spectral_centroids
 
 def RMS(samples, sample_rate, frame_size, hop_size):

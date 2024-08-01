@@ -61,4 +61,4 @@ def get_file(filename=''):
     return send_file(os.path.join(DATA_FOLDER, filename))
 
 if __name__ == '__main__':
-    app.run(port=3000)
+    app.run(port=3000, debug=True)
