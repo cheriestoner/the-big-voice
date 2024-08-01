@@ -18,6 +18,7 @@ CORS(app)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FOLDER = os.path.join(BASE_DIR, 'data')
+AUDIO_FOLDER = os.path.join(BASE_DIR, 'audio')
 # UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 # print('upload folder:', os.path.abspath(UPLOAD_FOLDER))
 ALLOWED_EXTENSIONS = set(['wav', 'mp3'])
@@ -32,8 +33,9 @@ def allowed_file(filename):
 
 # A decorator used to tell the application 
 # which URL is associated function 
-@app.route('/')      
-def index(): 
+@app.route('/')
+def index():
+
     return render_template('index.html')
 
 # @app.route('/audio-files', methods=['POST'])
@@ -51,14 +53,18 @@ def index():
 
 @app.route('/remixer')
 def load_features_csv():
-    filename = os.path.join(DATA_FOLDER, 'data.csv')
+    filename = os.path.join(DATA_FOLDER, 'test_office/xyz.csv')
     data = pd.read_csv(filename, header=0)
     feed_data = list(data.values) # 32 * 
-    return render_template('audio_viz.html', feed_data=feed_data)
+    return render_template('audio_viz.html', audiofile='test_office.wav') #, feed_data=json.dumps(feed_data))
 
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
 def get_file(subpath=''):
     return send_file(os.path.join(DATA_FOLDER, subpath))
+
+@app.route('/audio/<path:subpath>', methods=['GET', 'POST'])
+def get_audio(subpath=''):
+    return send_file(os.path.join(AUDIO_FOLDER, subpath))
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

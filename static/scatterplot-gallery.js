@@ -19,6 +19,10 @@ const svg = d3.select("#my_dataviz")
 //     scatterplot_visualize(data);
 // })
 
+// var test_data = JSON.parse('{{ feed_data | safe }}');
+// console.log(test_data);
+
+
 d3.csv('/data/test_office/data.csv').then(function(data) { // with header
     console.log(data);
     scatterplot_visualize(data);
@@ -49,4 +53,6 @@ function scatterplot_visualize(data) {
         .attr("cy", function (d) { return y(d.rms); } )
         .attr("r", 2)
         .style("fill", "#69b3a2")
+        // .on("mouseover", highlight)
+        // .on("mouseleave", doNotHighlight)
 }
