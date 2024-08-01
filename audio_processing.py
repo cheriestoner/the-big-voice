@@ -29,9 +29,10 @@ def extractSpectralCentroid(samples, sample_rate, frame_size, hop_size):
         
         spectral_centroids.append(numerator//denominator)
         
+
     return spectral_centroids
 
-def RMS(samples, sample_rate, frame_size, hop_size):
+def extractRMS(samples, sample_rate, frame_size, hop_size):
     import math
     frame_size = int(frame_size*sample_rate*1e-3) #convert from ms to number of samples
     hop_size = int(hop_size*frame_size) #hop size into number of samples
@@ -60,21 +61,20 @@ def save_to_csv(df, file_name, header=True):
 
 
 ##################################################################
-# def main():
+# def main(audiofile="test_office.wav"):
     # indent and include below
-    # todo: session
 
 # Importing the audiofile
-filename = "test_office.wav"
-filename_text = filename.rsplit('.', 1)[0].lower() # or file[:-3]
-filename_extension = filename.rsplit('.', 1)[1].lower() # or filename[-3:]
+audiofile = "test_office.wav"
+audiofile_text = audiofile.rsplit('.', 1)[0].lower() # or file[:-3]
+audiofile_extension = audiofile.rsplit('.', 1)[1].lower() # or audiofile[-3:]
 # convert file if not .wav
-if filename_extension == "mp3":
-    wav_audio = AudioSegment.from_mp3(filename)
-    filename = filename_text + ".wav"
-    wav_audio.export(filename, format="wav")
+if audiofile_extension == "mp3":
+    wav_audio = AudioSegment.from_mp3(audiofile)
+    audiofile = audiofile_text + ".wav"
+    wav_audio.export(audiofile, format="wav")
 
-sound = AudioSegment.from_file(filename, format="wav")
+sound = AudioSegment.from_file(audiofile, format="wav")
 sound = sound.split_to_mono()[0]
 #Getting sample rate and samples
 sample_rate = sound.frame_rate
@@ -83,33 +83,33 @@ samples = np.divide(sound.get_array_of_samples(), sound.max_possible_amplitude)
 
 num_frames = int(np.ceil(len(samples)/(CHUNK_SIZE*sample_rate*1e-3)))
 spectral_centroids = extractSpectralCentroid(samples, sample_rate, CHUNK_SIZE, HOPPING)
-rms = RMS(samples, sample_rate, CHUNK_SIZE, HOPPING)
+rms = extractRMS(samples, sample_rate, CHUNK_SIZE, HOPPING)
 
 spectral_centroids = normalizeFeature(spectral_centroids)
 rms = normalizeFeature(rms)
 
 # Save extracted features to dataframe
-# [filename, chunk number (file sub index), start time, end time, spec centroid, rms]
+# [audiofile, chunk number (file sub index), start time, end time, spec centroid, rms]
 
 # BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 # data_dir = os.path.join(BASE_DIR, 'data')
 
-data_dir = 'data'
+data_dir = os.path.join('data', audiofile_text)
 data_file = 'data.csv'
 data_file = os.path.join(data_dir, data_file)
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
 
 data = []
-xyz = []
+# xyz = []
 # for the same audio file
 for i in range(num_frames):
-    data.append([filename, i, i*CHUNK_SIZE*1e-3, (i+1)*CHUNK_SIZE*1e-3, spectral_centroids[i], rms[i]])
-    xyz.append([spectral_centroids[i], rms[i], 0])
+    data.append([audiofile, i, i*CHUNK_SIZE*1e-3, (i+1)*CHUNK_SIZE*1e-3, spectral_centroids[i], rms[i]])
+    # xyz.append([spectral_centroids[i], rms[i], 0])
 
-data_df = pd.DataFrame(data, columns = ['filename', 'chunk index', 'start time sec', 'end time sec', 'centroid', 'rms'])
-xyz_df = pd.DataFrame(xyz)
+data_df = pd.DataFrame(data, columns = ['audiofile', 'chunk index', 'start time sec', 'end time sec', 'centroid', 'rms'])
+# xyz_df = pd.DataFrame(xyz)
 
 save_to_csv(data_df, data_file)
-save_to_csv(xyz_df, 'data/xyz.csv', header=False)
+# save_to_csv(xyz_df, 'data/xyz.csv', header=False)

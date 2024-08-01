@@ -56,9 +56,9 @@ def load_features_csv():
     feed_data = list(data.values) # 32 * 
     return render_template('audio_viz.html', feed_data=feed_data)
 
-@app.route('/data/<string:filename>', methods=['GET'])
-def get_file(filename=''):
-    return send_file(os.path.join(DATA_FOLDER, filename))
+@app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
+def get_file(subpath=''):
+    return send_file(os.path.join(DATA_FOLDER, subpath))
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

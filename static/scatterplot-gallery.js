@@ -19,7 +19,7 @@ const svg = d3.select("#my_dataviz")
 //     scatterplot_visualize(data);
 // })
 
-d3.csv('/data/data.csv').then(function(data) { // with header
+d3.csv('/data/test_office/data.csv').then(function(data) { // with header
     console.log(data);
     scatterplot_visualize(data);
 })
