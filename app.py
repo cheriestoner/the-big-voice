@@ -51,9 +51,9 @@ def index():
 
 @app.route('/remixer')
 def load_features_csv():
-    filename = os.path.join(DATA_FOLDER, 'xyz.csv')
-    data = pd.read_csv(filename, header=None)
-    feed_data = list(data.values) # 32 * 3
+    filename = os.path.join(DATA_FOLDER, 'data.csv')
+    data = pd.read_csv(filename, header=0)
+    feed_data = list(data.values) # 32 * 
     return render_template('audio_viz.html', feed_data=feed_data)
 
 @app.route('/data/<string:filename>', methods=['GET'])
