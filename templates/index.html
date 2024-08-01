@@ -23,7 +23,6 @@
 </head>
 
 <body>
-    <h1>音频文件列表</h1>
     <ul id="audioList"></ul>
     <div id="controls">
         <h1>录音和上传音频</h1>
@@ -35,8 +34,7 @@
         <br>
         <button id="submitAudio">上传音频</button>
     </div>
-    <canvas id="mouseCanvas" width="400" height="400"></canvas>
-    <ul id="audioList"></ul>
+    <button onclick="window.location.href='/remixer'">Go to Remixer</button>
 
 
     <script src="{{ url_for('static', filename='audio.js') }}"></script>
