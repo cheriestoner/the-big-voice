@@ -30,37 +30,11 @@
         <button id="stopRecording" disabled>停止录音</button>
         <audio id="audioPlayback" controls></audio>
         <br>
-        <input type="file" id="uploadAudio" accept="audio/*" multiple>
-        <br>
-        <button id="submitAudio">上传音频</button>
+        <button id="submitRecording">上传录音</button>
     </div>
     <button onclick="window.location.href='/remixer'">Go to Remixer</button>
 
-
     <script src="{{ url_for('static', filename='audio.js') }}"></script>
-    <script type="module" src="static/audioVisualizer.js"></script>
-
-    <script>
-        async function fetchAudioFiles() {
-            try {
-                const response = await fetch('/audio-files');
-                const audioFiles = await response.json();
-                const audioList = document.getElementById('audioList');
-
-                audioFiles.forEach(file => {
-                    const listItem = document.createElement('li');
-                    const audio = document.createElement('audio');
-                    audio.controls = true;
-                    audio.src = `audio/${file}`;
-                    listItem.appendChild(audio);
-                    audioList.appendChild(listItem);
-                });
-            } catch (error) {
-                console.error('获取音频文件时出错:', error);
-            }
-        }
-
-        window.onload = fetchAudioFiles;
-    </script>
+    
 </body>
 </html>

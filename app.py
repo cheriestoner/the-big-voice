@@ -11,6 +11,8 @@ from werkzeug.utils import secure_filename
 import pandas as pd
 import csv
 import json
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__, template_folder='templates/')
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -66,5 +68,25 @@ def get_file(subpath=''):
 def get_audio(subpath=''):
     return send_file(os.path.join(AUDIO_FOLDER, subpath))
 
+UPLOAD_FOLDER = 'uploads'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+@app.route('/upload-audio', methods=['POST'])
+def upload_audio():
+    if 'audio' not in request.files:
+        app.logger.error('No file part')
+        return jsonify({'error': 'No file part'})
+    file = request.files['audio']
+    if file.filename == '':
+        app.logger.error('No selected file')
+        return jsonify({'error': 'No selected file'})
+    if file:
+        file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+        file.save(file_path)
+        app.logger.info(f'File saved to {file_path}')
+        return jsonify({'success': 'File uploaded successfully', 'file_path': file_path})
+
 if __name__ == '__main__':
     app.run(port=3000, debug=True)
+

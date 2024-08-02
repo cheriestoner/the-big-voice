@@ -1,11 +1,11 @@
 const startButton = document.getElementById('startRecording');
 const stopButton = document.getElementById('stopRecording');
 const audioPlayback = document.getElementById('audioPlayback');
-const uploadInput = document.getElementById('uploadAudio');
-const submitButton = document.getElementById('submitAudio');
+const submitButton = document.getElementById('submitRecording');
 
 let mediaRecorder;
 let audioChunks = [];
+let audioBlob;
 let audioContext;
 let analyser;
 let dataArray;
@@ -72,7 +72,7 @@ startButton.addEventListener('click', async () => {
     };
 
     mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
         const audioUrl = URL.createObjectURL(audioBlob);
         audioPlayback.src = audioUrl;
         audioChunks = [];
@@ -93,12 +93,11 @@ stopButton.addEventListener('click', () => {
 });
 
 submitButton.addEventListener('click', () => {
-    const file = uploadInput.files[0];
-    if (file) {
+    if (audioBlob) {
         const formData = new FormData();
-        formData.append('audio', file);
+        formData.append('audio', audioBlob, 'recording.wav');
 
-        fetch('服务器地址', {
+        fetch('http://127.0.0.1:3000/upload-audio', {  // 更改为服务器的实际上传地址
             method: 'POST',
             body: formData
         })
@@ -110,6 +109,6 @@ submitButton.addEventListener('click', () => {
             console.error('上传失败:', error);
         });
     } else {
-        console.log('请选择一个音频文件');
+        console.log('没有可上传的录音');
     }
 });
