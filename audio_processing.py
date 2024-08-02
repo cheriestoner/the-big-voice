@@ -61,55 +61,52 @@ def save_to_csv(df, file_name, header=True):
 
 
 ##################################################################
-# def main(audiofile="test_office.wav"):
+def main(audiofile="test_office.wav", audio_folder='audio'):
     # indent and include below
 
-# Importing the audiofile
-audiofile = "test_office.wav"
-audiofile_text = audiofile.rsplit('.', 1)[0].lower() # or file[:-3]
-audiofile_extension = audiofile.rsplit('.', 1)[1].lower() # or audiofile[-3:]
-# convert file if not .wav
-if audiofile_extension == "mp3":
-    wav_audio = AudioSegment.from_mp3(audiofile)
-    audiofile = audiofile_text + ".wav"
-    wav_audio.export(audiofile, format="wav")
+    # Importing the audiofile
+    # audiofile = "test_office.wav"
+    audiofile_text = audiofile.rsplit('.', 1)[0].lower() # or file[:-3]
+    audiofile_extension = audiofile.rsplit('.', 1)[1].lower() # or audiofile[-3:]
+    # convert file if not .wav
+    if audiofile_extension == "mp3":
+        wav_audio = AudioSegment.from_mp3(audiofile)
+        audiofile = audiofile_text + ".wav"
+        wav_audio.export(audiofile, format="wav")
 
-sound = AudioSegment.from_file(audiofile, format="wav")
-sound = sound.split_to_mono()[0]
-#Getting sample rate and samples
-sample_rate = sound.frame_rate
-duration = sound.duration_seconds
-samples = np.divide(sound.get_array_of_samples(), sound.max_possible_amplitude)
+    print('processing file: ', os.path.join(audio_folder, audiofile))
+    sound = AudioSegment.from_file(os.path.join(audio_folder, audiofile), format="wav")
+    sound = sound.split_to_mono()[0]
+    #Getting sample rate and samples
+    sample_rate = sound.frame_rate
+    duration = sound.duration_seconds
+    samples = np.divide(sound.get_array_of_samples(), sound.max_possible_amplitude)
 
-num_frames = int(np.ceil(len(samples)/(CHUNK_SIZE*sample_rate*1e-3)))
-spectral_centroids = extractSpectralCentroid(samples, sample_rate, CHUNK_SIZE, HOPPING)
-rms = extractRMS(samples, sample_rate, CHUNK_SIZE, HOPPING)
+    num_frames = int(np.ceil(len(samples)/(CHUNK_SIZE*sample_rate*1e-3)))
+    spectral_centroids = extractSpectralCentroid(samples, sample_rate, CHUNK_SIZE, HOPPING)
+    rms = extractRMS(samples, sample_rate, CHUNK_SIZE, HOPPING)
 
-spectral_centroids = normalizeFeature(spectral_centroids)
-rms = normalizeFeature(rms)
+    spectral_centroids = normalizeFeature(spectral_centroids)
+    rms = normalizeFeature(rms)
 
-# Save extracted features to dataframe
-# [audiofile, chunk number (file sub index), start time, end time, spec centroid, rms]
+    # Save extracted features to dataframe
+    # [audiofile, chunk number (file sub index), start time, end time, spec centroid, rms]
 
-# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
-# data_dir = os.path.join(BASE_DIR, 'data')
+    # BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    # UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+    # data_dir = os.path.join(BASE_DIR, 'data')
 
-data_dir = os.path.join('data', audiofile_text)
-data_file = 'data.csv'
-data_file = os.path.join(data_dir, data_file)
-if not os.path.exists(data_dir):
-    os.makedirs(data_dir)
+    data_dir = os.path.join('data', audiofile_text)
+    data_file = 'data.csv'
+    data_file = os.path.join(data_dir, data_file)
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
 
-data = []
-# xyz = []
-# for the same audio file
-for i in range(num_frames):
-    data.append([audiofile, i, i*CHUNK_SIZE*1e-3, (i+1)*CHUNK_SIZE*1e-3, spectral_centroids[i], rms[i]])
-    # xyz.append([spectral_centroids[i], rms[i], 0])
+    data = []
+    # for the same audio file
+    for i in range(num_frames):
+        data.append([audiofile, i, i*CHUNK_SIZE*1e-3, (i+1)*CHUNK_SIZE*1e-3, spectral_centroids[i], rms[i]])
 
-data_df = pd.DataFrame(data, columns = ['audiofile', 'chunk index', 'start time sec', 'end time sec', 'centroid', 'rms'])
-# xyz_df = pd.DataFrame(xyz)
+    data_df = pd.DataFrame(data, columns = ['audiofile', 'chunk index', 'start time sec', 'end time sec', 'centroid', 'rms'])
 
-save_to_csv(data_df, data_file)
-# save_to_csv(xyz_df, 'data/xyz.csv', header=False)
+    save_to_csv(data_df, data_file)

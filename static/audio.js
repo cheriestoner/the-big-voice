@@ -2,6 +2,7 @@ const startButton = document.getElementById('startRecording');
 const stopButton = document.getElementById('stopRecording');
 const audioPlayback = document.getElementById('audioPlayback');
 const submitButton = document.getElementById('submitRecording');
+const nextButton = document.getElementById('gotoRemixer')
 
 let mediaRecorder;
 let audioChunks = [];
@@ -111,4 +112,8 @@ submitButton.addEventListener('click', () => {
     } else {
         console.log('没有可上传的录音');
     }
+});
+
+nextButton.addEventListener('click', () => {
+    window.location.href='/remixer';
 });
