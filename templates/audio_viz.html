@@ -17,6 +17,10 @@
         <meta charset="UTF-8">
         <style>
             body {
+                position: relative;
+                background: #f0f0f0;
+            }
+            article {
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;
@@ -26,21 +30,70 @@
                 margin: 0;
                 background: #f0f0f0;
             }
-            #controls {
-                margin-bottom: 20px;
+            #my_dataviz {
+                cursor: pointer;
             }
-            canvas {
-                border: 1px solid #000;
-                background-color: #fff;
+            .body-foot {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: calc(100% - 120px);
+                background-color: #f0f0f0;
+                padding: 40px 60px 20px 60px;
+                border-top: 2px solid #36393e;
+            }
+            .body-foot .foot-container {
+                flex: 1 1 0%;
+                position: relative;
+                border-bottom: 1px solid #5c657f;
+            }
+            .body-foot .foot-bottom {
+                display: block;
+                margin-top: 10px;
+                width: 100%;
+                text-align: center;
+                color: #9aa1a7;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
+            .catagories .column {
+                margin: 0 40px 30px 0;
+                margin-left: calc(50% - 90px);
+                width: 180px;
+                text-align: center;
+            }
+            .catagories .column>a {
+                color: #000;
+                background-color: transparent;
+                font-size: 18px;
+                line-height: 50px;
+                font-weight: 700;
+                text-decoration: none;
+            }
+            .catagories .column a:hover {
+                color: #4a4ade;
             }
         </style>
+        <title>audioVisualizer</title>
     </head>
 <script src="https://d3js.org/d3.v7.js"></script>
 <body>
+    <article>
+        <h3>{{ audiofile }} plot</h3>
+        <div id="my_dataviz"></div>
+    </article>
 
-<h3>{{ audiofile }} plot</h3>
-
-<div id="my_dataviz"></div>
+    <footer class="body-foot">
+        <div class="foot-container">
+            <div class="catagories">
+                <div class="column">
+                    <a href="https://soundstudiesgroup.net/" target="_blank">Related Links</a>
+                </div>
+            </div>
+        </div>
+        <div class="foot-bottom">
+            Copyright © 2024, Sound Studies Group, SUSTech
+        </div>
+    </footer>
 
 <!-- <svg id="myPlot" style="width:500px;height:500px"></svg> -->
 <!-- <script src="{{ url_for('static', filename='scatterplot-w3.js') }}"></script> -->

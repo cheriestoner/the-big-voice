@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <style>
         body {
+            position: relative;
+            background: #f0f0f0;
+        }
+        article {
             display: flex;
             justify-content: flex-start;
             align-items: center;
@@ -25,6 +29,7 @@
             flex-wrap: nowrap;
         }
         #controls button {
+            margin: 20px 0;
             padding: 0 50px;
             font-size: 1.35em;
             font-weight: 700;
@@ -35,9 +40,24 @@
             border-radius: 10px;
             transition: all .3s;
         }
-        #controls button:hover {
-            background-color: #000;
+        #controls #startRecording:hover {
+            background-color: #37c807;
             color: #fff;
+        }
+        #controls #stopRecording:hover {
+            background-color: #ff2626;
+            color: #fff;
+        }
+        #controls #submitRecording:hover {
+            background-color: #0539d5;
+            color: #fff;
+        }
+        audio {
+            margin: 20px 0;
+            padding: 20px 0;
+            width: 280%;
+            border: 3px solid #000;
+            border-radius: 47px;
         }
         #gotoRemixer {
             --glow-color: rgb(176, 177, 255);
@@ -51,14 +71,15 @@
         
             cursor: pointer;
             position: relative;
-            padding: 12px 28px;
-            font-size: 22px;
+            padding: 24px 40px;
+            margin: 0 0 50px;
+            font-size: 32px;
             font-weight: 900;
             text-transform: uppercase;
             color: var(--glow-color);
             background: var(--btn-color);
             border: 0.05em solid var(--glow-color);
-            border-radius: 1em;
+            border-radius: 0.8em;
             transition: all .3s;
             outline: none;
         }
@@ -82,37 +103,87 @@
                 inset 0 0 .025em .025em var(--glow-color);
         }
         @keyframes glow {
-        
             from {
                 background-position: 0%;
             }
-        
             to {
                 background-position: 400%;
             }
-        
         }
         canvas {
-            border: 1px solid #000;
+            border: 2px solid #000;
             background-color: #fff;
+        }
+        .body-foot {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: calc(100% - 120px);
+            background-color: #f0f0f0;
+            padding: 40px 60px 20px 60px;
+            border-top: 2px solid #36393e;
+        }
+        .body-foot .foot-container {
+            flex: 1 1 0%;
+            position: relative;
+            border-bottom: 1px solid #5c657f;
+        }
+        .body-foot .foot-bottom {
+            display: block;
+            margin-top: 10px;
+            width: 100%;
+            text-align: center;
+            color: #9aa1a7;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        .catagories .column {
+            margin: 0 40px 30px 0;
+            margin-left: calc(50% - 90px);
+            width: 180px;
+            text-align: center;
+        }
+        .catagories .column>a {
+            color: #000;
+            background-color: transparent;
+            font-size: 18px;
+            line-height: 50px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .catagories .column a:hover {
+            color: #4a4ade;
         }
     </style>
     <title>Welcome keylab Big Voice</title>
 </head>
 
 <body>
-    <ul id="audioList"></ul>
-    <div id="controls">
-        <h1>The Big Voice</h1>
-        <button id="startRecording">Start Recording</button>
-        <button id="stopRecording" disabled>Stop Recording</button>
-        <audio id="audioPlayback" controls></audio>
-        <br>
-        <button id="submitRecording">Upload Recording</button>
-    </div>
-    <button id='gotoRemixer'>Go to Remixer</button>
-
+    <article>
+        <ul id="audioList"></ul>
+        <div id="controls">
+            <h1>The Big Voice</h1>
+            <button id="startRecording">Start Recording</button>
+            <button id="stopRecording" disabled>Stop Recording</button>
+            <audio id="audioPlayback" controls></audio>
+            <button id="submitRecording">Upload Recording</button>
+        </div>
+        <button id='gotoRemixer'>Go to Remixer</button>
+        
     <script src="{{ url_for('static', filename='audio.js') }}"></script>
-    
+
+    </article>
+
+    <footer class="body-foot">
+        <div class="foot-container">
+            <div class="catagories">
+                <div class="column">
+                    <a href="https://soundstudiesgroup.net/" target="_blank">Related Links</a>
+                </div>
+            </div>
+        </div>
+        <div class="foot-bottom">
+            Copyright © 2024, Sound Studies Group, SUSTech
+        </div>
+    </footer>
 </body>
 </html>
