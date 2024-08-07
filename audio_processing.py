@@ -107,6 +107,6 @@ def main(audiofile="test_office.wav", audio_folder='audio'):
     for i in range(num_frames):
         data.append([audiofile, i, i*CHUNK_SIZE*1e-3, (i+1)*CHUNK_SIZE*1e-3, spectral_centroids[i], rms[i]])
 
-    data_df = pd.DataFrame(data, columns = ['audiofile', 'chunk index', 'start time sec', 'end time sec', 'centroid', 'rms'])
+    data_df = pd.DataFrame(data, columns = ['audiofile', 'chunk_index', 'start_time_sec', 'end_time_sec', 'centroid', 'rms'])
 
     save_to_csv(data_df, data_file)
