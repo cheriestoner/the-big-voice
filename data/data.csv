@@ -1,4 +1,4 @@
-filename,chunk index,start time sec,end time sec,centroid,rms
+filename,chunk_index,start_time_sec,end_time_sec,centroid,rms
 test_office.wav,0,0.0,0.5,0.5050872093023255,0.07071441352596174
 test_office.wav,1,0.5,1.0,0.9663880813953488,0.6418534406638902
 test_office.wav,2,1.0,1.5,0.9287790697674418,0.5327837396593933

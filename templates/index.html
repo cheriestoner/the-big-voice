@@ -21,6 +21,7 @@
             font-size: 3em
         }
         #controls {
+            width: 85%;
             margin-bottom: 20px;
             display: flex;
             justify-content: flex-start;
@@ -55,7 +56,7 @@
         audio {
             margin: 20px 0;
             padding: 20px 0;
-            width: 280%;
+            width: 100%;
             border: 3px solid #000;
             border-radius: 47px;
         }
@@ -111,13 +112,11 @@
             }
         }
         canvas {
+            margin-bottom: 20px;
             border: 2px solid #000;
             background-color: #fff;
         }
         .body-foot {
-            position: fixed;
-            bottom: 0;
-            left: 0;
             width: calc(100% - 120px);
             background-color: #f0f0f0;
             padding: 40px 60px 20px 60px;
@@ -159,7 +158,6 @@
 
 <body>
     <article>
-        <ul id="audioList"></ul>
         <div id="controls">
             <h1>The Big Voice</h1>
             <button id="startRecording">Start Recording</button>
