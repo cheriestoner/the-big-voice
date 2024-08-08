@@ -41,7 +41,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/Loading')
-def index():
+def loading():
     return render_template('Loading.html')
 # @app.route('/audio-files', methods=['POST'])
 # def upload_file():
