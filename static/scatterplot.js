@@ -22,6 +22,8 @@ const svg = d3.select("#my_dataviz")
 // var test_data = JSON.parse('{{ feed_data | safe }}');
 // console.log(test_data);
 
+// d3.csv('/adata/{{audiofile}}/data.csv').then()
+
 
 d3.csv('/data/test_office/data.csv').then(function(data) { // with header
     console.log(data);

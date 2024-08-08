@@ -23,10 +23,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FOLDER = os.path.join(BASE_DIR, 'data')
 AUDIO_FOLDER = os.path.join(BASE_DIR, 'audio')
 # UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
-# print('upload folder:', os.path.abspath(UPLOAD_FOLDER))
 ALLOWED_EXTENSIONS = set(['wav', 'mp3'])
 if not os.path.exists(DATA_FOLDER):
-    os.makedirs(DATA_FOLDER) 
+    os.makedirs(DATA_FOLDER)
 
 app.config['DATA_FOLDER'] = DATA_FOLDER
 
@@ -40,25 +39,17 @@ def allowed_file(filename):
 def index():
     return render_template('index.html')
 
-# @app.route('/audio-files', methods=['POST'])
-# def upload_file():
-#     if formData not in request.files:
-#         return jsonify({"error": "No file part"}), 400
-    
-#     file = request.files['audio']
-#     if file.filename == '':
-#         return jsonify({"error": "No selected file"}), 400
+@app.route('/remix/<string:filename>')
+def process_features(filename):
+    # filename = os.path.join(DATA_FOLDER, 'test_office/xyz.csv')
+    # data = pd.read_csv(filename, header=0)
+    # feed_data = data.values.tolist() # 32 * 
+    audio_processing.main(filename, AUDIO_FOLDER)
+    return render_template('audio_viz.html', audiofile=filename) #, feed_data=json.dumps(feed_data))
 
-#     filename = os.path.join(UPLOAD_FOLDER, file.filename)
-#     file.save(filename)
-#     return jsonify({"message": "File uploaded successfully"}), 200
-
-@app.route('/remixer')
-def load_features_csv():
-    filename = os.path.join(DATA_FOLDER, 'test_office/xyz.csv')
-    data = pd.read_csv(filename, header=0)
-    feed_data = data.values.tolist() # 32 * 
-    return render_template('audio_viz.html', audiofile='test_office.wav') #, feed_data=json.dumps(feed_data))
+@app.route('/loading/<string:filename>', methods=['GET', 'POST'])
+def loading_page(filename):
+    return render_template('loading.html', filename=filename)
 
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
 def get_file(subpath=''):
@@ -67,10 +58,6 @@ def get_file(subpath=''):
 @app.route('/audio/<path:subpath>', methods=['GET', 'POST'])
 def get_audio(subpath=''):
     return send_file(os.path.join(AUDIO_FOLDER, subpath))
-
-# UPLOAD_FOLDER = 'uploads'
-# if not os.path.exists(UPLOAD_FOLDER):
-#     os.makedirs(UPLOAD_FOLDER)
 
 @app.route('/upload-audio', methods=['POST'])
 def upload_audio():
@@ -84,6 +71,7 @@ def upload_audio():
     if file:
         file_path = os.path.join(AUDIO_FOLDER, file.filename) # save to AUDIO_FOLDER
         file.save(file_path)
+        file.close()
         app.logger.info(f'File saved to {file_path}')
         # audio_processing.main(file.filename, AUDIO_FOLDER)
         return jsonify({'success': 'File uploaded successfully', 'file_path': file_path})

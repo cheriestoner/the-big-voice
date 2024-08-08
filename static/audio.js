@@ -119,5 +119,6 @@ submitButton.addEventListener('click', () => {
 });
 
 nextButton.addEventListener('click', () => {
-    window.location.href='/remixer';
+    // window.location.href='/loading/recording.wav'; // uncomment it to use the loading page
+    window.location.href='/remixer/recording.wav'; // comment it to use the loading page
 });
