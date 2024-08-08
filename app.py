@@ -49,7 +49,7 @@ def process_features(filename):
 
 @app.route('/loading/<string:filename>', methods=['GET', 'POST'])
 def loading_page(filename):
-    return render_template('loading.html', filename=filename)
+    return render_template('loading_xh.html', filename=filename) # or change it to loading_jy.html
 
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
 def get_file(subpath=''):
