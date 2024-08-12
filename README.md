@@ -10,8 +10,8 @@ Xuehua (Fullstack dev, System design)
 
 **To-do functionalities:**
 - Index page: /Jiayi
-    - ～上传音频到服务器～
-    - ～Next button 跳转到remixer /Jiayi～
+    - ~上传音频到服务器~
+    - ~Next button 跳转到remixer /Jiayi~
         - ～后台调用audio_processing.main() /Xuehua～
     - User录音文件命名用variable存储 & 传给remixer
 - Loading page (暂时不需要)
