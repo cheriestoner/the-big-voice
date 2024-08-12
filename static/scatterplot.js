@@ -1,3 +1,4 @@
+const backButton = document.getElementById('backtoRemixer');
 // d3 gallery https://d3-graph-gallery.com/graph/scatter_basic.html
 // set the dimensions and margins of the graph
 const margin = {top: 10, right: 30, bottom: 30, left: 60},
@@ -24,6 +25,9 @@ const svg = d3.select("#my_dataviz")
 
 // d3.csv('/data/{{audiofile}}/data.csv').then()
 
+backButton.addEventListener('click', () => {
+    window.location.href='/';
+});
 
 d3.csv('/data/test_office/data.csv').then(function(data) { // with header
     console.log(data);

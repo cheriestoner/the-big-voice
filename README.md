@@ -19,7 +19,7 @@ Xuehua (Fullstack dev, System design)
     - Skeleton screen (loading scatterplot)
 - Remixer page: /Lio
     - ~mouseOver play audio~
-    - Button to go back to recorder
+    - ~Button to go back to recorder~
     - Plot user recording in addition to test_office.wav
 - Backend management: /Xuehua
     - flask feed list data to html instead of d3.csv()
