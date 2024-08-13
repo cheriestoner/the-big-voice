@@ -31,23 +31,23 @@ startButton.addEventListener('click', async () => {
     // 获取Canvas元素和上下文
     canvas = document.createElement('canvas');
     // 将Canvas插入到article元素之后
-    // const article = document.querySelector('article');
-    // article.appendChild(canvas);
-    const audio = document.querySelector('audio');
-    audio.insertAdjacentElement('beforebegin', canvas);
+    const article = document.querySelector('body');
+    article.appendChild(canvas);
+    // const audio = document.querySelector('audio');
+    // audio.insertAdjacentElement('beforebegin', canvas);
     canvasCtx = canvas.getContext('2d');
     canvas.width = 800;
-    canvas.height = 300;
+    canvas.height = 100;
 
     function draw() {
         drawVisual = requestAnimationFrame(draw);
         analyser.getByteTimeDomainData(dataArray);
 
-        canvasCtx.fillStyle = 'rgb(255, 255, 255)';
+        canvasCtx.fillStyle = 'rgb(230, 228, 215)';
         canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
         canvasCtx.lineWidth = 2;
-        canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+        canvasCtx.strokeStyle = 'rgb(58, 171, 81)';
 
         canvasCtx.beginPath();
         const sliceWidth = canvas.width * 1.0 / bufferLength;
