@@ -6,8 +6,6 @@ from werkzeug.utils import secure_filename
 # import subprocess
 # import sys
 # import time
-# import audio_processing
-# from pydub import AudioSegment # install ffmpeg first
 import pandas as pd
 import csv
 import json
