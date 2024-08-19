@@ -42,8 +42,11 @@ def process_features(filename):
     # filename = os.path.join(DATA_FOLDER, 'test_office/xyz.csv')
     # data = pd.read_csv(filename, header=0)
     # feed_data = data.values.tolist() # 32 * 
-    audio_processing.main(filename, AUDIO_FOLDER)
-    return render_template('audio_viz.html', audiofile=filename) #, feed_data=json.dumps(feed_data))
+    if os.path.exists(os.path.join(DATA_FOLDER, filename[:-4])):
+        app.logger.info("Data exist!")
+    else:
+        audio_processing.main(filename, AUDIO_FOLDER, DATA_FOLDER)
+    return render_template('audio_viz.html', audiofile=filename[:-4])
 
 @app.route('/loading/<string:filename>', methods=['GET', 'POST'])
 def loading_page(filename):

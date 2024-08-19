@@ -1,4 +1,4 @@
-const backButton = document.getElementById('backtoRemixer');
+const backButton = document.getElementById('backtoRecorder');
 // d3 gallery https://d3-graph-gallery.com/graph/scatter_basic.html
 // set the dimensions and margins of the graph
 const margin = {top: 10, right: 30, bottom: 30, left: 60},
@@ -29,7 +29,9 @@ backButton.addEventListener('click', () => {
     window.location.href='/';
 });
 
-d3.csv('/data/test_office/data.csv').then(function(data) { // with header
+const csvPath = '/data/' + audiofilename + '/data.csv';
+
+d3.csv(csvPath).then(function(data) { // with header
     console.log(data);
     scatterplot_visualize(data);
 })
@@ -49,11 +51,6 @@ function scatterplot_visualize(data) {
     .range([ height, 0]);
     svg.append("g")
     .call(d3.axisLeft(y));
-
-    // Create an audio element
-    const audioElement = document.createElement('audio');
-    audioElement.src = '/audio/test_office.wav'; // 加载完整的音频文件
-    document.body.appendChild(audioElement);
 
     let isUserInteracted = false;
     // Listen for user interaction
@@ -76,7 +73,12 @@ function scatterplot_visualize(data) {
               .transition()
               .duration(200)
               .attr("r", 15);
-            
+
+            // Create an audio element
+            const audioElement = document.createElement('audio');
+            audioElement.src = '/audio/' + d.filename; // 加载完整的音频文件
+            document.body.appendChild(audioElement);
+                    
             if (isUserInteracted) {
                 const startTime = parseFloat(d.start_time_sec);
                 const endTime = parseFloat(d.end_time_sec);

@@ -97,10 +97,12 @@ stopButton.addEventListener('click', () => {
     stopButton.disabled = true;
 });
 
+const audiofile = 'recording.wav'; // todo
+
 submitButton.addEventListener('click', () => {
     if (audioBlob) {
         const formData = new FormData();
-        formData.append('audio', audioBlob, 'recording.wav');
+        formData.append('audio', audioBlob, audiofile);
 
         fetch('http://127.0.0.1:3000/upload-audio', {  // 更改为服务器的实际上传地址
             method: 'POST',
@@ -119,6 +121,6 @@ submitButton.addEventListener('click', () => {
 });
 
 nextButton.addEventListener('click', () => {
-    // window.location.href='/loading/recording.wav'; // uncomment it to use the loading page
-    window.location.href='/loading/recording.wav'; // comment it to use the loading page
+    window.location.href='/loading/' + audiofile; // uncomment it to use the loading page
+    // window.location.href='/remix/' + audiofile; // comment it to use the loading page
 });

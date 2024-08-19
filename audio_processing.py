@@ -66,16 +66,16 @@ def normalizeFeature(x):
 
 def save_to_csv(df, file_name, header=True):
     # Check if the file already exists
-    if os.path.isfile(file_name):
-        # If it exists, append without writing the header
-        df.to_csv(file_name, mode='a', header=False, index=False)
-    else:
+    if not os.path.isfile(file_name):
         # If it does not exist, create the file with the header
         df.to_csv(file_name, mode='w', header=header, index=False)
+    # else:
+        # If it exists, append without writing the header
+        # df.to_csv(file_name, mode='a', header=False, index=False)
 
 
 ##################################################################
-def main(audiofile="test_office.wav", audio_folder='audio'):
+def main(audiofile="test_office.wav", audio_folder='audio', data_folder='data'):
     # Importing the audiofile
     # audiofile = "test_office.wav"
     audiofile_text = audiofile.rsplit('.', 1)[0].lower() # or file[:-3]
@@ -103,7 +103,7 @@ def main(audiofile="test_office.wav", audio_folder='audio'):
     # Save extracted features to dataframe
     # [audiofile, chunk number (file sub index), start time, end time, spec centroid, rms]
 
-    data_dir = os.path.join('data', audiofile_text)
+    data_dir = os.path.join(data_folder, audiofile_text)
     data_file = 'data.csv'
     data_file = os.path.join(data_dir, data_file)
     if not os.path.exists(data_dir):
@@ -113,7 +113,9 @@ def main(audiofile="test_office.wav", audio_folder='audio'):
     # for the same audio file
     num_chunks = calculate_frame_num(len(samples), sample_rate, CHUNK_SIZE, HOPPING)
     for i in range(num_chunks):
-        data.append([audiofile, i, i*CHUNK_SIZE*1e-3, (i+1)*CHUNK_SIZE*1e-3, spectral_centroids[i], rms[i]])
+        end_time = (i+1)*CHUNK_SIZE*1e-3
+        if end_time >= duration: end_time = duration
+        data.append([audiofile, i, i*CHUNK_SIZE*1e-3, end_time, spectral_centroids[i], rms[i]])
 
     data_df = pd.DataFrame(data, columns = ['audiofile', 'chunk index', 'start time sec', 'end time sec', 'centroid', 'rms'])
 
