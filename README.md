@@ -14,7 +14,7 @@ Xuehua (Fullstack dev, System design)
     - ~Next button 跳转到remixer /Jiayi~
         - ~后台调用audio_processing.main() /Xuehua~
     - ~User录音文件命名用variable存储 & 传给remixer /Xuehua~
-    - User recording 命名带timestamp
+    - User recording 命名带timestamp (inside audio.js)
 - Loading page (暂时不需要)
     - ~Placeholder animation~
     - Skeleton screen (loading scatterplot)
@@ -28,3 +28,5 @@ Xuehua (Fullstack dev, System design)
     - "user session" color highlight user recording?
     - maintain a CONSTANTS.py?
     - store recording metadata: time, location
+- UI decorations
+    - CSS style in separate files
