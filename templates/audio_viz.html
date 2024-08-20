@@ -101,7 +101,7 @@
                 border: none;
                 transition: all 0.5s ease;
             }
-            #backtoRemixer {
+            #backtoRecorder {
                 --glow-color: rgb(176, 177, 255);
                 --glow-spread-color: rgba(123, 127, 255, 0.781);
                 --enhanced-glow-color: rgb(206, 212, 255);
@@ -125,7 +125,7 @@
                 transition: all 0.3s ease;
                 outline: none;
             }
-            #backtoRemixer:hover {
+            #backtoRecorder:hover {
                 z-index: 1;
                 border-color: transparent;
                 color: var(--btn-color);
@@ -178,10 +178,16 @@
                 color: #9aa1a7;
                 font-family: Verdana, Geneva, Tahoma, sans-serif;
             }
+            .catagories {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-direction: row;
+                flex-wrap: nowrap;
+            }
             .catagories .column {
-                margin: 0 40px 50px 0;
-                margin-left: calc(50% - 90px);
-                width: 180px;
+                margin: 0 0 50px 0;
+                width: 195px;
                 text-align: center;
             }
             .catagories .column>a {
@@ -222,7 +228,13 @@
                     transform: translateY(0);
                 }
             }
+            @media screen and (max-width: 720px) {
+                .catagories {
+                    flex-direction: column;
+                }
+            }
         </style>
+        <link rel="shortcut icon" href="/favicon.ico"/>
         <title>Remix</title>
     </head>
     <script src="https://d3js.org/d3.v7.js"></script>
@@ -241,6 +253,12 @@
         <footer class="body-foot">
             <div class="foot-container">
                 <div class="catagories">
+                    <div class="column">
+                        <a href="https://soundstudiesgroup.net/" target="_blank">Sound Studies Group</a>
+                    </div>
+                    <div class="column">
+                        <a href="https://soundstudiesgroup.net/" target="_blank">Related Links</a>
+                    </div>
                     <div class="column">
                         <a href="https://soundstudiesgroup.net/" target="_blank">Related Links</a>
                     </div>
@@ -261,7 +279,7 @@
                 width = 720 - margin.left - margin.right,
                 height = 640 - margin.top - margin.bottom;
 
-        // append the svg object to the body of the page
+        // 创建SVG对象
         const svg = d3.select("#my_dataviz")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -285,19 +303,26 @@
             window.location.href='/';
         });
 
-        const csvPath = '/data/' + "{{ audiofile }}" + '/data.csv';
+        const csvPath = ['/data/{{ audiofile }}/data.csv', '/data/test_office/data.csv'];
+        const audioFile = ['/audio/{{ audiofile }}.wav', '/audio/test_office.wav'];
+        const color = ['#24d00a', '#ff5733', '#563f2e', 'f7c242', 'bec23f'];
 
         // Create an audio element
-        const audioElement = document.createElement('audio');
-        audioElement.src = '/audio/' + '{{ audiofile }}' + '.wav'; // 加载完整的音频文件
-        document.body.appendChild(audioElement);
+        let audioElements = [];
+        audioFile.forEach((audioSrc, index) => {
+            const audioElement = document.createElement('audio');
+            audioElement.src = audioSrc;
+            document.body.appendChild(audioElement);
+            audioElements.push(audioElement);
+        });
 
-        d3.csv(csvPath).then(function(data) { // with header
-            console.log(data);
-            scatterplot_visualize(data);
-        })
+        csvPath.forEach((csvPath, index) => {
+            d3.csv(csvPath).then(function(data) {
+                scatterplot_visualize(data, color[index], audioElements[index]);
+            });
+        });
 
-        function scatterplot_visualize(data) {
+        function scatterplot_visualize(data, dotColor, audioElement) {
             // Add X axis
             const x = d3.scaleLinear()
             .domain([0, 1])
@@ -313,13 +338,12 @@
             svg.append("g")
             .call(d3.axisLeft(y));
 
-            
             let isUserInteracted = false;
             // Listen for user interaction
             document.body.addEventListener('pointerdown', function () {
                 isUserInteracted = true;
             });
-
+            
             // Add dots
             svg.append('g')
             .selectAll("dot")
@@ -328,14 +352,14 @@
                 .attr("cx", function (d) { return x(d.centroid); } )
                 .attr("cy", function (d) { return y(d.rms); } )
                 .attr("r", 7.5)
-                .style("fill", "#24d00a")
-                
+                .style("fill", dotColor)
+            
                 .on("mouseover", function(event, d) {
                     d3.select(this)
                     .transition()
                     .duration(200)
                     .attr("r", 15);
-                            
+
                     if (isUserInteracted) {
                         const startTime = parseFloat(d.start_time_sec);
                         const endTime = parseFloat(d.end_time_sec);

@@ -12,6 +12,7 @@
             background: linear-gradient(-45deg, #ff7e5f, #9970bf, #feb47b, #90b5a4, #4394a4, #9970bf, #ff7e5f);
             background-size: 800% 800%;
             animation: gradientBG 20s ease infinite;
+            font-family: futura;
         }
         @keyframes gradientBG {
             0% {
@@ -78,8 +79,9 @@
         #controls button {
             margin: 20px 0;
             padding: 0 50px;
+            font-family: futura;
             font-size: 1.35em;
-            font-weight: 700;
+            font-weight: 500;
             line-height: 3em;
             color: #fff;
             text-align: center;
@@ -229,10 +231,16 @@
             color: #9aa1a7;
             font-family: Verdana, Geneva, Tahoma, sans-serif;
         }
+        .catagories {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
         .catagories .column {
-            margin: 0 40px 50px 0;
-            margin-left: calc(50% - 90px);
-            width: 180px;
+            margin: 0 0 50px 0;
+            width: 195px;
             text-align: center;
         }
         .catagories .column>a {
@@ -278,7 +286,13 @@
                 height: 125px;
             }
         }
+        @media screen and (max-width: 720px) {
+            .catagories {
+                flex-direction: column;
+            }
+        }
     </style>
+    <link rel="shortcut icon" href="/favicon.ico"/>
     <title>Welcome keylab Big Voice</title>
 </head>
 
@@ -305,6 +319,12 @@
     <footer class="body-foot">
         <div class="foot-container">
             <div class="catagories">
+                <div class="column">
+                    <a href="https://soundstudiesgroup.net/" target="_blank">Sound Studies Group</a>
+                </div>
+                <div class="column">
+                    <a href="https://soundstudiesgroup.net/" target="_blank">Related Links</a>
+                </div>
                 <div class="column">
                     <a href="https://soundstudiesgroup.net/" target="_blank">Related Links</a>
                 </div>

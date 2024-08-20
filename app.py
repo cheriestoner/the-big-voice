@@ -31,6 +31,11 @@ app.config['DATA_FOLDER'] = DATA_FOLDER
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# favicon.ico
+@app.route('/favicon.ico')
+def favicon():
+    return send_file(os.path.join(BASE_DIR, 'favicon.ico'))
+
 # A decorator used to tell the application 
 # which URL is associated function 
 @app.route('/')
