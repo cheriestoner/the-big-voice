@@ -287,6 +287,11 @@
 
         const csvPath = '/data/' + "{{ audiofile }}" + '/data.csv';
 
+        // Create an audio element
+        const audioElement = document.createElement('audio');
+        audioElement.src = '/audio/' + '{{ audiofile }}' + '.wav'; // 加载完整的音频文件
+        document.body.appendChild(audioElement);
+
         d3.csv(csvPath).then(function(data) { // with header
             console.log(data);
             scatterplot_visualize(data);
@@ -308,11 +313,7 @@
             svg.append("g")
             .call(d3.axisLeft(y));
 
-            // Create an audio element
-            const audioElement = document.createElement('audio');
-            audioElement.src = '/audio/' + '{{ audiofile }}' + '.wav'; // 加载完整的音频文件
-            document.body.appendChild(audioElement);
-
+            
             let isUserInteracted = false;
             // Listen for user interaction
             document.body.addEventListener('pointerdown', function () {
@@ -338,6 +339,7 @@
                     if (isUserInteracted) {
                         const startTime = parseFloat(d.start_time_sec);
                         const endTime = parseFloat(d.end_time_sec);
+                        console.log(startTime);
                         if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
                             // Set audio to start time and play
                             audioElement.currentTime = startTime;
