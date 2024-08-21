@@ -21,7 +21,7 @@ Xuehua (Fullstack dev, System design)
 - Remixer page: /Lio
     - ~mouseOver play audio~
     - ~Button to go back to recorder~
-    - Plot 2 .csv files on one graph
+    - ~Plot 2 .csv files on one graph~
 - Backend management: /Xuehua
     - flask feed list data to html instead of d3.csv()
     - maintain a global value range (variable) for each feature, calculated from the current dataset
@@ -29,4 +29,4 @@ Xuehua (Fullstack dev, System design)
     - maintain a CONSTANTS.py?
     - store recording metadata: time, location
 - UI decorations
-    - CSS style in separate files
+    - ~CSS style in separate files~
