@@ -14,19 +14,20 @@ Xuehua (Fullstack dev, System design)
     - ~Next button 跳转到remixer /Jiayi~
         - ~后台调用audio_processing.main() /Xuehua~
     - ~User录音文件命名用variable存储 & 传给remixer /Xuehua~
-    - User recording 命名带timestamp (inside audio.js)
+    - ~User recording 命名带timestamp (inside audio.js) /Lio~
 - Loading page (暂时不需要)
     - ~Placeholder animation~
     - Skeleton screen (loading scatterplot)
 - Remixer page: /Lio
     - ~mouseOver play audio~
     - ~Button to go back to recorder~
-    - Plot 2 .csv files on one graph
+    - Plot a list of .csv files on one graph
+    - color highlight user recording?
 - Backend management: /Xuehua
     - flask feed list data to html instead of d3.csv()
     - maintain a global value range (variable) for each feature, calculated from the current dataset
-    - "user session" color highlight user recording?
+    - flask user session, without authentication, login with username
     - maintain a CONSTANTS.py?
-    - store recording metadata: time, location
+    - store recording metadata: date, time, location
 - UI decorations
-    - CSS style in separate files
+    - ~CSS style in separate files /Lio~
