@@ -22,7 +22,6 @@ CORS(app)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FOLDER = os.path.join(BASE_DIR, 'data')
 AUDIO_FOLDER = os.path.join(BASE_DIR, 'audio')
-STYLE_FOLDER = os.path.join(BASE_DIR, 'style')
 FONT_FOLDER = os.path.join(BASE_DIR, 'fonts')
 # UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 
@@ -100,9 +99,10 @@ def process_features(filename):
         audio_processing.main(filename, AUDIO_FOLDER, DATA_FOLDER)
     return render_template('audio_viz.html', audiofile=filename[:-4])
 
-@app.route('/style/<path:subpath>', methods=['GET'])
-def get_style(subpath=''):
-    return send_file(os.path.join(STYLE_FOLDER, subpath))
+# icon
+@app.route('/favicon.ico')
+def favicon():
+    return send_file(os.path.join(BASE_DIR, 'favicon.ico'))
 
 @app.route('/fonts/<path:subpath>', methods=['GET'])
 def get_fonts(subpath=''):
