@@ -15,227 +15,9 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <style>
-            body::-webkit-scrollbar {
-                display: none;
-            }
-            body {
-                position: relative;
-                margin: 0;
-                background: linear-gradient(-45deg, #ff7e5f, #feb47b, #90b5a4, #9970bf, #ff7e5f);
-                background-size: 800% 800%;
-                animation: gradientBG 20s ease infinite;
-            }
-            @keyframes gradientBG {
-                0% {
-                    background-position: 0% 50%;
-                }
-                50% {
-                    background-position: 100% 50%;
-                }
-                100% {
-                    background-position: 0% 50%;
-                }
-            }
-            header {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 120px;
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                z-index: 1000;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                opacity: 0;
-                transform: translateY(-100%);
-                animation: slideIn 1s ease forwards 0.5s;
-            }
-            @keyframes slideIn {
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-            header h1 {
-                color: white;
-                font-size: 2.7em;
-                font-weight: 300;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                cursor: pointer;
-            }
-            article {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                flex-direction: column;
-                flex-wrap: nowrap;
-                margin: 0;
-                padding-top: 120px;
-                height: 100%;
-                background: transparent;
-            }
-            #controls {
-                width: 85%;
-                margin-bottom: 20px;
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                flex-direction: column;
-                flex-wrap: nowrap;
-            }
-            #controls button {
-                margin: 20px 0;
-                padding: 0 50px;
-                font-size: 1.35em;
-                font-weight: 700;
-                line-height: 3em;
-                color: #fff;
-                text-align: center;
-                cursor: pointer;
-                border-radius: 10px;
-                border: none;
-                transition: all 0.5s ease;
-            }
-            #backtoRecorder {
-                --glow-color: rgb(176, 177, 255);
-                --glow-spread-color: rgba(123, 127, 255, 0.781);
-                --enhanced-glow-color: rgb(206, 212, 255);
-                --btn-color: rgb(30, 45, 210);
-                box-shadow: 0 0 .05em .05em var(--glow-color),
-                            0 0 1em .25em var(--glow-spread-color),
-                            inset 0 0 .05em .05em var(--glow-color);
-                text-shadow: 0 0 .05em var(--glow-color);
-            
-                cursor: pointer;
-                position: relative;
-                padding: 24px 40px;
-                margin: 50px 0 50px;
-                font-size: 2.1em;
-                font-weight: 900;
-                text-transform: uppercase;
-                color: var(--glow-color);
-                background: var(--btn-color);
-                border: 0.05em solid var(--glow-color);
-                border-radius: 0.8em;
-                transition: all 0.3s ease;
-                outline: none;
-            }
-            #backtoRecorder:hover {
-                z-index: 1;
-                border-color: transparent;
-                color: var(--btn-color);
-                background: linear-gradient(
-                    90deg,
-                    #f9d923,
-                    #00a19d,
-                    #0c87b7,
-                    #cb49ff,
-                    #ff6666,
-                    #f9d923
-                );
-                background-size: 400%;
-                animation: glow 12s linear forwards;
-                box-shadow: 0 0 .025em .025em var(--glow-color),
-                            0 0 1em .5em var(--glow-spread-color),
-                            inset 0 0 .025em .025em var(--glow-color);
-            }
-            @keyframes glow {
-                from {
-                    background-position: 0%;
-                }
-                to {
-                    background-position: 400%;
-                }
-            }
-            #my_dataviz {
-                cursor: pointer;
-                overflow: visible;
-            }
-            svg {
-                overflow: visible;
-            }
-            .body-foot {
-                width: calc(100% - 120px);
-                background-color: #f0f0f0;
-                padding: 50px 60px 145px 60px;
-                border-top: 2px solid #36393e;
-            }
-            .body-foot .foot-container {
-                flex: 1 1 0%;
-                position: relative;
-                border-bottom: 1px solid #5c657f;
-            }
-            .body-foot .foot-bottom {
-                display: block;
-                margin-top: 10px;
-                width: 100%;
-                text-align: center;
-                color: #9aa1a7;
-                font-family: Verdana, Geneva, Tahoma, sans-serif;
-            }
-            .catagories {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                flex-direction: row;
-                flex-wrap: nowrap;
-            }
-            .catagories .column {
-                margin: 0 0 50px 0;
-                width: 195px;
-                text-align: center;
-            }
-            .catagories .column>a {
-                color: #000;
-                background-color: transparent;
-                font-size: 18px;
-                line-height: 50px;
-                font-weight: 700;
-                text-decoration: none;
-                position: relative;
-                transition: color 0.3s ease;
-            }
-            .catagories .column a::after {
-                content: '';
-                position: absolute;
-                width: 0;
-                height: 2px;
-                bottom: -3px;
-                left: 50%;
-                background-color: #4a4ade;
-                transition: width 0.3s ease, left 0.3s ease;
-            }
-            .catagories .column a:hover {
-                color: #4a4ade;
-            }
-            .catagories .column a:hover::after {
-                width: 100%;
-                left: 0;
-            }
-            article, .body-foot {
-                opacity: 0;
-                transform: translateY(50px);
-                animation: fadeIn 1.5s ease forwards;
-            }
-            @keyframes fadeIn {
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-            @media screen and (max-width: 720px) {
-                .catagories {
-                    flex-direction: column;
-                }
-            }
-        </style>
+        <link rel="stylesheet" href="/style/audio_viz.css">
         <link rel="shortcut icon" href="/favicon.ico"/>
-        <title>Remix</title>
+        <title>Remix | The Big Voice</title>
     </head>
     <script src="https://d3js.org/d3.v7.js"></script>
     <body>
@@ -260,7 +42,7 @@
                         <a href="https://soundstudiesgroup.net/" target="_blank">Related Links</a>
                     </div>
                     <div class="column">
-                        <a href="https://soundstudiesgroup.net/" target="_blank">Related Links</a>
+                        <a href="https://soundstudiesgroup.net/" target="_blank">About</a>
                     </div>
                 </div>
             </div>
@@ -303,9 +85,9 @@
             window.location.href='/';
         });
 
-        const csvPath = ['/data/{{ audiofile }}/data.csv', '/data/test_office/data.csv'];
-        const audioFile = ['/audio/{{ audiofile }}.wav', '/audio/test_office.wav'];
-        const color = ['#24d00a', '#ff5733', '#563f2e', 'f7c242', 'bec23f'];
+        const csvPath = ['/data/{{ audiofile }}/data.csv', '/data/test_office/data.csv', '/data/test_office/test1.csv', '/data/test_office/test2.csv', '/data/test_office/test3.csv', '/data/test_office/test4.csv'];
+        const audioFile = ['/audio/{{ audiofile }}.wav', '/audio/test_office.wav', '/audio/test1.wav', '/audio/test2.wav', '/audio/test3.wav', '/audio/test4.wav'];
+        const color = ['#24d00a', '#ff5733', '#563f2e', '#f7c242', '#bec23f', '#000000bc'];
 
         // Create an audio element
         let audioElements = [];

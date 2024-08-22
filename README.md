@@ -21,8 +21,8 @@ Xuehua (Fullstack dev, System design)
 - Remixer page: /Lio
     - ~mouseOver play audio~
     - ~Button to go back to recorder~
-    - Plot a list of .csv files on one graph
-    - color highlight user recording?
+    - ~Plot a list of .csv files on one graph~
+    - ~color highlight user recording?~
 - Backend management: /Xuehua
     - flask feed list data to html instead of d3.csv()
     - maintain a global value range (variable) for each feature, calculated from the current dataset
