@@ -10,15 +10,20 @@
 <body>
     <header>
         <h1>The Big Voice</h1>
+        <div class="user">
+            <button id="loginButton">Login</button>
+        </div>
     </header>
     <article>
         <div id="elements">
             <div id="controls">
-                <button id="startRecording">Start</button>
-                <button id="stopRecording" disabled>Stop</button>
-                <button id="submitRecording">Upload</button>
+                <button id="recordButton">Start</button>
             </div>
-            <audio id="audioPlayback" controls></audio>
+            <div id="recordingsList"></div>
+        </div>
+        <div class="index-popup">
+            <span>Attention:</span> <br>
+            <span>Please login before record</span> <br>
         </div>
         <button id='gotoRemixer'>Go to Remixer ➡ </button>
         

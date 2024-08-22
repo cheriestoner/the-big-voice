@@ -23,6 +23,8 @@ Xuehua (Fullstack dev, System design)
     - ~Button to go back to recorder~
     - ~Plot a list of .csv files on one graph~
     - ~color highlight user recording?~
+    - ~One button~
+    - ~Recording list~
 - Backend management: /Xuehua
     - flask feed list data to html instead of d3.csv()
     - maintain a global value range (variable) for each feature, calculated from the current dataset

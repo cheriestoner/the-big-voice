@@ -22,6 +22,8 @@ CORS(app)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FOLDER = os.path.join(BASE_DIR, 'data')
 AUDIO_FOLDER = os.path.join(BASE_DIR, 'audio')
+STYLE_FOLDER = os.path.join(BASE_DIR, 'style')
+FONT_FOLDER = os.path.join(BASE_DIR, 'fonts')
 # UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 
 if not os.path.exists(DATA_FOLDER):
@@ -97,6 +99,14 @@ def process_features(filename):
     else:
         audio_processing.main(filename, AUDIO_FOLDER, DATA_FOLDER)
     return render_template('audio_viz.html', audiofile=filename[:-4])
+
+@app.route('/style/<path:subpath>', methods=['GET'])
+def get_style(subpath=''):
+    return send_file(os.path.join(STYLE_FOLDER, subpath))
+
+@app.route('/fonts/<path:subpath>', methods=['GET'])
+def get_fonts(subpath=''):
+    return send_file(os.path.join(FONT_FOLDER, subpath))
 
 @app.route('/loading/<string:filename>', methods=['GET', 'POST'])
 def loading_page(filename):

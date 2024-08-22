@@ -1,6 +1,20 @@
+@font-face {
+    font-family: 'futura';
+    src: url('../fonts/FuturaPTMedium.otf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'futura';
+    src: url('../fonts/FuturaPTLight.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body::-webkit-scrollbar {
     display: none;
 }
+
 body {
     position: relative;
     margin: 0;
@@ -8,6 +22,7 @@ body {
     background-size: 800% 800%;
     animation: gradientBG 20s ease infinite;
 }
+
 @keyframes gradientBG {
     0% {
         background-position: 0% 50%;
@@ -19,6 +34,7 @@ body {
         background-position: 0% 50%;
     }
 }
+
 header {
     position: fixed;
     top: 0;
@@ -36,20 +52,23 @@ header {
     transform: translateY(-100%);
     animation: slideIn 1s ease forwards 0.5s;
 }
+
 @keyframes slideIn {
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
+
 header h1 {
     color: white;
-    font-size: 2.7em;
+    font-size: 3em;
     font-weight: 300;
     text-transform: uppercase;
     letter-spacing: 2px;
     cursor: pointer;
 }
+
 article {
     display: flex;
     justify-content: flex-start;
@@ -61,6 +80,7 @@ article {
     height: 100%;
     background: transparent;
 }
+
 #controls {
     width: 85%;
     margin-bottom: 20px;
@@ -70,6 +90,7 @@ article {
     flex-direction: column;
     flex-wrap: nowrap;
 }
+
 #controls button {
     margin: 20px 0;
     padding: 0 50px;
@@ -83,6 +104,7 @@ article {
     border: none;
     transition: all 0.5s ease;
 }
+
 #backtoRecorder {
     --glow-color: rgb(176, 177, 255);
     --glow-spread-color: rgba(123, 127, 255, 0.781);
@@ -106,7 +128,9 @@ article {
     border-radius: 0.8em;
     transition: all 0.3s ease;
     outline: none;
+    font-family: futura;
 }
+
 #backtoRecorder:hover {
     z-index: 1;
     border-color: transparent;
@@ -126,6 +150,7 @@ article {
                 0 0 1em .5em var(--glow-spread-color),
                 inset 0 0 .025em .025em var(--glow-color);
 }
+
 @keyframes glow {
     from {
         background-position: 0%;
@@ -134,24 +159,29 @@ article {
         background-position: 400%;
     }
 }
+
 #my_dataviz {
     cursor: pointer;
     overflow: visible;
 }
+
 svg {
     overflow: visible;
 }
+
 .body-foot {
     width: calc(100% - 120px);
     background-color: #f0f0f0;
     padding: 50px 60px 145px 60px;
     border-top: 2px solid #36393e;
 }
+
 .body-foot .foot-container {
     flex: 1 1 0%;
     position: relative;
     border-bottom: 1px solid #5c657f;
 }
+
 .body-foot .foot-bottom {
     display: block;
     margin-top: 10px;
@@ -160,6 +190,7 @@ svg {
     color: #9aa1a7;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+
 .catagories {
     display: flex;
     justify-content: space-between;
@@ -167,11 +198,13 @@ svg {
     flex-direction: row;
     flex-wrap: nowrap;
 }
+
 .catagories .column {
     margin: 0 0 50px 0;
     width: 195px;
     text-align: center;
 }
+
 .catagories .column>a {
     color: #000;
     background-color: transparent;
@@ -182,6 +215,7 @@ svg {
     position: relative;
     transition: color 0.3s ease;
 }
+
 .catagories .column a::after {
     content: '';
     position: absolute;
@@ -192,24 +226,29 @@ svg {
     background-color: #4a4ade;
     transition: width 0.3s ease, left 0.3s ease;
 }
+
 .catagories .column a:hover {
     color: #4a4ade;
 }
+
 .catagories .column a:hover::after {
     width: 100%;
     left: 0;
 }
+
 article, .body-foot {
     opacity: 0;
     transform: translateY(50px);
     animation: fadeIn 1.5s ease forwards;
 }
+
 @keyframes fadeIn {
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
+
 @media screen and (max-width: 720px) {
     .catagories {
         flex-direction: column;
