@@ -80,12 +80,12 @@ recordButton.addEventListener('click', async () => {
         };
     
         mediaRecorder.onstop = () => {
-            audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-            const audioUrl = URL.createObjectURL(audioBlob);
+            const currentAudioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const audioUrl = URL.createObjectURL(currentAudioBlob);
             audioChunks = [];
-            
-            cancelAnimationFrame(drawVisual); // 停止绘图
-            canvas.remove(); // 移除Canvas
+            // 停止绘图，移除Canvas
+            cancelAnimationFrame(drawVisual);
+            canvas.remove();
 
             function addTimeToFileName(originalFileName) {
                 const now = new Date();
@@ -99,6 +99,8 @@ recordButton.addEventListener('click', async () => {
                 const dateTimeString = `${year}-${month}-${day}-${hours}-${minutes}-${seconds}`;
                 return `${originalFileName}_${dateTimeString}${'.wav'}`;
             }
+            
+            const currentFileName = addTimeToFileName('recording'); //recording_2024-08-21-14-35-45.wav
 
             // 创建录音列表
             const listItem = document.createElement('div');
@@ -116,9 +118,9 @@ recordButton.addEventListener('click', async () => {
             submitButton.id = 'submitButton';
 
             submitButton.addEventListener('click', () => {
-                if (audioBlob) {
+                if (currentAudioBlob) {
                     const formData = new FormData();
-                    formData.append('audio', audioBlob, fileName);
+                    formData.append('audio', currentAudioBlob, currentFileName);
             
                     fetch('http://127.0.0.1:3000/upload-audio', {  // 更改为服务器的实际上传地址
                         method: 'POST',
@@ -142,15 +144,17 @@ recordButton.addEventListener('click', async () => {
             audioElement.id = 'audioPlayback';
             audioElement.controls = true;
             audioElement.src = audioUrl;
-            fileName = addTimeToFileName('recording'); //recording_2024-08-21-14-35-45.wav
             const fileNameElement = document.createElement('span');
-            fileNameElement.textContent = fileName;
+            fileNameElement.textContent = currentFileName;
             
             listItem.appendChild(fileNameElement);
             listItem.appendChild(deleteButton);
             listItem.appendChild(submitButton);
             listItem.appendChild(audioElement);
             recordingsList.appendChild(listItem);
+
+            // 重置fileName
+            fileName = addTimeToFileName('recording');
         };
         
         mediaRecorder.start();
