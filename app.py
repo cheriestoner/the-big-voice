@@ -41,12 +41,18 @@ if not os.path.exists(RECORDINGS_CSV):
         writer = csv.writer(csvfile)
         writer.writerow(['username', 'filename', 'timestamp'])
 
+DEBUG = True
+
 # Route for the home page
 @app.route('/')
 def index():
     # if 'logged_in' in session and session['logged_in']:
     #     return render_template('index.html', username=session['username'])
     # return redirect(url_for('login'))
+    if(DEBUG):
+        session['logged_in'] = True
+        session['username'] = 'admin'
+        session['filenames'] = []
     return render_template('index.html')
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -122,8 +128,8 @@ def get_audio(subpath=''):
 
 @app.route('/upload-audio', methods=['POST'])
 def upload_audio():
-    if 'logged_in' not in session or not session['logged_in']:
-        return redirect(url_for('login'))
+    # if 'logged_in' not in session or not session['logged_in']:
+        # return redirect(url_for('login'))
     if request.method == 'POST':
         if 'audio' not in request.files:
             app.logger.error('No file part')
