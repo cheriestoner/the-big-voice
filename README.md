@@ -8,6 +8,14 @@ Jiayi (Frontend dev, Fullstack dev)
 
 Xuehua (Fullstack dev, System design)
 
+**Objectives**
+1. User record, upload, and remix
+2. Specific feature set (for environmental soundscape?)
+3. Feature dimensionality reduction (soundscape descriptors?)
+4. Cluster
+4. Interactive scatterplot: play audio with mouse on
+4. GPU renderings
+
 **To-do functionalities:**
 - Index page: /Jiayi
     - ~上传音频到服务器~
