@@ -68,6 +68,7 @@ Xuehua (Fullstack dev, System design)
     - ~color highlight user recording?~
     - ~One button~
     - ~Recording list~
+    - Play a neighborhood of sounds (mouse cursor with a collision area instead of a dot)
 
 - Backend management: /Xuehua
     - flask feed list data to html instead of d3.csv()
@@ -75,6 +76,8 @@ Xuehua (Fullstack dev, System design)
     - ~flask user session, without authentication, login with username~
     - maintain a CONSTANTS.py?
     - store recording metadata: date, time, location
+
+- Cloud deployment /Jiayi
 
 - Audio processing: /Xuehua
     - Feature extraction
