@@ -76,5 +76,9 @@ Xuehua (Fullstack dev, System design)
     - maintain a CONSTANTS.py?
     - store recording metadata: date, time, location
 
+- Audio processing: /Xuehua
+    - Feature extraction
+    - Dimensionality reduction (SNE or PCA)
+
 - UI decorations
     - ~CSS style in separate files /Lio~
