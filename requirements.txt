@@ -1,0 +1,9 @@
+numpy
+flask
+flask_cors
+werkzeug
+pandas
+librosa
+pydub
+scipy
+matplotlib
