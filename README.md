@@ -49,12 +49,13 @@ Xuehua (Fullstack dev, System design)
 
 **To-dos for developers:**
 
-- Index page: /Jiayi
+- Recorder page: /Jiayi
     - ~Upload audio to server~
     - ~Next button go to remixer /Jiayi~
         - ~call audio_processing.main() on server end/Xuehua~
     - ~User recording filename as a variable & send to remixer /Xuehua~
     - ~Naming user recording with timestamp (inside audio.js) /Lio~
+    - Limit the recording duration
 
 - Loading page (low priority for now)
     - ~Placeholder animation~
