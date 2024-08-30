@@ -130,7 +130,7 @@ def process_features(filename):
     # feed_data = data.values.tolist() # 32 * 
     audio_processing.process(filename, AUDIO_FOLDER, DATA_FOLDER)
     audio_processing.embed_data(DATA_FOLDER)
-    return render_template('audio_viz.html', audiofile=filename.rsplit('.', 1)[0].lower())
+    return render_template('audio_viz.html', audiofile=filename.rsplit('.', 1)[0])
 
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
 def get_file(subpath=''):
