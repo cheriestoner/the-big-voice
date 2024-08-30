@@ -79,8 +79,6 @@ Xuehua (Fullstack dev, System design)
     - maintain a CONSTANTS.py?
     - store recording metadata: date, time, location
 
-- Cloud deployment /Jiayi
-
 - Audio processing: /Xuehua
     - Feature extraction
         - ~MFCC first & second derivatives (delta)~
