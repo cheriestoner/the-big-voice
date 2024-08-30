@@ -79,15 +79,16 @@
         // var test_data = JSON.parse('{{ feed_data | safe }}');
         // console.log(test_data);
 
-        // d3.csv('/data/{{audiofile}}/data.csv').then()
-
         backButton.addEventListener('click', () => {
             window.location.href='/';
         });
 
-        const csvPath = ['/data/{{ audiofile }}/data.csv', '/data/test_office/test1.csv', '/data/test_office/test2.csv', '/data/test_office/test3.csv', '/data/test_office/test4.csv'];
-        const audioFile = ['/audio/{{ audiofile }}.wav', '/audio/test1.wav', '/audio/test2.wav', '/audio/test3.wav', '/audio/test4.wav'];
-        const color = ['#24d00a', '#563f2e', '#f7c242', '#bec23f', '#000000bc'];
+        const csvPath = [//'/data/{{ audiofile }}/data.csv', 
+        '/data/test_office/test1.csv', '/data/test_office/test2.csv', '/data/test_office/test3.csv', '/data/test_office/test4.csv'];
+        const audioFile = [//'/audio/{{ audiofile }}.wav', 
+        '/audio/test1.wav', '/audio/test2.wav', '/audio/test3.wav', '/audio/test4.wav'];
+        const color = [//'#24d00a', 
+        '#563f2e', '#f7c242', '#bec23f', '#000000bc'];
 
         // Create an audio element
         let audioElements = [];

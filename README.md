@@ -56,6 +56,7 @@ Xuehua (Fullstack dev, System design)
     - ~User recording filename as a variable & send to remixer /Xuehua~
     - ~Naming user recording with timestamp (inside audio.js) /Lio~
     - Limit the recording duration
+    - Upload and store recording data in recordings.csv
 
 - Loading page (low priority for now)
     - ~Placeholder animation~
@@ -69,6 +70,7 @@ Xuehua (Fullstack dev, System design)
     - ~One button~
     - ~Recording list~
     - Play a neighborhood of sounds (mouse cursor with a collision area instead of a dot)
+    - Visualize 'data_2d.csv'
 
 - Backend management: /Xuehua
     - flask feed list data to html instead of d3.csv()
@@ -81,7 +83,11 @@ Xuehua (Fullstack dev, System design)
 
 - Audio processing: /Xuehua
     - Feature extraction
-    - Dimensionality reduction (SNE or PCA)
+        - ~MFCC first & second derivatives (delta)~
+    - Sound event localization?
+    - Dimensionality reduction (SNE/PCA/UMAP)
+        - ~Unsupervised T-SNE~
+        - T-SNE semi-supervision with user labels?
 
 - UI decorations
     - ~CSS style in separate files /Lio~

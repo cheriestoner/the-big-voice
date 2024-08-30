@@ -12,7 +12,6 @@ import json
 import logging
 logging.basicConfig(level=logging.DEBUG)
 import audio_processing
-from utils import *
 
 app = Flask(__name__, template_folder='templates/')
 app.secret_key = 'BAD_SECRET_KEY'
@@ -24,11 +23,27 @@ DATA_FOLDER = os.path.join(BASE_DIR, 'data')
 AUDIO_FOLDER = os.path.join(BASE_DIR, 'audio')
 FONT_FOLDER = os.path.join(BASE_DIR, 'fonts')
 # UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+USERS_CSV = os.path.join(DATA_FOLDER, 'users.csv')
+RECORDINGS_CSV = os.path.join(DATA_FOLDER, 'recordings.csv')
+ALLOWED_EXTENSIONS = set(['wav', 'mp3'])
 
 if not os.path.exists(DATA_FOLDER):
     os.makedirs(DATA_FOLDER)
 
 app.config['DATA_FOLDER'] = DATA_FOLDER
+
+# Checks so file is allowed
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# Function to check if user exists
+def user_exists(username):
+    with open(USERS_CSV, 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            if row['username'] == username:
+                return True
+    return False
 
 # Ensure CSV files exist
 if not os.path.exists(USERS_CSV):
@@ -41,19 +56,20 @@ if not os.path.exists(RECORDINGS_CSV):
         writer = csv.writer(csvfile)
         writer.writerow(['username', 'filename', 'timestamp'])
 
-DEBUG = True
+DEV_MODE = True
 
 # Route for the home page
 @app.route('/')
 def index():
-    # if 'logged_in' in session and session['logged_in']:
-    #     return render_template('index.html', username=session['username'])
-    # return redirect(url_for('login'))
-    if(DEBUG):
+    if(DEV_MODE):
         session['logged_in'] = True
         session['username'] = 'admin'
         session['filenames'] = []
-    return render_template('index.html')
+    # if 'logged_in' not in session or not session['logged_in']:
+    #     return redirect(url_for('login'))
+    # else:
+    return render_template('index.html')#, username=session['username'])
+        
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -94,17 +110,6 @@ def logout():
     # session.clear()
     return redirect(url_for('index'))
 
-@app.route('/remix/<string:filename>')
-def process_features(filename):
-    # filename = os.path.join(DATA_FOLDER, 'test_office/xyz.csv')
-    # data = pd.read_csv(filename, header=0)
-    # feed_data = data.values.tolist() # 32 * 
-    if os.path.exists(os.path.join(DATA_FOLDER, filename[:-4])):
-        app.logger.info("Data exist!")
-    else:
-        audio_processing.main(filename, AUDIO_FOLDER, DATA_FOLDER)
-    return render_template('audio_viz.html', audiofile=filename[:-4])
-
 # icon
 @app.route('/favicon.ico')
 def favicon():
@@ -118,6 +123,15 @@ def get_fonts(subpath=''):
 def loading_page(filename):
     return render_template('loading_xh.html', filename=filename) # or change it to loading_jy.html
 
+@app.route('/remix/<string:filename>')
+def process_features(filename):
+    # filename = os.path.join(DATA_FOLDER, 'test_office/xyz.csv')
+    # data = pd.read_csv(filename, header=0)
+    # feed_data = data.values.tolist() # 32 * 
+    audio_processing.process(filename, AUDIO_FOLDER, DATA_FOLDER)
+    audio_processing.embed_data(DATA_FOLDER)
+    return render_template('audio_viz.html', audiofile=filename.rsplit('.', 1)[0].lower())
+
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
 def get_file(subpath=''):
     return send_file(os.path.join(DATA_FOLDER, subpath))
@@ -128,8 +142,8 @@ def get_audio(subpath=''):
 
 @app.route('/upload-audio', methods=['POST'])
 def upload_audio():
-    # if 'logged_in' not in session or not session['logged_in']:
-        # return redirect(url_for('login'))
+    if 'logged_in' not in session or not session['logged_in']:
+        return redirect(url_for('login'))
     if request.method == 'POST':
         if 'audio' not in request.files:
             app.logger.error('No file part')

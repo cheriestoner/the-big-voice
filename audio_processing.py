@@ -4,12 +4,28 @@ from scipy.fft import fft
 import pandas as pd
 import os
 from pydub import AudioSegment
+import librosa
 
-CHUNK_SIZE = 500 # millisecond
+SEGMENT_SIZE = 500 # millisecond
 HOPPING = 1 # 100% hopping, 0 overlapping. for feature extraction
 
-def calculate_frame_num(num_sample, sample_rate, frame_size, hopping):
-    frame_size = int(frame_size * sample_rate * 1e-3)
+def load_audio_pydub(filepath):
+    file_text = filepath.rsplit('.', 1)[0].lower() # or file[:-3]
+    file_extension = filepath.rsplit('.', 1)[1].lower() # or audiofile[-3:]
+    if file_extension == "mp3":
+        wav_audio = AudioSegment.from_mp3(filepath)
+        filepath = file_text + "wav" # set new audio_path
+        wav_audio.export(filepath, format="wav")
+    sound = AudioSegment.from_file(filepath) #, format='wav')
+    sound = sound.split_to_mono()[0]
+    # Getting sample rate and samples
+    sample_rate = sound.frame_rate
+    duration = sound.duration_seconds
+    sound_arr = np.divide(sound.get_array_of_samples(), sound.max_possible_amplitude)
+    return sound_arr, sample_rate, duration
+
+def calculate_frame_num(num_sample, sr, frame_size, hopping):
+    frame_size = int(frame_size * sr * 1e-3)
     hop_size = int(hopping * frame_size)
     return int(np.ceil(num_sample-frame_size)/hop_size) + 1
 
@@ -17,7 +33,7 @@ def calculate_frame_num(num_sample, sample_rate, frame_size, hopping):
 def extractSpectralCentroid(samples, sample_rate, frame_size, hop_size):
     '''
     samples: audio in samples
-    sample_rate: sample rate, normally 48000
+    sample_rate: sample rate, 48000 for iPhone recordings
     frame_size: frame size in millisecond
     hop_size: percentage of frame size
     '''
@@ -64,59 +80,100 @@ def normalizeFeature(x):
     x = np.divide(x, np.absolute(x).max())
     return x.tolist()
 
-def save_to_csv(df, file_name, header=True):
-    # Check if the file already exists
-    if not os.path.isfile(file_name):
-        # If it does not exist, create the file with the header
-        df.to_csv(file_name, mode='w', header=header, index=False)
-    # else:
-        # If it exists, append without writing the header
-        # df.to_csv(file_name, mode='a', header=False, index=False)
-
-
-##################################################################
-def main(audiofile="test_office.wav", audio_folder='audio', data_folder='data'):
-    # Importing the audiofile
-    # audiofile = "test_office.wav"
-    audiofile_text = audiofile.rsplit('.', 1)[0].lower() # or file[:-3]
-    audiofile_extension = audiofile.rsplit('.', 1)[1].lower() # or audiofile[-3:]
-    # convert file if not .wav
-    if audiofile_extension == "mp3":
-        wav_audio = AudioSegment.from_mp3(audiofile)
-        audiofile = audiofile_text + ".wav"
-        wav_audio.export(audiofile, format="wav")
-
-    # print('processing file: ', os.path.join(audio_folder, audiofile))
-    sound = AudioSegment.from_file(os.path.join(audio_folder, audiofile)) # , format="wav") does not work for werkzeug file?
-    sound = sound.split_to_mono()[0]
-    #Getting sample rate and samples
-    sample_rate = sound.frame_rate
-    duration = sound.duration_seconds
-    samples = np.divide(sound.get_array_of_samples(), sound.max_possible_amplitude)
-
-    spectral_centroids = extractSpectralCentroid(samples, sample_rate, CHUNK_SIZE, HOPPING)
-    rms = extractRMS(samples, sample_rate, CHUNK_SIZE, HOPPING)
-
-    spectral_centroids = normalizeFeature(spectral_centroids)
-    rms = normalizeFeature(rms)
-
-    # Save extracted features to dataframe
-    # [audiofile, chunk number (file sub index), start time, end time, spec centroid, rms]
-
-    data_dir = os.path.join(data_folder, audiofile_text)
-    data_file = 'data.csv'
-    data_file = os.path.join(data_dir, data_file)
+def save_features_csv(filename, dataframe, data_dir='data', data_file='data.csv'):
+    # Save raw features dataframe to csv
+    filename_text = filename.rsplit('.', 1)[0]
+    data_dir = os.path.join(data_dir, filename_text) 
+    data_file = os.path.join(data_dir, data_file) # /data/<filename>/data.csv
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
+    
+    dataframe.to_csv(data_file, mode='w', header=True, index=False) # data_file name always unique
 
+def millisec2sample(size, sr=48000):
+    return int(size*sr*1e-3)
+
+##################################################################
+def process(audiofile="test1.wav", audio_folder='audio', data_folder='data'):
+    # Importing the audiofile
+    # audiofile = "test_office.wav"
+    sound_arr, sr, duration = load_audio_pydub(os.path.join(audio_folder, audiofile))
+
+    # print('processing file: ', os.path.join(audio_folder, audiofile))
+
+    spectral_args = {"n_fft":millisec2sample(SEGMENT_SIZE), 
+                     "hop_length":millisec2sample(HOPPING*SEGMENT_SIZE), 
+                     "center":False}
+    temporal_args = {"frame_length":millisec2sample(SEGMENT_SIZE), 
+                     "hop_length":millisec2sample(HOPPING*SEGMENT_SIZE), 
+                     "center":False}
+
+    rms = librosa.feature.rms(y=sound_arr, **temporal_args)[0]
+    zcr = librosa.feature.zero_crossing_rate(y=sound_arr, **temporal_args)[0]
+    sc = librosa.feature.spectral_centroid(y=sound_arr, sr=sr, **spectral_args)[0]
+    sf = librosa.feature.spectral_flatness(y=sound_arr, **spectral_args)[0]
+    mfccs = librosa.feature.mfcc(y=sound_arr, sr=sr, n_mfcc=20, **spectral_args) # matrix
+    mfcc_delta = librosa.feature.delta(mfccs)
+    mfcc_delta2 = librosa.feature.delta(mfcc_delta)
+
+    # spectral_centroids = extractSpectralCentroid(sound_arr, sr, SEGMENT_SIZE, HOPPING)
+    # rms = extractRMS(sound_arr, sr, SEGMENT_SIZE, HOPPING)
+    # spectral_centroids = normalizeFeature(spectral_centroids)
+    # rms = normalizeFeature(rms)
+
+    # Save extracted features to dataframe
+    # [audiofile, segment number (file sub index), start time, end time, features]
     data = []
-    # for the same audio file
-    num_chunks = calculate_frame_num(len(samples), sample_rate, CHUNK_SIZE, HOPPING)
-    for i in range(num_chunks):
-        end_time = (i+1)*CHUNK_SIZE*1e-3
+    for i in range(sc.shape[-1]): # loop over num segments
+        end_time = (i+1)*SEGMENT_SIZE*1e-3
         if end_time >= duration: end_time = duration
-        data.append([audiofile, i, i*CHUNK_SIZE*1e-3, end_time, spectral_centroids[i], rms[i]])
+        data_i = [audiofile, i, i*SEGMENT_SIZE*1e-3, end_time, rms[i], zcr[i], sc[i], sf[i]]
+        data_i.extend(mfccs.T[i].tolist() + mfcc_delta.T[i].tolist() + mfcc_delta2.T[i].tolist())
+        data.append(data_i)
 
-    data_df = pd.DataFrame(data, columns = ['audiofile', 'chunk_index', 'start_time_sec', 'end_time_sec', 'centroid', 'rms'])
+    columns = ['audiofile', 'segment_index', 'start_time_sec', 'end_time_sec', 'rms', 'zero_crossing_rate', 'spectral_centroid', 'spectral_flatness']
+    # mfcc_columns = [f'mfcc_{j+1}' for j in range(mfccs.shape[0])]
+    for j in range(mfccs.shape[0]):
+        columns.append(f'mfcc_{j+1}')
+    for j in range(mfccs.shape[0]):
+        columns.append(f'mfcc_delta_{j+1}')
+    for j in range(mfccs.shape[0]):
+        columns.append(f'mfcc_delta2_{j+1}')
 
-    save_to_csv(data_df, data_file)
+    data_df = pd.DataFrame(data, columns = columns)
+
+    save_features_csv(audiofile, data_df, data_folder)
+
+    # return data_df
+
+def embed_data(data_folder='data'):
+    '''
+    Reduce dimensionality of the whole dataset of features
+    '''
+    from sklearn.manifold import TSNE
+    recordings = pd.read_csv(os.path.join(data_folder, 'recordings.csv'))['recording_file'].tolist()
+    features = []
+    items = []
+    for file in recordings: # loop over all recording files
+        file_name = file.rsplit('.', 1)[0].lower()
+        data_file = os.path.join(os.path.join(data_folder, file_name), 'data.csv')
+        features_i = pd.read_csv(data_file, header=0).iloc[:, 4:].values.tolist()
+        item = pd.read_csv(data_file, header=0).iloc[:, 0:4].values.tolist()
+        # features_i = df.iloc[:, 4:].values.tolist()
+        # item = df.iloc[:, 0:4].values.tolist()
+        # print(item)
+        features.extend(features_i) # ndarray (num_seg, 64 feature dimensions)
+        items.extend(item)
+    features = np.array(features) # raw features
+    items = np.array(items) # ['audiofile', 'segment_index', 'start_time_sec', 'end_time_sec']
+
+    # print(features.shape[0], items.shape[0])
+    tsne = TSNE(n_components=2, learning_rate='auto', perplexity=30)
+    features_embedded = tsne.fit_transform(features)
+    data_2d = np.append(items, features_embedded, axis=1)
+
+    data_2d_file = 'data_2d.csv'
+    filepath = os.path.join(data_folder, data_2d_file)
+    columns = ['audiofile', 'segment_index', 'start_time_sec', 'end_time_sec', 'tsne1', 'tsne2']
+    data_df = pd.DataFrame(data_2d, columns = columns)
+    data_df.to_csv(filepath, mode='w', header=True, index=False)
