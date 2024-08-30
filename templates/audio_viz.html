@@ -83,6 +83,27 @@
             window.location.href='/';
         });
 
+        // 使用 PapaParse 解析 CSV 文件
+        Papa.parse("/data/data_2d.csv", {
+            download: true,
+            header: true,
+            complete: function(results) {
+                const data = results.data;
+            
+                data.forEach(row => {
+                    let audioFile = row['audiofile'];
+                    let segmentIndex = row['segment_index'];
+                    let startTime = row['start_time_sec'];
+                    let endTime = row['end_time_sec'];
+                    let csvPath = `segments/${audioFile}_segment_${segmentIndex}.csv`;
+            
+                    console.log('Audio File:', audioFile);
+                    console.log('CSV Path:', csvPath);
+                });
+            }
+        });
+  
+
         const csvPath = [//'/data/{{ audiofile }}/data.csv', 
         '/data/test_office/test1.csv', '/data/test_office/test2.csv', '/data/test_office/test3.csv', '/data/test_office/test4.csv'];
         const audioFile = [//'/audio/{{ audiofile }}.wav', 

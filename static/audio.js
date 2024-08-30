@@ -1,3 +1,4 @@
+const loginButton = document.getElementById('loginButton');
 const recordButton = document.getElementById('recordButton');
 const stopButton = document.getElementById('stopButton');
 const recordingsList = document.getElementById('recordingsList');
@@ -14,6 +15,44 @@ let canvasCtx;
 let drawVisual;
 let isRecording = false;
 let fileName;
+
+loginButton.addEventListener('click', async () => {
+    function popup() {
+        const loginWindow = document.createElement('div');
+        const login = document.querySelector('body');
+        login.appendChild(loginWindow);
+        loginWindow.classList.add('loginwindow');
+        loginWindow.id = 'loginWindow';
+
+        const loginTitle = document.createElement('span');
+        loginWindow.appendChild(loginTitle);
+        loginTitle.textContent = 'Login';
+        loginTitle.id = 'loginTitle';
+
+        const inputWindow = document.createElement('input');
+        loginWindow.appendChild(inputWindow);
+        inputWindow.id = 'inputWindow';
+        inputWindow.type = 'text';
+
+        const userButton = document.createElement('input');
+        loginWindow.appendChild(userButton);
+        userButton.id = 'userButton';
+        userButton.type = 'submit';
+
+        const closeWindow = document.createElement('button');
+        loginWindow.appendChild(closeWindow);
+        closeWindow.textContent = 'close';
+        closeWindow.id = 'closeWindow';
+        closeWindow.addEventListener('click', () => {
+            loginWindow.parentNode.removeChild(loginWindow);
+        loginButton.textContent = 'Login';
+        });
+    }
+    popup();
+    
+    loginButton.textContent = 'User';
+    // loginButton.disabled = true;
+})
 
 recordButton.addEventListener('click', async () => {
     if (!isRecording) {
@@ -40,7 +79,7 @@ recordButton.addEventListener('click', async () => {
         // audio.insertAdjacentElement('beforebegin', canvas);
         canvasCtx = canvas.getContext('2d');
         canvas.width = 800;
-        canvas.height = 100;
+        canvas.height = 150;
     
         function draw() {
             drawVisual = requestAnimationFrame(draw);
