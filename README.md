@@ -10,6 +10,54 @@ Jiayi (Frontend dev, Fullstack dev)
 
 Xuehua (Fullstack dev, System design)
 
+**To-dos for developers:**
+
+- Cloud deployment \Jiayi
+    - Git
+
+- Recorder page: /Jiayi
+    - ~Upload audio to server~
+    - ~Next button go to remixer /Jiayi~
+        - ~call audio_processing.main() on server end/Xuehua~
+    - ~User recording filename as a variable & send to remixer /Xuehua~
+    - ~Naming user recording with timestamp (inside audio.js) /Lio~
+    - ~Upload and store recording data in recordings.csv~
+    - Limit the recording duration
+
+- Loading page (low priority for now)
+    - ~Placeholder animation~
+    - Skeleton screen (loading scatterplot)
+
+- Remixer page: /Lio
+    - ~mouseOver play audio~
+    - ~Button to go back to recorder~
+    - ~Plot a list of .csv files on one graph with color highlights~
+    - ~Recording list~
+    - Visualize 'data_2d.csv'
+    - Play a neighborhood of sounds (mouse cursor with a collision area instead of a dot)
+    - How to mix an area of sounds: sounds from the current user as foreground, sound from tha dataset as background? Volumn control + reverb?
+
+- Backend management: /Xuehua
+    - flask feed list data to html instead of d3.csv()
+    - maintain a global value range (variable) for each feature, calculated from the current dataset
+    - ~flask user session, without authentication, login with username~
+    - maintain a CONSTANTS.py?
+    - store recording metadata: date, time, location
+
+- Audio processing: /Xuehua
+    - Feature extraction
+        - ~MFCC first & second derivatives (delta)~
+    - Sound event localization?
+    - Dimensionality reduction (SNE/PCA/UMAP)
+        - ~Unsupervised T-SNE~
+        - T-SNE semi-supervision with user labels?
+
+- UI decorations
+    - ~CSS style in separate files /Lio~
+
+
+---
+
 **Concept**
 
 (briefly write our concept here)
@@ -39,53 +87,10 @@ Xuehua (Fullstack dev, System design)
 
 - Install the latest version of [Python](https://www.python.org/downloads/). Check if it is installed successfully by running `python --version` in Terminal.
 
+- Install ffmpeg and add to path
+
 - Clone the repository on your on laptop.
 
 - In Terminal, go to the project folder. Install package dependencies by running `pip install requirements.txt`.
 
 - Start the app on your local server by running `python app.py` in Terminal, and go to the website via the url.
-
----
-
-**To-dos for developers:**
-
-- Recorder page: /Jiayi
-    - ~Upload audio to server~
-    - ~Next button go to remixer /Jiayi~
-        - ~call audio_processing.main() on server end/Xuehua~
-    - ~User recording filename as a variable & send to remixer /Xuehua~
-    - ~Naming user recording with timestamp (inside audio.js) /Lio~
-    - Limit the recording duration
-    - Upload and store recording data in recordings.csv
-
-- Loading page (low priority for now)
-    - ~Placeholder animation~
-    - Skeleton screen (loading scatterplot)
-
-- Remixer page: /Lio
-    - ~mouseOver play audio~
-    - ~Button to go back to recorder~
-    - ~Plot a list of .csv files on one graph~
-    - ~color highlight user recording?~
-    - ~One button~
-    - ~Recording list~
-    - Play a neighborhood of sounds (mouse cursor with a collision area instead of a dot)
-    - Visualize 'data_2d.csv'
-
-- Backend management: /Xuehua
-    - flask feed list data to html instead of d3.csv()
-    - maintain a global value range (variable) for each feature, calculated from the current dataset
-    - ~flask user session, without authentication, login with username~
-    - maintain a CONSTANTS.py?
-    - store recording metadata: date, time, location
-
-- Audio processing: /Xuehua
-    - Feature extraction
-        - ~MFCC first & second derivatives (delta)~
-    - Sound event localization?
-    - Dimensionality reduction (SNE/PCA/UMAP)
-        - ~Unsupervised T-SNE~
-        - T-SNE semi-supervision with user labels?
-
-- UI decorations
-    - ~CSS style in separate files /Lio~
