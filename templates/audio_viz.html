@@ -69,16 +69,6 @@
             .append("g")
             .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-        //Read the data
-        // csvParseRows: without header
-        // d3.text('data/xyz.csv').then(function(text) {
-        //     data = d3.csvParseRows(text);
-        //     scatterplot_visualize(data);
-        // })
-
-        // var test_data = JSON.parse('{{ feed_data | safe }}');
-        // console.log(test_data);
-
         backButton.addEventListener('click', () => {
             window.location.href='/';
         });
@@ -103,12 +93,12 @@
         // });
   
 
-        const csvPath = [//'/data/{{ audiofile }}/data.csv', 
-        '/data/test_office/test1.csv', '/data/test_office/test2.csv', '/data/test_office/test3.csv', '/data/test_office/test4.csv'];
-        const audioFile = [//'/audio/{{ audiofile }}.wav', 
-        '/audio/test1.wav', '/audio/test2.wav', '/audio/test3.wav', '/audio/test4.wav'];
-        const color = [//'#24d00a', 
-        '#563f2e', '#f7c242', '#bec23f', '#000000bc'];
+        // const csvPath = [//'/data/{{ audiofile }}/data.csv', 
+        // '/data/test_office/test1.csv', '/data/test_office/test2.csv', '/data/test_office/test3.csv', '/data/test_office/test4.csv'];
+        // const audioFile = [//'/audio/{{ audiofile }}.wav', 
+        // '/audio/test1.wav', '/audio/test2.wav', '/audio/test3.wav', '/audio/test4.wav'];
+        // const color = [//'#24d00a', 
+        // '#563f2e', '#f7c242', '#bec23f', '#000000bc'];
 
         // // Create an audio element
         // let audioElements = [];
@@ -126,8 +116,10 @@
         // });
 
         d3.csv('/data/data_2d.csv').then(function(data) {
+            // console.log(data);
             let audioFiles_raw = data.map(function(d) { return d.audiofile; }); // locally available
             let audioFiles = Array.from(new Set(audioFiles_raw)); // merged repeated ones
+            console.log(audioFiles);
             var audioElements = {}; // dictionary-like
             audioFiles.forEach((audioSrc, index) => {
                 const audioElement = document.createElement('audio');
@@ -136,13 +128,14 @@
                 // audioElements.push(audioElement); // for let audioElement = [];
                 audioElements[audioSrc] = audioElement;
             });
-            scatterplot_visualize(data, '#f7c242', audioElements);
+            console.log(audioElements);
+            scatterplot_visualize(data, "#69b3a2", audioElements);
         });
 
         function scatterplot_visualize(data, dotColor, audioElements) {
             // Add X axis
             const x = d3.scaleLinear()
-            .domain([0, 1])
+            .domain([-40, 40])
             .range([ 0, width ]);
             svg.append("g")
             .attr("transform", `translate(0, ${height})`)
@@ -150,7 +143,7 @@
 
             // Add Y axis
             const y = d3.scaleLinear()
-            .domain([0, 1])
+            .domain([-5, 5])
             .range([ height, 0]);
             svg.append("g")
             .call(d3.axisLeft(y));
@@ -176,7 +169,7 @@
                     .transition()
                     .duration(200)
                     .attr("r", 15);
-                    audioELement = audioElements[d.audiofile]; // access audiofile
+                    // audioELement = audioElements[d.audiofile]; // access audiofile
 
                     if (isUserInteracted) {
                         const startTime = parseFloat(d.start_time_sec);
@@ -184,14 +177,14 @@
                         console.log(startTime);
                         if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
                             // Set audio to start time and play
-                            audioElement.currentTime = startTime;
-                            audioElement.play();
+                            audioElements[d.audiofile].currentTime = startTime;
+                            audioElements[d.audiofile].play();
                             // Calculate duration
                             const duration = endTime - startTime;
                             // Stop audio
                             setTimeout(() => {
-                                audioElement.pause();
-                                audioElement.currentTime = 0; // Reset to start
+                                audioElements[d.audiofile].pause();
+                                audioElements[d.audiofile].currentTime = 0; // Reset to start
                             }, duration * 1000); // Convert duration to milliseconds
                         } else {
                             console.error("Invalid start or end time:", d.start_time_sec, d.end_time_sec);
@@ -204,8 +197,8 @@
                     .duration(200)
                     .attr("r", 7.5);
                     //停止播放
-                    audioElement.pause();
-                    audioElement.currentTime = 0; //重置
+                    audioElements[d.audiofile].pause();
+                    audioElements[d.audiofile].currentTime = 0; //重置
                 })
         }
     </script>

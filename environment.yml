@@ -1,0 +1,14 @@
+name: the-big-voice
+dependencies:
+  - python
+  - pip
+  - pip:
+    - numpy
+    - flask
+    - flask_cors
+    - werkzeug
+    - pandas
+    - librosa
+    - pydub
+    - scipy
+    - matplotlib
