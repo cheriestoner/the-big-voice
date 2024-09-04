@@ -37,6 +37,7 @@ Xuehua (Fullstack dev, System design)
     - Play a neighborhood of sounds (mouse cursor with a collision area instead of a dot)
     - How to mix an area of sounds: sounds from the current user as foreground, sound from tha dataset as background? Volumn control + reverb?
     - Different modes for navigating the plot? area selection and single dot play?
+    - Loop play?
 
 - Backend management: /Xuehua
     - flask feed list data to html instead of d3.csv()

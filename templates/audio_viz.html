@@ -84,24 +84,23 @@
         });
 
         // 使用 PapaParse 解析 CSV 文件
-        Papa.parse("/data/data_2d.csv", {
-            download: true,
-            header: true,
-            complete: function(results) {
-                const data = results.data;
+        // Papa.parse("/data/data_2d.csv", {
+        //     header: true,
+        //     complete: function(results) {
+        //         const data = results.data;
             
-                data.forEach(row => {
-                    let audioFile = row['audiofile'];
-                    let segmentIndex = row['segment_index'];
-                    let startTime = row['start_time_sec'];
-                    let endTime = row['end_time_sec'];
-                    let csvPath = `segments/${audioFile}_segment_${segmentIndex}.csv`;
+        //         data.forEach(row => {
+        //             let audioFile = row['audiofile'];
+        //             let segmentIndex = row['segment_index'];
+        //             let startTime = row['start_time_sec'];
+        //             let endTime = row['end_time_sec'];
+        //             let csvPath = `segments/${audioFile}_segment_${segmentIndex}.csv`;
             
-                    console.log('Audio File:', audioFile);
-                    console.log('CSV Path:', csvPath);
-                });
-            }
-        });
+        //             console.log('Audio File:', audioFile);
+        //             console.log('CSV Path:', csvPath);
+        //         });
+        //     }
+        // });
   
 
         const csvPath = [//'/data/{{ audiofile }}/data.csv', 
@@ -111,22 +110,36 @@
         const color = [//'#24d00a', 
         '#563f2e', '#f7c242', '#bec23f', '#000000bc'];
 
-        // Create an audio element
-        let audioElements = [];
-        audioFile.forEach((audioSrc, index) => {
-            const audioElement = document.createElement('audio');
-            audioElement.src = audioSrc;
-            document.body.appendChild(audioElement);
-            audioElements.push(audioElement);
-        });
+        // // Create an audio element
+        // let audioElements = [];
+        // audioFile.forEach((audioSrc, index) => {
+        //     const audioElement = document.createElement('audio');
+        //     audioElement.src = audioSrc;
+        //     document.body.appendChild(audioElement);
+        //     audioElements.push(audioElement);
+        // });
 
-        csvPath.forEach((csvPath, index) => {
-            d3.csv(csvPath).then(function(data) {
-                scatterplot_visualize(data, color[index], audioElements[index]);
+        // csvPath.forEach((csvPath, index) => {
+        //     d3.csv(csvPath).then(function(data) {
+        //         scatterplot_visualize(data, color[index], audioElements[index]);
+        //     });
+        // });
+
+        d3.csv('/data/data_2d.csv').then(function(data) {
+            let audioFiles_raw = data.map(function(d) { return d.audiofile; }); // locally available
+            let audioFiles = Array.from(new Set(audioFiles_raw)); // merged repeated ones
+            var audioElements = {}; // dictionary-like
+            audioFiles.forEach((audioSrc, index) => {
+                const audioElement = document.createElement('audio');
+                audioElement.src = '/audio/'.concat(audioSrc); // concat folder with filename
+                document.body.appendChild(audioElement);
+                // audioElements.push(audioElement); // for let audioElement = [];
+                audioElements[audioSrc] = audioElement;
             });
+            scatterplot_visualize(data, '#f7c242', audioElements);
         });
 
-        function scatterplot_visualize(data, dotColor, audioElement) {
+        function scatterplot_visualize(data, dotColor, audioElements) {
             // Add X axis
             const x = d3.scaleLinear()
             .domain([0, 1])
@@ -153,8 +166,8 @@
             .selectAll("dot")
             .data(data)
             .join("circle")
-                .attr("cx", function (d) { return x(d.centroid); } )
-                .attr("cy", function (d) { return y(d.rms); } )
+                .attr("cx", function (d) { return x(d.tsne1); } )
+                .attr("cy", function (d) { return y(d.tsne2); } )
                 .attr("r", 7.5)
                 .style("fill", dotColor)
             
@@ -163,6 +176,7 @@
                     .transition()
                     .duration(200)
                     .attr("r", 15);
+                    audioELement = audioElements[d.audiofile]; // access audiofile
 
                     if (isUserInteracted) {
                         const startTime = parseFloat(d.start_time_sec);
