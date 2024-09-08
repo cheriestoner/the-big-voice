@@ -36,6 +36,9 @@
             .attr("viewBox", [0, 0, width + margin.left + margin.right, height + margin.top + margin.bottom])
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom);
+
+        // 追踪当前的缩放变换
+        let currentTransform = d3.zoomIdentity;
         
         // Add X axis
         const x = d3.scaleLinear()
@@ -51,11 +54,11 @@
         const yAxis = d3.axisLeft(y);
 
         function zoomed(event) {
-            const { transform } = event;
-            const zx = transform.rescaleX(x).interpolate(d3.interpolateRound);
-            const zy = transform.rescaleY(y).interpolate(d3.interpolateRound);
-        
-            gDot.attr("transform", transform).attr("stroke-width", 5 / transform.k);
+            currentTransform = event.transform;
+            const zx = currentTransform.rescaleX(x).interpolate(d3.interpolateRound);
+            const zy = currentTransform.rescaleY(y).interpolate(d3.interpolateRound);
+
+            gDot.attr("transform", currentTransform).attr("stroke-width", 5 / currentTransform.k);
             gx.call(xAxis.scale(zx));
             gy.call(yAxis.scale(zy));
         }
@@ -157,6 +160,43 @@
             
             // 应用缩放行为到 SVG
             svg.call(zoom);
+
+            svg.on("click", function(event) {
+                // 获取点击位置
+                const [clickX, clickY] = d3.pointer(event);
+                const transformedX = currentTransform.invertX(clickX);
+                const transformedY = currentTransform.invertY(clickY);
+
+                // 添加一个新的圆圈到点击位置
+                svg.append("circle")
+                    .attr("cx", clickX)
+                    .attr("cy", clickY)
+                    .attr("r", 50)
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 3)
+                    .attr("fill", "none");
+        
+                // 播放所有在圈内的音频
+                gDot.selectAll("circle").each(function(d) {
+                    const cx = x(d.tsne1);
+                    const cy = y(d.tsne2);
+                    const distance = Math.sqrt((currentTransform.applyX(cx) - clickX) ** 2 + (currentTransform.applyY(cy) - clickY) ** 2);
+                    if (distance <= 50) {
+                        const audioElement = audioElements[d.audiofile];
+                        const startTime = parseFloat(d.start_time_sec);
+                        const endTime = parseFloat(d.end_time_sec);
+                        if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
+                            audioElement.currentTime = startTime;
+                            audioElement.play();
+                            const duration = endTime - startTime;
+                            setTimeout(() => {
+                                audioElement.pause();
+                                audioElement.currentTime = 0;
+                            }, duration * 1000);
+                        }
+                    }
+                });
+            });
         }
     </script>
     <!-- <script src="{{ url_for('static', filename='scatterplot.js') }}"></script> -->
