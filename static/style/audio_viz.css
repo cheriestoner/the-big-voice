@@ -127,6 +127,5 @@ article {
 }
 
 #my_dataviz svg {
-    width: 100%;
     overflow: visible;
 }

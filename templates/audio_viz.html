@@ -27,9 +27,9 @@
         // d3 gallery https://d3-graph-gallery.com/graph/scatter_basic.html
         // set the dimensions and margins of the graph
         // 设置图表的尺寸和边距
-        const margin = { top: 0, right: 0, bottom: 15, left: 25 },
-              width = 980 - margin.left - margin.right,
-              height = 800 - margin.top - margin.bottom;
+        const margin = { top: 0, right: 0, bottom: 15, left: 25 };
+        let width = window.innerWidth * 0.95 - margin.left - margin.right;
+        let height = window.innerHeight * 0.8 - margin.top - margin.bottom;
 
         // 创建SVG对象
         const svg = d3.create("svg")
