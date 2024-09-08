@@ -33,6 +33,7 @@ loginButton.addEventListener('click', async () => {
         loginWindow.appendChild(inputWindow);
         inputWindow.id = 'inputWindow';
         inputWindow.type = 'text';
+        inputWindow.textContent = 'username';
 
         const userButton = document.createElement('input');
         loginWindow.appendChild(userButton);
@@ -45,13 +46,14 @@ loginButton.addEventListener('click', async () => {
         closeWindow.id = 'closeWindow';
         closeWindow.addEventListener('click', () => {
             loginWindow.parentNode.removeChild(loginWindow);
-        loginButton.textContent = 'Login';
+            loginButton.textContent = 'Login';
+            loginButton.disabled = false;
         });
     }
     popup();
     
     loginButton.textContent = 'User';
-    // loginButton.disabled = true;
+    loginButton.disabled = true;
 })
 
 recordButton.addEventListener('click', async () => {

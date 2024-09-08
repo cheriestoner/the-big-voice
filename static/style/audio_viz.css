@@ -72,6 +72,32 @@ header h1 {
     cursor: pointer;
 }
 
+header .back {
+    position: fixed;
+    top: 45px;
+    left: 40px;
+    height: 30px;
+}
+
+.back #backButton {
+    height: 100%;
+    width: 70px;
+    background-color: #9a0067;
+    cursor: pointer;
+    color: #fff;
+    font-weight: 600;
+    font-family: futura;
+    border: 0;
+    border-radius: 15px;
+    transition: all 0.5s ease;
+}
+
+.back #backButton:hover {
+    background-color: transparent;
+    color: #000;
+    border: 2px solid #000;
+}
+
 article {
     display: flex;
     justify-content: flex-start;
@@ -85,7 +111,7 @@ article {
 }
 
 #controls {
-    width: 85%;
+    width: 100%;
     margin-bottom: 20px;
     display: flex;
     justify-content: flex-start;
@@ -94,166 +120,13 @@ article {
     flex-wrap: nowrap;
 }
 
-#controls button {
-    margin: 20px 0;
-    padding: 0 50px;
-    font-size: 1.35em;
-    font-weight: 700;
-    line-height: 3em;
-    color: #fff;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 10px;
-    border: none;
-    transition: all 0.5s ease;
-}
-
-#backtoRecorder {
-    --glow-color: rgb(176, 177, 255);
-    --glow-spread-color: rgba(123, 127, 255, 0.781);
-    --enhanced-glow-color: rgb(206, 212, 255);
-    --btn-color: rgb(30, 45, 210);
-    box-shadow: 0 0 .05em .05em var(--glow-color),
-                0 0 1em .25em var(--glow-spread-color),
-                inset 0 0 .05em .05em var(--glow-color);
-    text-shadow: 0 0 .05em var(--glow-color);
-
-    cursor: pointer;
-    position: relative;
-    padding: 24px 40px;
-    margin: 50px 0 50px;
-    font-size: 2.1em;
-    font-weight: 900;
-    text-transform: uppercase;
-    color: var(--glow-color);
-    background: var(--btn-color);
-    border: 0.05em solid var(--glow-color);
-    border-radius: 0.8em;
-    transition: all 0.3s ease;
-    outline: none;
-    font-family: futura;
-}
-
-#backtoRecorder:hover {
-    z-index: 1;
-    border-color: transparent;
-    color: var(--btn-color);
-    background: linear-gradient(
-        90deg,
-        #f9d923,
-        #00a19d,
-        #0c87b7,
-        #cb49ff,
-        #ff6666,
-        #f9d923
-    );
-    background-size: 400%;
-    animation: glow 12s linear forwards;
-    box-shadow: 0 0 .025em .025em var(--glow-color),
-                0 0 1em .5em var(--glow-spread-color),
-                inset 0 0 .025em .025em var(--glow-color);
-}
-
-@keyframes glow {
-    from {
-        background-position: 0%;
-    }
-    to {
-        background-position: 400%;
-    }
-}
-
 #my_dataviz {
+    margin-top: 20px;
     cursor: pointer;
-    overflow: visible;
+    overflow: hidden;
 }
 
-svg {
-    overflow: visible;
-}
-
-.body-foot {
-    width: calc(100% - 120px);
-    background-color: #f0f0f0;
-    padding: 50px 60px 145px 60px;
-    border-top: 2px solid #36393e;
-}
-
-.body-foot .foot-container {
-    flex: 1 1 0%;
-    position: relative;
-    border-bottom: 1px solid #5c657f;
-}
-
-.body-foot .foot-bottom {
-    display: block;
-    margin-top: 10px;
+#my_dataviz svg {
     width: 100%;
-    text-align: center;
-    color: #9aa1a7;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-.catagories {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: nowrap;
-}
-
-.catagories .column {
-    margin: 0 0 50px 0;
-    width: 195px;
-    text-align: center;
-}
-
-.catagories .column>a {
-    color: #000;
-    background-color: transparent;
-    font-size: 18px;
-    line-height: 50px;
-    font-weight: 700;
-    text-decoration: none;
-    position: relative;
-    transition: color 0.3s ease;
-}
-
-.catagories .column a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -3px;
-    left: 50%;
-    background-color: #4a4ade;
-    transition: width 0.3s ease, left 0.3s ease;
-}
-
-.catagories .column a:hover {
-    color: #4a4ade;
-}
-
-.catagories .column a:hover::after {
-    width: 100%;
-    left: 0;
-}
-
-article, .body-foot {
-    opacity: 0;
-    transform: translateY(50px);
-    animation: fadeIn 1.5s ease forwards;
-}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@media screen and (max-width: 720px) {
-    .catagories {
-        flex-direction: column;
-    }
+    overflow: visible;
 }

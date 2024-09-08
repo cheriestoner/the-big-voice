@@ -1,121 +1,81 @@
-<!-- <!DOCTYPE html>
-<html>
-<script src="https://d3js.org/d3.v7.js"></script>
-<body>
-<h2>Scatter-Plot</h2>
-
-<div id="d3_scatterplot"></div>
-
-<script src="static/scatterplot.js"></script>
-
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='style/audio_viz.css') }}">
-        <link rel="shortcut icon" href="/favicon.ico"/>
+        <link rel="stylesheet" type= "text/css" href="audio_viz.css">
         <title>Remix | The Big Voice</title>
     </head>
     <script src="https://d3js.org/d3.v7.js"></script>
     <body>
         <header>
+            <div class="back">
+                <button id="backButton">⬅ Back</button>
+            </div>
             <h1>The Big Voice</h1>
         </header>
         <article>
-            <button id='backtoRecorder'> ⬅ Back to Recorder</button>
             <div id="controls">
                 <h3>{{ audiofile }} in scatterplot</h3>
                 <div id="my_dataviz"></div>
             </div>
         </article>
 
-        <footer class="body-foot">
-            <div class="foot-container">
-                <div class="catagories">
-                    <div class="column">
-                        <a href="https://soundstudiesgroup.net/" target="_blank">Sound Studies Group</a>
-                    </div>
-                    <div class="column">
-                        <a href="https://soundstudiesgroup.net/" target="_blank">Related Links</a>
-                    </div>
-                    <div class="column">
-                        <a href="https://soundstudiesgroup.net/" target="_blank">About</a>
-                    </div>
-                </div>
-            </div>
-            <div class="foot-bottom">
-                Copyright © 2024, Sound Studies Group, SUSTech
-            </div>
-        </footer>
-
-<!-- <svg id="myPlot" style="width:500px;height:500px"></svg> -->
-<!-- <script src="{{ url_for('static', filename='scatterplot-w3.js') }}"></script> -->
+    <!-- <svg id="myPlot" style="width:500px;height:500px"></svg> -->
+    <!-- <script src="{{ url_for('static', filename='scatterplot-w3.js') }}"></script> -->
     <script> 
-        const backButton = document.getElementById('backtoRecorder');
+        const backButton = document.getElementById('backButton');
         // d3 gallery https://d3-graph-gallery.com/graph/scatter_basic.html
         // set the dimensions and margins of the graph
-        const margin = {top: 10, right: 30, bottom: 30, left: 60},
-                width = 720 - margin.left - margin.right,
-                height = 640 - margin.top - margin.bottom;
+        // 设置图表的尺寸和边距
+        const margin = { top: 0, right: 0, bottom: 15, left: 25 },
+              width = 980 - margin.left - margin.right,
+              height = 800 - margin.top - margin.bottom;
 
         // 创建SVG对象
-        const svg = d3.select("#my_dataviz")
-            .append("svg")
+        const svg = d3.create("svg")
+            .attr("viewBox", [0, 0, width + margin.left + margin.right, height + margin.top + margin.bottom])
             .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
+            .attr("height", height + margin.top + margin.bottom);
+        
+        // Add X axis
+        const x = d3.scaleLinear()
+            .domain([-40, 40])
+            .range([0, width]);
+
+        // Add Y axis
+        const y = d3.scaleLinear()
+            .domain([-5, 5])
+            .range([height, 0]);
+
+        const xAxis = d3.axisBottom(x);
+        const yAxis = d3.axisLeft(y);
+
+        function zoomed(event) {
+            const { transform } = event;
+            const zx = transform.rescaleX(x).interpolate(d3.interpolateRound);
+            const zy = transform.rescaleY(y).interpolate(d3.interpolateRound);
+        
+            gDot.attr("transform", transform).attr("stroke-width", 5 / transform.k);
+            gx.call(xAxis.scale(zx));
+            gy.call(yAxis.scale(zy));
+        }
+
+        const zoom = d3.zoom()
+            .scaleExtent([0.5, 32])
+            .on("zoom", zoomed);
+        const gDot = svg.append("g")
+        const gx = svg.append("g")
+            .attr("transform", `translate(${margin.left}, ${height + margin.top})`);
+        const gy = svg.append("g")
             .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+        d3.select("#my_dataviz").node().appendChild(svg.node());
+
         backButton.addEventListener('click', () => {
-            window.location.href='/';
+            window.location.href = '/';
         });
 
-        // 使用 PapaParse 解析 CSV 文件
-        // Papa.parse("/data/data_2d.csv", {
-        //     header: true,
-        //     complete: function(results) {
-        //         const data = results.data;
-            
-        //         data.forEach(row => {
-        //             let audioFile = row['audiofile'];
-        //             let segmentIndex = row['segment_index'];
-        //             let startTime = row['start_time_sec'];
-        //             let endTime = row['end_time_sec'];
-        //             let csvPath = `segments/${audioFile}_segment_${segmentIndex}.csv`;
-            
-        //             console.log('Audio File:', audioFile);
-        //             console.log('CSV Path:', csvPath);
-        //         });
-        //     }
-        // });
-  
-
-        // const csvPath = [//'/data/{{ audiofile }}/data.csv', 
-        // '/data/test_office/test1.csv', '/data/test_office/test2.csv', '/data/test_office/test3.csv', '/data/test_office/test4.csv'];
-        // const audioFile = [//'/audio/{{ audiofile }}.wav', 
-        // '/audio/test1.wav', '/audio/test2.wav', '/audio/test3.wav', '/audio/test4.wav'];
-        // const color = [//'#24d00a', 
-        // '#563f2e', '#f7c242', '#bec23f', '#000000bc'];
-
-        // // Create an audio element
-        // let audioElements = [];
-        // audioFile.forEach((audioSrc, index) => {
-        //     const audioElement = document.createElement('audio');
-        //     audioElement.src = audioSrc;
-        //     document.body.appendChild(audioElement);
-        //     audioElements.push(audioElement);
-        // });
-
-        // csvPath.forEach((csvPath, index) => {
-        //     d3.csv(csvPath).then(function(data) {
-        //         scatterplot_visualize(data, color[index], audioElements[index]);
-        //     });
-        // });
-
-        d3.csv('/data/data_2d.csv').then(function(data) {
+        d3.csv('data_2d.csv').then(function(data) {
             // console.log(data);
             let audioFiles_raw = data.map(function(d) { return d.audiofile; }); // locally available
             let audioFiles = Array.from(new Set(audioFiles_raw)); // merged repeated ones
@@ -129,54 +89,48 @@
                 audioElements[audioSrc] = audioElement;
             });
             console.log(audioElements);
-            scatterplot_visualize(data, "#69b3a2", audioElements);
+            scatterplot_visualize(data, "#28713E", audioElements);
         });
 
         function scatterplot_visualize(data, dotColor, audioElements) {
-            // Add X axis
-            const x = d3.scaleLinear()
-            .domain([-40, 40])
-            .range([ 0, width ]);
-            svg.append("g")
-            .attr("transform", `translate(0, ${height})`)
-            .call(d3.axisBottom(x));
+            const z = d3.scaleOrdinal()
+                .domain(data.map(d => d.audiofile))
+                .range(d3.schemeCategory10);
 
-            // Add Y axis
-            const y = d3.scaleLinear()
-            .domain([-5, 5])
-            .range([ height, 0]);
-            svg.append("g")
-            .call(d3.axisLeft(y));
-
+            // Add X & Y axis
+            gx.call(xAxis);
+            gy.call(yAxis);
+        
             let isUserInteracted = false;
             // Listen for user interaction
             document.body.addEventListener('pointerdown', function () {
                 isUserInteracted = true;
             });
-            
+
             // Add dots
-            svg.append('g')
-            .selectAll("dot")
-            .data(data)
-            .join("circle")
-                .attr("cx", function (d) { return x(d.tsne1); } )
-                .attr("cy", function (d) { return y(d.tsne2); } )
-                .attr("r", 7.5)
-                .style("fill", dotColor)
-            
+            gDot.selectAll("circle")
+                .data(data)
+                .join("circle")
+                .attr("cx", d => x(d.tsne1))
+                .attr("cy", d => y(d.tsne2))
+                .attr("r", 5)
+                .attr("fill", dotColor)
                 .on("mouseover", function(event, d) {
                     d3.select(this)
-                    .transition()
-                    .duration(200)
-                    .attr("r", 15);
-                    // audioELement = audioElements[d.audiofile]; // access audiofile
-
+                        .transition()
+                        .duration(200)
+                        .attr("r", 10);
+                
                     if (isUserInteracted) {
                         const startTime = parseFloat(d.start_time_sec);
                         const endTime = parseFloat(d.end_time_sec);
                         console.log(startTime);
                         if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
                             // Set audio to start time and play
+                            Object.values(audioElements).forEach(audio => {
+                                audio.pause();
+                                audio.currentTime = 0;
+                            });
                             audioElements[d.audiofile].currentTime = startTime;
                             audioElements[d.audiofile].play();
                             // Calculate duration
@@ -195,11 +149,14 @@
                     d3.select(this)
                     .transition()
                     .duration(200)
-                    .attr("r", 7.5);
+                    .attr("r", 5);
                     //停止播放
                     audioElements[d.audiofile].pause();
                     audioElements[d.audiofile].currentTime = 0; //重置
-                })
+                });
+            
+            // 应用缩放行为到 SVG
+            svg.call(zoom);
         }
     </script>
     <!-- <script src="{{ url_for('static', filename='scatterplot.js') }}"></script> -->
