@@ -27,6 +27,13 @@
         <button id='gotoRemixer'>Go to Remixer ➡ </button>
         
     <script src="{{ url_for('static', filename='audio.js') }}"></script>
+    <script>
+        const nextButton = document.getElementById('gotoRemixer');
+        nextButton.addEventListener('click', () => {
+        window.location.href='/loading/' + '{{ username }}'; // uncomment it to use the loading page
+        // window.location.href='/remix/' + fileName; // comment it to use the loading page
+});
+    </script>
 
     </article>
 

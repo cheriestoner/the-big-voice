@@ -163,7 +163,8 @@ recordButton.addEventListener('click', async () => {
                     const formData = new FormData();
                     formData.append('audio', currentAudioBlob, currentFileName);
             
-                    fetch('http://127.0.0.1:3000/upload-audio', {  // 更改为服务器的实际上传地址
+                    // fetch('http://127.0.0.1:3000/upload-audio', {  // 更改为服务器的实际上传地址
+                    fetch('/upload-audio', {
                         method: 'POST',
                         body: formData
                     })

@@ -2,13 +2,13 @@ import os
 import io
 from flask import Flask, render_template, request, flash, redirect, jsonify, make_response, send_file, session, url_for
 from flask_cors import CORS
-from werkzeug.utils import secure_filename
+# from werkzeug.utils import secure_filename
 # import subprocess
 # import sys
 # import time
-import pandas as pd
+# import pandas as pd
 import csv
-import json
+# import json
 import logging
 logging.basicConfig(level=logging.DEBUG)
 import audio_processing
@@ -21,7 +21,6 @@ CORS(app)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FOLDER = os.path.join(BASE_DIR, 'data')
 AUDIO_FOLDER = os.path.join(BASE_DIR, 'audio')
-FONT_FOLDER = os.path.join(BASE_DIR, 'fonts')
 # UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 USERS_CSV = os.path.join(DATA_FOLDER, 'users.csv')
 RECORDINGS_CSV = os.path.join(DATA_FOLDER, 'recordings.csv')
@@ -68,7 +67,7 @@ def index():
     # if 'logged_in' not in session or not session['logged_in']:
     #     return redirect(url_for('login'))
     # else:
-    return render_template('index.html')#, username=session['username'])
+    return render_template('index.html', username=session['username'])
         
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -115,22 +114,18 @@ def logout():
 def favicon():
     return send_file(os.path.join(BASE_DIR, 'favicon.ico'))
 
-@app.route('/fonts/<path:subpath>', methods=['GET'])
-def get_fonts(subpath=''):
-    return send_file(os.path.join(FONT_FOLDER, subpath))
+@app.route('/loading/<string:username>', methods=['GET', 'POST'])
+def loading_page(username):
+    return render_template('loading_xh.html', user=username) # or change it to loading_jy.html
 
-@app.route('/loading/<string:filename>', methods=['GET', 'POST'])
-def loading_page(filename):
-    return render_template('loading_xh.html', filename=filename) # or change it to loading_jy.html
-
-@app.route('/remix/<string:filename>')
-def process_features(filename):
+@app.route('/remix/<string:username>')
+def process_features(username):
     # filename = os.path.join(DATA_FOLDER, 'test_office/xyz.csv')
     # data = pd.read_csv(filename, header=0)
     # feed_data = data.values.tolist() # 32 * 
-    audio_processing.process(filename, AUDIO_FOLDER, DATA_FOLDER)
+    # audio_processing.process(filename, AUDIO_FOLDER, DATA_FOLDER) # move to upload
     audio_processing.embed_data(DATA_FOLDER)
-    return render_template('audio_viz.html', audiofile=filename.rsplit('.', 1)[0])
+    return render_template('audio_viz.html', user=username)
 
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
 def get_file(subpath=''):
@@ -157,6 +152,9 @@ def upload_audio():
             file_path = os.path.join(AUDIO_FOLDER, filename) # save to AUDIO_FOLDER
             file.save(file_path)
             file.close()
+
+            ## feature extraction for each upload
+            audio_processing.process(filename, AUDIO_FOLDER, DATA_FOLDER)
 
             # Save filename to session and CSV
             session['filenames'].append(filename)

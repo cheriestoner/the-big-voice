@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" type= "text/css" href="audio_viz.css">
+        <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='style/audio_viz.css') }}">
         <title>Remix | The Big Voice</title>
     </head>
     <script src="https://d3js.org/d3.v7.js"></script>
@@ -15,7 +15,7 @@
         </header>
         <article>
             <div id="controls">
-                <h3>{{ audiofile }} in scatterplot</h3>
+                <h3>{{ username }} sound map</h3>
                 <div id="my_dataviz"></div>
             </div>
         </article>
@@ -78,7 +78,7 @@
             window.location.href = '/';
         });
 
-        d3.csv('data_2d.csv').then(function(data) {
+        d3.csv('/data/data_2d.csv').then(function(data) {
             // console.log(data);
             let audioFiles_raw = data.map(function(d) { return d.audiofile; }); // locally available
             let audioFiles = Array.from(new Set(audioFiles_raw)); // merged repeated ones
@@ -92,7 +92,7 @@
                 audioElements[audioSrc] = audioElement;
             });
             console.log(audioElements);
-            scatterplot_visualize(data, "#28713E", audioElements);
+            scatterplot_visualize(data, "#28713E", audioElements); // highlight with another color
         });
 
         function scatterplot_visualize(data, dotColor, audioElements) {
@@ -118,6 +118,8 @@
                 .attr("cy", d => y(d.tsne2))
                 .attr("r", 5)
                 .attr("fill", dotColor)
+                .style("opacity", 0.5)
+                .style("stroke", "white")
                 .on("mouseover", function(event, d) {
                     d3.select(this)
                         .transition()
