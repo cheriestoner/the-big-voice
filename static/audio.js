@@ -2,7 +2,7 @@ const loginButton = document.getElementById('loginButton');
 const recordButton = document.getElementById('recordButton');
 const stopButton = document.getElementById('stopButton');
 const recordingsList = document.getElementById('recordingsList');
-const nextButton = document.getElementById('gotoRemixer');
+// const nextButton = document.getElementById('gotoRemixer');
 
 let mediaRecorder;
 let audioChunks = [];
@@ -213,7 +213,7 @@ recordButton.addEventListener('click', async () => {
     }
 });
 
-nextButton.addEventListener('click', () => {
-    window.location.href='/loading/' + fileName; // uncomment it to use the loading page
-    // window.location.href='/remix/' + fileName; // comment it to use the loading page
-});
+// nextButton.addEventListener('click', () => {
+//     window.location.href='/loading/' + fileName; // uncomment it to use the loading page
+//     // window.location.href='/remix/' + fileName; // comment it to use the loading page
+// });

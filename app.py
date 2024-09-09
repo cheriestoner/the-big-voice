@@ -67,6 +67,7 @@ def index():
     # if 'logged_in' not in session or not session['logged_in']:
     #     return redirect(url_for('login'))
     # else:
+    # app.logger.info(f'Current username: { session['username'] }')
     return render_template('index.html', username=session['username'])
         
 
@@ -116,16 +117,18 @@ def favicon():
 
 @app.route('/loading/<string:username>', methods=['GET', 'POST'])
 def loading_page(username):
-    return render_template('loading_xh.html', user=username) # or change it to loading_jy.html
+    return render_template('loading.html', username=username) # or change it to loading_jy.html
 
 @app.route('/remix/<string:username>')
 def process_features(username):
+    if 'logged_in' not in session or not session['logged_in']:
+        return redirect(url_for('login'))
     # filename = os.path.join(DATA_FOLDER, 'test_office/xyz.csv')
     # data = pd.read_csv(filename, header=0)
     # feed_data = data.values.tolist() # 32 * 
     # audio_processing.process(filename, AUDIO_FOLDER, DATA_FOLDER) # move to upload
     audio_processing.embed_data(DATA_FOLDER)
-    return render_template('audio_viz.html', user=username)
+    return render_template('audio_viz.html', username=username)
 
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
 def get_file(subpath=''):

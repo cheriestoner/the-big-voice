@@ -28,11 +28,12 @@
         
     <script src="{{ url_for('static', filename='audio.js') }}"></script>
     <script>
+        console.log('current user: {{ username }}');
         const nextButton = document.getElementById('gotoRemixer');
         nextButton.addEventListener('click', () => {
-        window.location.href='/loading/' + '{{ username }}'; // uncomment it to use the loading page
-        // window.location.href='/remix/' + fileName; // comment it to use the loading page
-});
+            window.location.href='/loading/' + '{{ username }}'; // uncomment it to use the loading page
+            // window.location.href='/remix/' + fileName; // comment it to use the loading page
+        });
     </script>
 
     </article>
