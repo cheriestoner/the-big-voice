@@ -2,7 +2,6 @@ const loginButton = document.getElementById('loginButton');
 const recordButton = document.getElementById('recordButton');
 const stopButton = document.getElementById('stopButton');
 const recordingsList = document.getElementById('recordingsList');
-// const nextButton = document.getElementById('gotoRemixer');
 
 let mediaRecorder;
 let audioChunks = [];
@@ -138,10 +137,11 @@ recordButton.addEventListener('click', async () => {
                 const seconds = now.getSeconds().toString().padStart(2, '0');
                
                 const dateTimeString = `${year}-${month}-${day}-${hours}-${minutes}-${seconds}`;
-                return `${originalFileName}_${dateTimeString}${'.wav'}`;
+                // return `${originalFileName}_${dateTimeString}${'.wav'}`;
+                return `${dateTimeString}${'.wav'}`;
             }
             
-            const currentFileName = addTimeToFileName('recording'); //recording_2024-08-21-14-35-45.wav
+            const currentFileName = addTimeToFileName(''); //recording_2024-08-21-14-35-45.wav
 
             // 创建录音列表
             const listItem = document.createElement('div');
@@ -163,7 +163,6 @@ recordButton.addEventListener('click', async () => {
                     const formData = new FormData();
                     formData.append('audio', currentAudioBlob, currentFileName);
             
-                    // fetch('http://127.0.0.1:3000/upload-audio', {  // 更改为服务器的实际上传地址
                     fetch('/upload-audio', {
                         method: 'POST',
                         body: formData
@@ -212,8 +211,3 @@ recordButton.addEventListener('click', async () => {
         recordButton.textContent = 'Start';
     }
 });
-
-// nextButton.addEventListener('click', () => {
-//     window.location.href='/loading/' + fileName; // uncomment it to use the loading page
-//     // window.location.href='/remix/' + fileName; // comment it to use the loading page
-// });

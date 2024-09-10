@@ -151,13 +151,16 @@ def upload_audio():
             app.logger.error('No selected file')
             return jsonify({'error': 'No selected file'})
         if file:
+            user_dir = os.path.join(AUDIO_FOLDER, session['username'])
+            if not os.path.exists(user_dir):
+                os.makedirs(user_dir)
             filename = file.filename
-            file_path = os.path.join(AUDIO_FOLDER, filename) # save to AUDIO_FOLDER
+            file_path = os.path.join(user_dir, filename) # save to AUDIO_FOLDER
             file.save(file_path)
             file.close()
 
             ## feature extraction for each upload
-            audio_processing.process(filename, AUDIO_FOLDER, DATA_FOLDER)
+            audio_processing.process(session['username'], filename, AUDIO_FOLDER, DATA_FOLDER)
 
             # Save filename to session and CSV
             session['filenames'].append(filename)
