@@ -86,7 +86,7 @@ recordButton.addEventListener('click', async () => {
             drawVisual = requestAnimationFrame(draw);
             analyser.getByteTimeDomainData(dataArray);
         
-            canvasCtx.fillStyle = 'rgb(230, 228, 215)';
+            // canvasCtx.fillStyle = 'rgb(230, 228, 215)';
             canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
         
             canvasCtx.lineWidth = 2;

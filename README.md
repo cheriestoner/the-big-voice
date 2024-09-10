@@ -22,8 +22,8 @@ Xuehua (Fullstack dev, System design)
     - ~User recording filename as a variable & send to remixer /Xuehua~
     - ~Naming user recording with timestamp (inside audio.js) /Lio~
     - ~Upload and store recording data in recordings.csv~
+    - ~Improve layout: waveform below the start button, footnote fixed at the bottom~
     - Limit the recording duration
-    - Improve layout: waveform below the start button, footnote fixed at the bottom
 
 - Loading page (low priority for now)
     - ~Placeholder animation~
@@ -31,11 +31,10 @@ Xuehua (Fullstack dev, System design)
 
 - Remixer page: /Lio
     - ~mouseOver play audio~
-    - ~Button to go back to recorder~
-    - ~Plot a list of .csv files on one graph with color highlights~
     - ~Recording list~
     - ~Visualize 'data_2d.csv' /Xuehua~
     - ~Play a neighborhood of sounds (mouse cursor with a collision area instead of a dot)~
+    - Circle selection disappears after 10 sec
     - How to mix an area of sounds: sounds from the current user as foreground, sound from tha dataset as background? Volumn control + reverb?
     - Different modes for navigating the plot? area selection and single dot play?
     - Loop play?
@@ -47,6 +46,8 @@ Xuehua (Fullstack dev, System design)
     - store recording metadata: date, time, location
 
 - Audio processing: /Xuehua
+    - dynamic segmentation
+    - filter out segments under rms threshold
     - Feature extraction
         - ~MFCC first & second derivatives (delta)~
     - Sound event localization?

@@ -93,10 +93,13 @@
                 audioElements[audioSrc] = audioElement;
             });
             console.log(audioElements);
-            scatterplot_visualize(data, "#28713E", audioElements); // highlight with another color
+            scatterplot_visualize(data, "#FF5C35", audioElements); 
         });
 
         function scatterplot_visualize(data, dotColor, audioElements) {
+            /*
+            dotColor: highlight sounds of the current user
+            */
             const z = d3.scaleOrdinal()
                 .domain(data.map(d => d.audiofile))
                 .range(d3.schemeCategory10);
@@ -118,9 +121,9 @@
                 .attr("cx", d => x(d.tsne1))
                 .attr("cy", d => y(d.tsne2))
                 .attr("r", 5)
-                .attr("fill", dotColor)
+                .attr("fill", function(d) {return ((d.username == "{{ username }}")? dotColor : "#28713E")})
                 .style("opacity", 0.5)
-                .style("stroke", "white")
+                // .style("stroke", "white")
                 .on("mouseover", function(event, d) {
                     d3.select(this)
                         .transition()
@@ -130,7 +133,7 @@
                     if (isUserInteracted) {
                         const startTime = parseFloat(d.start_time_sec);
                         const endTime = parseFloat(d.end_time_sec);
-                        console.log(startTime);
+                        // console.log(startTime);
                         if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
                             // Set audio to start time and play
                             Object.values(audioElements).forEach(audio => {
