@@ -333,8 +333,8 @@ audio::-webkit-media-controls-panel {
 }
 
 canvas {
-    position: fixed;
-    bottom: 0;
+    /* position: fixed; */
+    /* bottom: 0; */
     width: calc(100% - 6px);
     border: 3px solid #000;
     background-color: #fff;
@@ -376,6 +376,9 @@ canvas {
     background-color: #f0f0f0;
     padding: 50px 60px 145px 60px;
     border-top: 2px solid #36393e;
+    position: fixed;
+    left: 0;
+    bottom: 0;
 }
 
 .body-foot .foot-container {
