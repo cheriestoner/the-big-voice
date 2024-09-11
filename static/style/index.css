@@ -72,7 +72,7 @@ header h1 {
 
 header .user {
     position: fixed;
-    top: 45px;
+    top: 35px;
     right: 40px;
     height: 50px;
 }
@@ -83,7 +83,7 @@ header .user {
     background-color: #9a0067;
     cursor: pointer;
     color: #fff;
-    font-size: 2em;
+    font-size: 1.75em;
     font-weight: 600;
     font-family: futura;
     border: 0;
@@ -161,8 +161,8 @@ article {
 }
 
 #controls {
-    height: 160px;
-    width: 400px;
+    height: 240px;
+    width: 600px;
     margin: 30px 0;
     display: flex;
     justify-content: space-evenly;
@@ -172,21 +172,21 @@ article {
     flex-wrap: wrap;
     background-color: rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
-    border-radius: 100px;
+    border-radius: 150px;
 }
 
 #controls button {
-    height: 106px;
+    height: 175px;
     margin: 20px 20px;
     padding: 0 30px;
     font-family: futura;
-    font-size: 1.35em;
+    font-size: 3.5em;
     font-weight: 600;
     line-height: 3em;
     color: #fff;
     text-align: center;
     cursor: pointer;
-    border-radius: 75px;
+    border-radius: 90px;
     border: none;
     transition: all 0.5s ease;
 }
@@ -199,14 +199,14 @@ article {
 #controls #recordButton {
     margin: 20px 20px 20px 40px;
     background: transparent;
-    border: 3px solid #000;
+    border: 5px solid #000;
     color: #000;
 }
 
 #controls #stopButton {
-    margin: 20px 40px 20px 255px;
+    margin: 20px 40px 20px 385px;
     background: transparent;
-    border: 3px solid #000;
+    border: 5px solid #000;
     color: #000;
 }
 
@@ -221,17 +221,17 @@ article {
 
 .recording-item span {
     line-height: 3em;
-    font-size: 1.2em;
+    font-size: 2em;
     font-weight: 600;
 }
 
 #recordingsList #deleteButton,
 #submitButton {
-    width: 72px;
+    width: 115px;
     margin: 0 0 0 40px;
     padding: 10px;
     font-family: futura;
-    font-size: 1em;
+    font-size: 1.75em;
     font-weight: 600;
     text-align: center;
     cursor: pointer;
@@ -336,7 +336,7 @@ audio::-webkit-media-controls-panel {
 canvas {
     /* position: fixed; */
     /* bottom: 0; */
-    width: calc(100% - 6px);
+    width: 100%;
     /* border: 3px solid #000; */
     background-color: #fff;
 }
@@ -354,8 +354,8 @@ canvas {
     position: absolute;
     top: 140px;
     right: 10px;
-    height: 20px;
-    max-width: 160px;
+    height: 45px;
+    max-width: 142px;
     padding: 8px 12px;
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 5px;
@@ -366,7 +366,7 @@ canvas {
 }
 
 .index-popup span {
-    font-size: 15px;
+    font-size: 1.5em;
     font-weight: 600;
     color: rgba(255, 30, 0, 0.8);
 }
@@ -375,7 +375,7 @@ canvas {
 .body-foot {
     width: calc(100% - 120px);
     background-color: #f0f0f0;
-    padding: 50px 60px 145px 60px;
+    padding: 50px 60px 20px 60px;
     border-top: 2px solid #36393e;
     position: fixed;
     left: 0;
@@ -407,14 +407,14 @@ canvas {
 
 .catagories .column {
     margin: 0 0 50px 0;
-    width: 195px;
+    width: 215px;
     text-align: center;
 }
 
 .catagories .column>a {
     color: #000;
     background-color: transparent;
-    font-size: 18px;
+    font-size: 1.5em;
     line-height: 50px;
     font-weight: 700;
     text-decoration: none;
