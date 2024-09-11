@@ -163,7 +163,7 @@
         document.body.addEventListener('click', resumeAudioContext, { once: true });
 
         // 加载 IR 文件，并将其应用到卷积节点
-        fetch('sounds/cardiod-rear-levelled.wav')
+        fetch('/audio/cardiod-rear-levelled.wav')
             .then(response => response.arrayBuffer())
             .then(undecodedAudio => audioContext.decodeAudioData(undecodedAudio))
             .then(audioBuffer => {
@@ -289,7 +289,7 @@
                 const transformedY = currentTransform.invertY(clickY);
 
                 // 添加一个新的圆圈到点击位置
-                svg.append("circle")
+                const circle = svg.append("circle")
                     .attr("cx", clickX)
                     .attr("cy", clickY)
                     .attr("r", 50)
