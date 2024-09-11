@@ -18,6 +18,54 @@
                 <h3>{{ username }} sound map</h3>
                 <div id="my_dataviz"></div>
             </div>
+            <div class="controlTable">
+                <table>
+                    <tbody>
+                        <tr id="volume-control">
+                            <td style="padding: 5px 20px;">
+                                <label for="volumeSlider">VOLUME:</label>
+                            </td>
+                            <td style="padding: 5px 5px 5px 20px;">
+                                <span>LOW</span>
+                            </td>
+                            <td style="padding: 5px 0;">
+                                <input type="range" id="volumeSlider" min="0.0" max="1" value="1" step="0.01" style="height: 20px; width: 200px;">
+                            </td>
+                            <td style="padding: 5px 20px 5px 5px;">
+                                <span>HIGH</span>
+                            </td>
+                        </tr>
+                        <tr id="reverb-control">
+                            <td style="padding: 5px 20px;">
+                                <label for="reverbSlider">REVERB:</label>
+                            </td>
+                            <td style="padding: 5px 5px 5px 20px;">
+                                <span>DRY</span>
+                            </td>
+                            <td style="padding: 5px 0;">
+                                <input type="range" id="reverbSlider" min="0.0" max="1" value="0.25" step="0.01" style="height: 20px; width: 200px;">
+                            </td>
+                            <td style="padding: 5px 20px 5px 5px;">
+                                <span>WET</span>
+                            </td>
+                        </tr>
+                        <tr id="filter-control">
+                            <td style="padding: 5px 20px;">
+                                <label for="filterSlider">LOWPASS FILTER:</label>
+                            </td>
+                            <td style="padding: 5px 5px 5px 20px;">
+                                <span>LOW</span>
+                            </td>
+                            <td style="padding: 5px 0;">
+                                <input type="range" id="filterSlider" min="50" max="8000" step="10" value="8000" style="height: 20px; width: 200px;">
+                            </td>
+                            <td style="padding: 5px 20px 5px 5px;">
+                                <span>HIGH</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </article>
 
     <!-- <svg id="myPlot" style="width:500px;height:500px"></svg> -->
@@ -28,8 +76,8 @@
         // set the dimensions and margins of the graph
         // 设置图表的尺寸和边距
         const margin = { top: 0, right: 0, bottom: 15, left: 25 };
-        let width = window.innerWidth * 0.95 - margin.left - margin.right;
-        let height = window.innerHeight * 0.8 - margin.top - margin.bottom;
+        let width = window.innerWidth * 1 - margin.left - margin.right;
+        let height = window.innerHeight * 0.6 - margin.top - margin.bottom;
 
         // 创建SVG对象
         const svg = d3.create("svg")
@@ -50,8 +98,8 @@
             .domain([-5, 5])
             .range([height, 0]);
 
-        const xAxis = d3.axisBottom(x);
-        const yAxis = d3.axisLeft(y);
+        //const xAxis = d3.axisBottom(x);
+        //const yAxis = d3.axisLeft(y);
 
         function zoomed(event) {
             currentTransform = event.transform;
@@ -59,13 +107,14 @@
             const zy = currentTransform.rescaleY(y).interpolate(d3.interpolateRound);
 
             gDot.attr("transform", currentTransform).attr("stroke-width", 5 / currentTransform.k);
-            gx.call(xAxis.scale(zx));
-            gy.call(yAxis.scale(zy));
+            //gx.call(xAxis.scale(zx));
+            //gy.call(yAxis.scale(zy));
         }
 
         const zoom = d3.zoom()
             .scaleExtent([0.5, 32])
             .on("zoom", zoomed);
+        const vo = svg.append("path");
         const gDot = svg.append("g")
         const gx = svg.append("g")
             .attr("transform", `translate(${margin.left}, ${height + margin.top})`);
@@ -76,6 +125,68 @@
 
         backButton.addEventListener('click', () => {
             window.location.href = '/';
+        });
+
+        // 初始化 Web Audio API、混响节点和低通滤波器
+        let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let reverbNode = audioContext.createConvolver();
+        let reverbGainNode = audioContext.createGain();
+        let filterNode = audioContext.createBiquadFilter();
+        filterNode.type = 'lowpass';
+        let volumeNode = audioContext.createGain();
+
+        function fadeIn(audioSource, duration = 200) {
+            const gainNode = audioContext.createGain();
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + duration / 1000);
+            audioSource.connect(gainNode).connect(volumeNode).connect(filterNode).connect(reverbGainNode).connect(reverbNode).connect(audioContext.destination);
+            return gainNode;
+        }
+        
+        function fadeOut(gainNode, duration = 200) {
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration / 1000);
+            setTimeout(() => {
+                gainNode.disconnect(); // 断开连接，停止声音
+            }, duration);
+        }
+
+        // 在用户交互后恢复 AudioContext
+        function resumeAudioContext() {
+            if (audioContext.state === 'suspended') {
+                audioContext.resume().then(() => {
+                    console.log('AudioContext resumed.');
+                });
+            }
+        }
+
+        // 在用户首次交互时恢复 AudioContext
+        document.body.addEventListener('click', resumeAudioContext, { once: true });
+
+        // 加载 IR 文件，并将其应用到卷积节点
+        fetch('sounds/cardiod-rear-levelled.wav')
+            .then(response => response.arrayBuffer())
+            .then(undecodedAudio => audioContext.decodeAudioData(undecodedAudio))
+            .then(audioBuffer => {
+                reverbNode.buffer = audioBuffer;
+            })
+            .catch(error => console.error('Error loading IR file:', error));
+        
+        const reverbSlider = document.getElementById('reverbSlider');
+        reverbGainNode.gain.value = reverbSlider.value;
+        reverbSlider.addEventListener('input', function () {
+            reverbGainNode.gain.value = this.value;
+        });
+
+        const volumeSlider = document.getElementById('volumeSlider');
+        volumeNode.gain.value = volumeSlider.value;
+        volumeSlider.addEventListener('input', function () {
+            volumeNode.gain.value = this.value;
+        });
+
+        const filterSlider = document.getElementById('filterSlider');
+        filterNode.frequency.value = filterSlider.value;
+        filterSlider.addEventListener('input', function () {
+            filterNode.frequency.value = this.value;
         });
 
         d3.csv('/data/coords.csv').then(function(data) {
@@ -91,7 +202,11 @@
                 document.body.appendChild(audioElement);
                 // audioElements.push(audioElement); // for let audioElement = [];
                 audioElements[audioSrc] = audioElement;
+
+                let track = audioContext.createMediaElementSource(audioElement);
+                track.connect(volumeNode).connect(filterNode).connect(reverbGainNode).connect(reverbNode).connect(audioContext.destination);
             });
+
             console.log(audioElements);
             scatterplot_visualize(data, "#FF5C35", audioElements); 
         });
@@ -105,8 +220,8 @@
                 .range(d3.schemeCategory10);
 
             // Add X & Y axis
-            gx.call(xAxis);
-            gy.call(yAxis);
+            //gx.call(xAxis);
+            //gy.call(yAxis);
         
             let isUserInteracted = false;
             // Listen for user interaction
@@ -178,9 +293,12 @@
                     .attr("cx", clickX)
                     .attr("cy", clickY)
                     .attr("r", 50)
-                    .attr("stroke", "black")
+                    .attr("stroke", "#00000080")
                     .attr("stroke-width", 3)
-                    .attr("fill", "none");
+                    .attr("fill", "#77777780")
+                    .attr("fill-opacity", 1)
+                    .attr("stroke-opacity", 1)
+                    .attr("class", "selection-circle");
         
                 // 播放所有在圈内的音频
                 gDot.selectAll("circle").each(function(d) {
@@ -202,6 +320,14 @@
                         }
                     }
                 });
+
+                setTimeout(() => {
+                    circle.transition()
+                        .duration(9000)
+                        .attr("fill-opacity", 0)
+                        .attr("stroke-opacity", 0)
+                        .remove();
+                }, 1000);
             });
         }
     </script>
