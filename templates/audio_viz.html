@@ -22,44 +22,44 @@
                 <table>
                     <tbody>
                         <tr id="volume-control">
-                            <td style="padding: 5px 20px;">
+                            <td style="padding: 10px 20px;">
                                 <label for="volumeSlider">VOLUME:</label>
                             </td>
-                            <td style="padding: 5px 5px 5px 20px;">
+                            <td style="padding: 10px 5px 10px 20px;">
                                 <span>LOW</span>
                             </td>
-                            <td style="padding: 5px 0;">
+                            <td style="padding: 10px 0;">
                                 <input type="range" id="volumeSlider" min="0.0" max="1" value="1" step="0.01" style="height: 20px; width: 200px;">
                             </td>
-                            <td style="padding: 5px 20px 5px 5px;">
+                            <td style="padding: 10px 20px 10px 5px;">
                                 <span>HIGH</span>
                             </td>
                         </tr>
                         <tr id="reverb-control">
-                            <td style="padding: 5px 20px;">
+                            <td style="padding: 10px 20px;">
                                 <label for="reverbSlider">REVERB:</label>
                             </td>
-                            <td style="padding: 5px 5px 5px 20px;">
+                            <td style="padding: 10px 5px 10px 20px;">
                                 <span>DRY</span>
                             </td>
-                            <td style="padding: 5px 0;">
+                            <td style="padding: 10px 0;">
                                 <input type="range" id="reverbSlider" min="0.0" max="1" value="0.25" step="0.01" style="height: 20px; width: 200px;">
                             </td>
-                            <td style="padding: 5px 20px 5px 5px;">
+                            <td style="padding: 10px 20px 10px 5px;">
                                 <span>WET</span>
                             </td>
                         </tr>
                         <tr id="filter-control">
-                            <td style="padding: 5px 20px;">
+                            <td style="padding: 10px 20px;">
                                 <label for="filterSlider">LOWPASS FILTER:</label>
                             </td>
-                            <td style="padding: 5px 5px 5px 20px;">
+                            <td style="padding: 10px 5px 10px 20px;">
                                 <span>LOW</span>
                             </td>
-                            <td style="padding: 5px 0;">
+                            <td style="padding: 10px 0;">
                                 <input type="range" id="filterSlider" min="50" max="8000" step="10" value="8000" style="height: 20px; width: 200px;">
                             </td>
-                            <td style="padding: 5px 20px 5px 5px;">
+                            <td style="padding: 10px 20px 10px 5px;">
                                 <span>HIGH</span>
                             </td>
                         </tr>
@@ -244,39 +244,39 @@
                         .transition()
                         .duration(200)
                         .attr("r", 10);
-                
-                    if (isUserInteracted) {
-                        const startTime = parseFloat(d.start_time_sec);
-                        const endTime = parseFloat(d.end_time_sec);
-                        // console.log(startTime);
-                        if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
-                            // Set audio to start time and play
-                            Object.values(audioElements).forEach(audio => {
-                                audio.pause();
-                                audio.currentTime = 0;
-                            });
-                            audioElements['/' + d.username + '/' + d.audiofile].currentTime = startTime;
-                            audioElements['/' + d.username + '/' + d.audiofile].play();
-                            // Calculate duration
-                            const duration = endTime - startTime;
-                            // Stop audio
-                            setTimeout(() => {
-                                audioElements['/' + d.username + '/' + d.audiofile].pause();
-                                audioElements['/' + d.username + '/' + d.audiofile].currentTime = 0; // Reset to start
-                            }, duration * 1000); // Convert duration to milliseconds
-                        } else {
-                            console.error("Invalid start or end time:", d.start_time_sec, d.end_time_sec);
-                        }
-                    }
+                //
+                //    if (isUserInteracted) {
+                //        const startTime = parseFloat(d.start_time_sec);
+                //        const endTime = parseFloat(d.end_time_sec);
+                //        // console.log(startTime);
+                //        if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
+                //            // Set audio to start time and play
+                //            Object.values(audioElements).forEach(audio => {
+                //                audio.pause();
+                //                audio.currentTime = 0;
+                //            });
+                //            audioElements['/' + d.username + '/' + d.audiofile].currentTime = startTime;
+                //            audioElements['/' + d.username + '/' + d.audiofile].play();
+                //            // Calculate duration
+                //            const duration = endTime - startTime;
+                //            // Stop audio
+                //            setTimeout(() => {
+                //                audioElements['/' + d.username + '/' + d.audiofile].pause();
+                //                audioElements['/' + d.username + '/' + d.audiofile].currentTime = 0; // Reset to start
+                //            }, duration * 1000); // Convert duration to milliseconds
+                //        } else {
+                //            console.error("Invalid start or end time:", d.start_time_sec, d.end_time_sec);
+                //        }
+                //    }
                 })
                 .on("mouseleave", function(event, d) {
                     d3.select(this)
                     .transition()
                     .duration(200)
                     .attr("r", 5);
-                    //停止播放
-                    audioElements['/' + d.username + '/' + d.audiofile].pause();
-                    audioElements['/' + d.username + '/' + d.audiofile].currentTime = 0; //重置
+                //    //停止播放
+                //    audioElements['/' + d.username + '/' + d.audiofile].pause();
+                //    audioElements['/' + d.username + '/' + d.audiofile].currentTime = 0; //重置
                 });
             
             // 应用缩放行为到 SVG
@@ -290,36 +290,56 @@
 
                 // 添加一个新的圆圈到点击位置
                 const circle = svg.append("circle")
-                    .attr("cx", clickX)
-                    .attr("cy", clickY)
-                    .attr("r", 50)
-                    .attr("stroke", "#00000080")
-                    .attr("stroke-width", 3)
-                    .attr("fill", "#77777780")
-                    .attr("fill-opacity", 1)
-                    .attr("stroke-opacity", 1)
-                    .attr("class", "selection-circle");
-        
-                // 播放所有在圈内的音频
+                .attr("cx", clickX)
+                .attr("cy", clickY)
+                .attr("r", 50)
+                .attr("stroke", "#00000080")
+                .attr("stroke-width", 3)
+                .attr("fill", "#77777780")
+                .attr("fill-opacity", 1)
+                .attr("stroke-opacity", 1)
+                .attr("class", "selection-circle");
+
+                const pointsInCircle = [];
                 gDot.selectAll("circle").each(function(d) {
                     const cx = x(d.tsne1);
                     const cy = y(d.tsne2);
                     const distance = Math.sqrt((currentTransform.applyX(cx) - clickX) ** 2 + (currentTransform.applyY(cy) - clickY) ** 2);
                     if (distance <= 50) {
-                        const audioElement = audioElements['/' + d.username + '/' + d.audiofile];
-                        const startTime = parseFloat(d.start_time_sec);
-                        const endTime = parseFloat(d.end_time_sec);
-                        if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
-                            audioElement.currentTime = startTime;
-                            audioElement.play();
-                            const duration = endTime - startTime;
-                            setTimeout(() => {
-                                audioElement.pause();
-                                audioElement.currentTime = 0;
-                            }, duration * 1000);
-                        }
+                        pointsInCircle.push(d);
                     }
                 });
+            
+                // 打乱顺序，随机播放点的音频
+                const shuffledPoints = d3.shuffle(pointsInCircle);
+            
+                function playNextAudio(index) {
+                    if (index >= shuffledPoints.length) {
+                        return;
+                    }
+                
+                    const d = shuffledPoints[index];
+                    const audioElement = audioElements['/' + d.username + '/' + d.audiofile];
+                    const startTime = parseFloat(d.start_time_sec);
+                    const endTime = parseFloat(d.end_time_sec);
+                
+                    if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
+                        audioElement.currentTime = startTime;
+                        audioElement.play();
+                        const duration = endTime - startTime;
+                    
+                        setTimeout(() => {
+                            audioElement.pause();
+                            audioElement.currentTime = 0;
+                            playNextAudio(index + 1);  // 递归播放下一个音频
+                        }, duration * 1000);
+                    } else {
+                        // 如果音频数据无效，跳到下一个
+                        playNextAudio(index + 1);
+                    }
+                }
+            
+                playNextAudio(0);
 
                 setTimeout(() => {
                     circle.transition()
