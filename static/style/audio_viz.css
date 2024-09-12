@@ -18,7 +18,7 @@ body::-webkit-scrollbar {
 body {
     position: relative;
     margin: 0;
-    background-color: #aeacb1;
+    background-color: #9970bf;
     /* background: linear-gradient(-45deg, #ff7e5f, #9970bf, #feb47b, #90b5a4, #4394a4, #9970bf, #ff7e5f); */
     /* background-size: 800% 800%; */
     /* animation: gradientBG 20s ease infinite; */
@@ -113,7 +113,6 @@ article {
 
 #controls {
     width: 100%;
-    margin-bottom: 20px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -121,8 +120,11 @@ article {
     flex-wrap: nowrap;
 }
 
+#controls h3 {
+    font-size: 2.5em;
+}
+
 #my_dataviz {
-    margin-top: 20px;
     cursor: pointer;
     overflow: hidden;
 }
@@ -133,7 +135,60 @@ article {
     background-color: #ddd;
 }
 
+.controlTable {
+    margin-top: 30px;
+}
+
 .controlTable table td {
-    font-size: 1.25em;
+    font-size: 2em;
+    font-weight: 500;
     text-align: right;
+}
+
+.wrapper {
+    position: relative;
+}
+
+.wrapper::before, .wrapper::after {
+    position: absolute;
+    color: #fff;
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 1rem;
+    pointer-events: none;
+}
+
+.wrapper::before {
+  content: "+";
+  right: 0;
+}
+
+.wrapper::after {
+  content: "−";
+  left: 0;
+}
+
+input[type=range] {
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 0;
+  padding: 0;
+  width: 25rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: row-resize;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 0;
+  box-shadow: -20rem 0 0 20rem rgba(255, 255, 255, 0.2);
+}
+
+input[type=range]::-moz-range-thumb {
+  border: none;
+  width: 0;
+  box-shadow: -20rem 0 0 20rem rgba(255, 255, 255, 0.2);
 }

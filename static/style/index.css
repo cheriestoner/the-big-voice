@@ -144,7 +144,7 @@ article {
     align-items: center;
     flex-direction: column;
     flex-wrap: nowrap;
-    margin: 0;
+    margin: 0 0 240px;
     padding-top: 120px;
     height: 100%;
     background: transparent;
@@ -152,7 +152,7 @@ article {
 
 #elements {
     width: 85%;
-    margin: 150px 0;
+    margin: 200px 0 150px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -284,7 +284,7 @@ article {
     position: relative;
     padding: 24px 40px;
     margin: 20px 0 50px;
-    font-size: 2.1em;
+    font-size: 2.5em;
     font-weight: 900;
     text-transform: uppercase;
     color: var(--glow-color);
@@ -393,6 +393,8 @@ canvas {
     margin-top: 10px;
     width: 100%;
     text-align: center;
+    font-size: 1.5em;
+    font-weight: 600;
     color: #9aa1a7;
     font-family: futura;
 }

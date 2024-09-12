@@ -22,44 +22,44 @@
                 <table>
                     <tbody>
                         <tr id="volume-control">
-                            <td style="padding: 10px 20px;">
+                            <td style="padding: 15px 20px 20px; font-weight: 900;">
                                 <label for="volumeSlider">VOLUME:</label>
                             </td>
-                            <td style="padding: 10px 5px 10px 20px;">
+                            <td style="padding: 15px 20px 20px 5px;">
                                 <span>LOW</span>
                             </td>
-                            <td style="padding: 10px 0;">
-                                <input type="range" id="volumeSlider" min="0.0" max="1" value="1" step="0.01" style="height: 20px; width: 200px;">
+                            <td class="wrapper" style="padding: 20px 0;">
+                                <input type="range" id="volumeSlider" min="0.0" max="100" value="100">
                             </td>
-                            <td style="padding: 10px 20px 10px 5px;">
+                            <td style="padding: 15px 5px 20px 20px;">
                                 <span>HIGH</span>
                             </td>
                         </tr>
                         <tr id="reverb-control">
-                            <td style="padding: 10px 20px;">
+                            <td style="padding: 15px 20px 20px; font-weight: 900;">
                                 <label for="reverbSlider">REVERB:</label>
                             </td>
-                            <td style="padding: 10px 5px 10px 20px;">
+                            <td style="padding: 15px 20px 20px 5px;">
                                 <span>DRY</span>
                             </td>
-                            <td style="padding: 10px 0;">
-                                <input type="range" id="reverbSlider" min="0.0" max="1" value="0.25" step="0.01" style="height: 20px; width: 200px;">
+                            <td class="wrapper" style="padding: 20px 0;">
+                                <input type="range" id="reverbSlider" min="1" max="100" value="25">
                             </td>
-                            <td style="padding: 10px 20px 10px 5px;">
+                            <td style="padding: 15px 5px 20px 20px; text-align: left;">
                                 <span>WET</span>
                             </td>
                         </tr>
                         <tr id="filter-control">
-                            <td style="padding: 10px 20px;">
+                            <td style="padding: 15px 20px 20px; font-weight: 900;">
                                 <label for="filterSlider">LOWPASS FILTER:</label>
                             </td>
-                            <td style="padding: 10px 5px 10px 20px;">
+                            <td style="padding: 15px 20px 20px 5px;">
                                 <span>LOW</span>
                             </td>
-                            <td style="padding: 10px 0;">
-                                <input type="range" id="filterSlider" min="50" max="8000" step="10" value="8000" style="height: 20px; width: 200px;">
+                            <td class="wrapper" style="padding: 20px 0;">
+                                <input type="range" id="filterSlider" min="50" max="8000" value="8000">
                             </td>
-                            <td style="padding: 10px 20px 10px 5px;">
+                            <td style="padding: 15px 5px 20px 20px;">
                                 <span>HIGH</span>
                             </td>
                         </tr>
@@ -112,7 +112,7 @@
         }
 
         const zoom = d3.zoom()
-            .scaleExtent([0.5, 32])
+            .scaleExtent([0.75, 5])
             .on("zoom", zoomed);
         const vo = svg.append("path");
         const gDot = svg.append("g")
@@ -172,15 +172,15 @@
             .catch(error => console.error('Error loading IR file:', error));
         
         const reverbSlider = document.getElementById('reverbSlider');
-        reverbGainNode.gain.value = reverbSlider.value;
+        reverbGainNode.gain.value = reverbSlider.value / 100;
         reverbSlider.addEventListener('input', function () {
-            reverbGainNode.gain.value = this.value;
+            reverbGainNode.gain.value = this.value / 100;
         });
 
         const volumeSlider = document.getElementById('volumeSlider');
-        volumeNode.gain.value = volumeSlider.value;
+        volumeNode.gain.value = volumeSlider.value / 100;
         volumeSlider.addEventListener('input', function () {
-            volumeNode.gain.value = this.value;
+            volumeNode.gain.value = this.value / 100;
         });
 
         const filterSlider = document.getElementById('filterSlider');
@@ -239,11 +239,11 @@
                 .attr("fill", function(d) {return ((d.username == "{{ username }}")? dotColor : "#28713E")})
                 .style("opacity", 0.5)
                 // .style("stroke", "white")
-                .on("mouseover", function(event, d) {
-                    d3.select(this)
-                        .transition()
-                        .duration(200)
-                        .attr("r", 10);
+                //.on("mouseover", function(event, d) {
+                //    d3.select(this)
+                //        .transition()
+                //        .duration(200)
+                //        .attr("r", 10);
                 //
                 //    if (isUserInteracted) {
                 //        const startTime = parseFloat(d.start_time_sec);
@@ -268,16 +268,16 @@
                 //            console.error("Invalid start or end time:", d.start_time_sec, d.end_time_sec);
                 //        }
                 //    }
-                })
-                .on("mouseleave", function(event, d) {
-                    d3.select(this)
-                    .transition()
-                    .duration(200)
-                    .attr("r", 5);
+                //})
+                //.on("mouseleave", function(event, d) {
+                //    d3.select(this)
+                //    .transition()
+                //    .duration(200)
+                //    .attr("r", 5);
                 //    //停止播放
                 //    audioElements['/' + d.username + '/' + d.audiofile].pause();
                 //    audioElements['/' + d.username + '/' + d.audiofile].currentTime = 0; //重置
-                });
+                //});
             
             // 应用缩放行为到 SVG
             svg.call(zoom);
@@ -288,24 +288,26 @@
                 const transformedX = currentTransform.invertX(clickX);
                 const transformedY = currentTransform.invertY(clickY);
 
+                const scaledRadius = 50 * currentTransform.k;
+
                 // 添加一个新的圆圈到点击位置
                 const circle = svg.append("circle")
-                .attr("cx", clickX)
-                .attr("cy", clickY)
-                .attr("r", 50)
-                .attr("stroke", "#00000080")
-                .attr("stroke-width", 3)
-                .attr("fill", "#77777780")
-                .attr("fill-opacity", 1)
-                .attr("stroke-opacity", 1)
-                .attr("class", "selection-circle");
+                    .attr("cx", clickX)
+                    .attr("cy", clickY)
+                    .attr("r", scaledRadius)
+                    .attr("stroke", "#00000080")
+                    .attr("stroke-width", 3)
+                    .attr("fill", "#77777780")
+                    .attr("fill-opacity", 1)
+                    .attr("stroke-opacity", 1)
+                    .attr("class", "selection-circle");
 
                 const pointsInCircle = [];
                 gDot.selectAll("circle").each(function(d) {
                     const cx = x(d.tsne1);
                     const cy = y(d.tsne2);
                     const distance = Math.sqrt((currentTransform.applyX(cx) - clickX) ** 2 + (currentTransform.applyY(cy) - clickY) ** 2);
-                    if (distance <= 50) {
+                    if (distance <= scaledRadius) {
                         pointsInCircle.push(d);
                     }
                 });
@@ -339,7 +341,7 @@
                     }
                 }
             
-                playNextAudio(0);
+                playNextAudio(0, shuffledPoints);
 
                 setTimeout(() => {
                     circle.transition()
