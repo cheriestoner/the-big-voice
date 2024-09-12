@@ -38,6 +38,7 @@ loginButton.addEventListener('click', async () => {
         loginWindow.appendChild(userButton);
         userButton.id = 'userButton';
         userButton.type = 'submit';
+        userButton.textContent = 'submit';
 
         const closeWindow = document.createElement('button');
         loginWindow.appendChild(closeWindow);
