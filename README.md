@@ -34,8 +34,8 @@ Xuehua (Fullstack dev, System design)
     - ~Recording list~
     - ~Visualize 'data_2d.csv' /Xuehua~
     - ~Play a neighborhood of sounds (mouse cursor with a collision area instead of a dot)~
-    - Circle selection disappears after 10 sec
-    - How to mix an area of sounds: sounds from the current user as foreground, sound from tha dataset as background? Volumn control + reverb?
+    - ~Circle selection disappears after 10 sec~
+    - ~How to mix an area of sounds: sounds from the current user as foreground, sound from tha dataset as background? Volumn control + reverb?~
     - Different modes for navigating the plot? area selection and single dot play?
     - Loop play?
 
