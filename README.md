@@ -24,6 +24,7 @@ Xuehua (Fullstack dev, System design)
     - ~Upload and store recording data in recordings.csv~
     - ~Improve layout: waveform below the start button, footnote fixed at the bottom~
     - Limit the recording duration
+    - LPF and HPF to enhance recording
 
 - Loading page (low priority for now)
     - ~Placeholder animation~
