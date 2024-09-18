@@ -18,7 +18,7 @@ body::-webkit-scrollbar {
 body {
     position: relative;
     margin: 0;
-    background-color: #8f9d8c;
+    background-color: #a3b8a5;
     /* background: linear-gradient(-45deg, #ff7e5f, #9970bf, #feb47b, #90b5a4, #4394a4, #9970bf, #ff7e5f); */
     /* background-size: 800% 800%; */
     /* animation: gradientBG 20s ease infinite; */
@@ -41,7 +41,7 @@ header {
     position: fixed;
     top: 0;
     width: 100%;
-    height: 120px;
+    height: 150px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -72,7 +72,7 @@ header h1 {
 
 header .user {
     position: fixed;
-    top: 35px;
+    top: 50px;
     right: 40px;
     height: 50px;
 }
@@ -80,7 +80,7 @@ header .user {
 .user #loginButton {
     height: 100%;
     width: 85px;
-    background-color: #9a0067;
+    background-color: #ba8ac0;
     cursor: pointer;
     color: #fff;
     font-size: 1.75em;
@@ -148,22 +148,15 @@ article {
     flex-direction: column;
     flex-wrap: nowrap;
     margin: 0 0 240px;
-    padding-top: 120px;
+    padding-top: 150px;
     height: 100%;
     background: transparent;
 }
 
-#elements {
-    width: 85%;
-    margin: 200px 0 150px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: column;
-    flex-wrap: nowrap;
-}
-
 #controls {
+    position: fixed;
+    bottom: 433px;
+    left: calc(50% - 300px);
     height: 240px;
     width: 600px;
     margin: 30px 0;
@@ -213,6 +206,13 @@ article {
     color: #000;
 }
 
+#recordingsList {
+    width: 85%;
+    height: 920px;
+    padding: 10px;
+    overflow: hidden;
+}
+
 .recording-item {
     display: flex;
     justify-content: space-evenly;
@@ -220,6 +220,11 @@ article {
     align-content: center;
     flex-direction: row;
     flex-wrap: wrap;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 0 6px 3px rgba(0, 0, 0, .2);
 }
 
 .recording-item span {
@@ -274,10 +279,10 @@ article {
 }
 
 #gotoRemixer {
-    --glow-color: rgb(176, 177, 255);
-    --glow-spread-color: rgba(123, 127, 255, 0.781);
-    --enhanced-glow-color: rgb(206, 212, 255);
-    --btn-color: rgb(30, 45, 210);
+    --glow-color: rgb(204, 204, 219);
+    --glow-spread-color: rgba(152, 152, 152, 0.78);
+    --enhanced-glow-color: rgb(244, 244, 244);
+    --btn-color: rgb(0, 0, 0);
     box-shadow: 0 0 .05em .05em var(--glow-color),
                 0 0 1em .25em var(--glow-spread-color),
                 inset 0 0 .05em .05em var(--glow-color);
@@ -285,8 +290,8 @@ article {
 
     cursor: pointer;
     position: relative;
-    padding: 24px 40px;
-    margin: 20px 0 50px;
+    padding: 30px 45px;
+    margin: 100px 0;
     font-size: 2.5em;
     font-weight: 900;
     text-transform: uppercase;
@@ -303,7 +308,7 @@ article {
     z-index: 1;
     border-color: transparent;
     color: var(--btn-color);
-    background: #00a19d;
+    background: #fff;
     box-shadow: 0 0 .025em .025em var(--glow-color),
                 0 0 1em .5em var(--glow-spread-color),
                 inset 0 0 .025em .025em var(--glow-color);
@@ -337,11 +342,9 @@ audio::-webkit-media-controls-panel {
 }
 
 canvas {
-    /* position: fixed; */
-    /* bottom: 0; */
+    position: fixed;
+    bottom: 213px;
     width: 100%;
-    /* border: 3px solid #000; */
-    background-color: #fff;
 }
 
 @keyframes left-move {
@@ -353,35 +356,12 @@ canvas {
     }
 }
 
-.index-popup {
-    position: absolute;
-    top: 140px;
-    right: 10px;
-    height: 45px;
-    max-width: 142px;
-    padding: 8px 12px;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 5px;
-    line-height: 22px;
-    animation: left-move 2s ease;
-    z-index: 99999;
-    font-family: futura;
-}
-
-.index-popup span {
-    font-size: 1.5em;
-    font-weight: 600;
-    color: rgba(255, 30, 0, 0.8);
-}
-
-
 .body-foot {
     width: calc(100% - 120px);
     background-color: #f0f0f0;
     padding: 50px 60px 20px 60px;
     border-top: 2px solid #36393e;
     position: fixed;
-    left: 0;
     bottom: 0;
 }
 
@@ -445,19 +425,6 @@ canvas {
 .catagories .column a:hover::after {
     width: 100%;
     left: 0;
-}
-
-article, .body-foot {
-    opacity: 0;
-    transform: translateY(50px);
-    animation: fadeIn 1.5s ease forwards;
-}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 @media screen and (min-width: 996px) {

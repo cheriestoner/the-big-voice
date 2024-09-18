@@ -15,17 +15,13 @@
         </div>
     </header>
     <article>
-        <div id="elements">
-            <div id="controls">
-                <button id="recordButton">Start</button>
-            </div>
-            <div id="recordingsList"></div>
+        <button id='gotoRemixer'>Go to Sound Map ➡ </button>
+        <div id="recordingsList"></div>
+        <div id="controls">
+            <button id="recordButton">Start</button>
         </div>
-        <div class="index-popup">
-            <span>Please login before record!</span> <br>
-        </div>
-        <button id='gotoRemixer'>Go to Remixer ➡ </button>
-        
+    </article>
+
     <script src="{{ url_for('static', filename='audio.js') }}"></script>
     <script>
         console.log('current user: {{ username }}');
@@ -35,8 +31,6 @@
             // window.location.href='/remix/' + fileName; // comment it to use the loading page
         });
     </script>
-
-    </article>
 
     <footer class="body-foot">
         <div class="foot-container">

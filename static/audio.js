@@ -75,7 +75,7 @@ recordButton.addEventListener('click', async () => {
         // 获取Canvas元素和上下文
         canvas = document.createElement('canvas');
         // 将Canvas插入到article元素之后
-        const article = document.querySelector('article');
+        const article = document.querySelector('body');
         article.appendChild(canvas);
         // const audio = document.querySelector('audio');
         // audio.insertAdjacentElement('beforebegin', canvas);
