@@ -89,12 +89,22 @@ Xuehua (Fullstack dev, System design)
 
 **Installation instructions**
 
-- Install the latest version of [Python](https://www.python.org/downloads/). Check if it is installed successfully by running `python --version` in Terminal.
-
 - Install ffmpeg and add to path
 
-- Clone the repository on your on laptop.
+- Install Miniconda
 
-- In Terminal, go to the project folder. Install package dependencies by running `pip install requirements.txt`.
+- Clone the repository on your on laptop via Git
+
+- Use conda to create an virtual environment:
+
+    `conda env create -f environment.yml`
+
+- Activate the environment
+
+    `source activate the-big-voice`
+
+- Run the flask app in the environment:
+
+    `(the-big-voice) $ python app.py`
 
 - Start the app on your local server by running `python app.py` in Terminal, and go to the website via the url.
