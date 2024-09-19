@@ -29,7 +29,7 @@
                                 <span>LOW</span>
                             </td>
                             <td class="wrapper" style="padding: 20px 0;">
-                                <input type="range" id="volumeSlider" min="0.0" max="100" value="100">
+                                <input type="range" id="volumeSlider" min="0.0" max="100" value="75">
                             </td>
                             <td style="padding: 15px 5px 20px 20px;">
                                 <span>HIGH</span>
@@ -87,16 +87,34 @@
 
         // 追踪当前的缩放变换
         let currentTransform = d3.zoomIdentity;
+
+        let x,
+            y;
         
-        // Add X axis
-        const x = d3.scaleLinear()
-            .domain([-40, 40])
+        d3.csv('/data/coords.csv').then(function(data) {
+            const xvalues = data.map(d => +d.tsne1);
+
+            const xmaxValue = d3.max(xvalues);
+            const xminValue = d3.min(xvalues);
+
+            const yvalues = data.map(d => +d.tsne2);
+
+            const ymaxValue = d3.max(yvalues);
+            const yminValue = d3.min(yvalues);
+
+            // Add X axis
+            x = d3.scaleLinear()
+            .domain([xminValue * 1.05, xmaxValue * 1.05])
             .range([0, width]);
 
-        // Add Y axis
-        const y = d3.scaleLinear()
-            .domain([-5, 5])
+            // Add Y axis
+            y = d3.scaleLinear()
+            .domain([yminValue * 1.05, ymaxValue * 1.05])
             .range([height, 0]);
+
+        }).catch(function(error) {
+            console.error('读取 CSV 数据时出错:', error);
+        });
 
         //const xAxis = d3.axisBottom(x);
         //const yAxis = d3.axisLeft(y);
@@ -135,8 +153,8 @@
         let volumeNode = audioContext.createGain();
         let dryGainNode = audioContext.createGain();
         let wetGainNode = audioContext.createGain();
-
-        
+        const gainNode = audioContext.createGain();
+        gainNode.gain.setValueAtTime(1, audioContext.currentTime);
 
         // 在用户交互后恢复 AudioContext
         function resumeAudioContext() {
@@ -192,16 +210,13 @@
                 // audioElements.push(audioElement); // for let audioElement = [];
                 audioElements[audioSrc] = audioElement;
 
-                const gainNode = audioContext.createGain();
-                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-
                 let track = audioContext.createMediaElementSource(audioElement);
                 track.connect(gainNode).connect(dryGainNode).connect(volumeNode).connect(filterNode).connect(audioContext.destination);
                 track.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
-                gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 1);
-                setTimeout(() => {
-                    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 5);
-                }, 9 * 1000);
+                //gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 3);
+                //setTimeout(() => {
+                //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
+                //}, 10 * 1000);
             });
 
             console.log(audioElements);
@@ -277,7 +292,7 @@
                 //});
             
             // 应用缩放行为到 SVG
-            //svg.call(zoom);
+            svg.call(zoom);
 
             svg.on("click", function(event) {
                 // 获取点击位置
@@ -314,22 +329,6 @@
             
                 function playNextAudio(index, totalDuration) {
                     
-                    function fadeIn(audioSource, duration = 200) {
-                        const gainNode = audioContext.createGain();
-                        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-                        gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + duration / 1000);
-                        audioSource.connect(gainNode).connect(dryGainNode).connect(volumeNode).connect(filterNode).connect(reverbNode).connect(audioContext.destination);
-                        audioSource.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
-                        return gainNode;
-                    }
-                    
-                    function fadeOut(gainNode, duration = 2000) {
-                        gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration / 1000);
-                        setTimeout(() => {
-                            gainNode.disconnect(); // 断开连接，停止声音
-                        }, duration);
-                    }
-                    
                     if (totalDuration >= 10000) {
                         console.log("Total play time exceeded 10 seconds, stopping playback.");
                         return;
@@ -357,6 +356,10 @@
                         audioElement.currentTime = startTime;
                         audioElement.play();
                         const duration = Math.min(endTime - startTime, 10 - totalDuration / 1000);
+
+                        //setTimeout(() => {
+                        //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
+                        //}, 2000);
                 
                         setTimeout(() => {
                             audioElement.pause();
