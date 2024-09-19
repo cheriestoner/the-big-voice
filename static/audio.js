@@ -32,12 +32,11 @@ loginButton.addEventListener('click', async () => {
         loginWindow.appendChild(inputWindow);
         inputWindow.id = 'inputWindow';
         inputWindow.type = 'text';
-        inputWindow.textContent = 'username';
+        inputWindow.placeholder = 'username';
 
-        const userButton = document.createElement('input');
+        const userButton = document.createElement('button');
         loginWindow.appendChild(userButton);
         userButton.id = 'userButton';
-        userButton.type = 'submit';
         userButton.textContent = 'submit';
 
         const closeWindow = document.createElement('button');

@@ -43,7 +43,7 @@
                                 <span>DRY</span>
                             </td>
                             <td class="wrapper" style="padding: 20px 0;">
-                                <input type="range" id="reverbSlider" min="1" max="100" value="25">
+                                <input type="range" id="reverbSlider" min="0" max="100" value="25">
                             </td>
                             <td style="padding: 15px 5px 20px 20px; text-align: left;">
                                 <span>WET</span>
@@ -57,7 +57,7 @@
                                 <span>LOW</span>
                             </td>
                             <td class="wrapper" style="padding: 20px 0;">
-                                <input type="range" id="filterSlider" min="50" max="8000" value="8000">
+                                <input type="range" id="filterSlider" min="50" max="15000" value="8000">
                             </td>
                             <td style="padding: 15px 5px 20px 20px;">
                                 <span>HIGH</span>
@@ -130,25 +130,13 @@
         // 初始化 Web Audio API、混响节点和低通滤波器
         let audioContext = new (window.AudioContext || window.webkitAudioContext)();
         let reverbNode = audioContext.createConvolver();
-        let reverbGainNode = audioContext.createGain();
         let filterNode = audioContext.createBiquadFilter();
         filterNode.type = 'lowpass';
         let volumeNode = audioContext.createGain();
+        let dryGainNode = audioContext.createGain();
+        let wetGainNode = audioContext.createGain();
 
-        function fadeIn(audioSource, duration = 200) {
-            const gainNode = audioContext.createGain();
-            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + duration / 1000);
-            audioSource.connect(gainNode).connect(volumeNode).connect(filterNode).connect(reverbGainNode).connect(reverbNode).connect(audioContext.destination);
-            return gainNode;
-        }
         
-        function fadeOut(gainNode, duration = 200) {
-            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration / 1000);
-            setTimeout(() => {
-                gainNode.disconnect(); // 断开连接，停止声音
-            }, duration);
-        }
 
         // 在用户交互后恢复 AudioContext
         function resumeAudioContext() {
@@ -172,9 +160,10 @@
             .catch(error => console.error('Error loading IR file:', error));
         
         const reverbSlider = document.getElementById('reverbSlider');
-        reverbGainNode.gain.value = reverbSlider.value / 100;
         reverbSlider.addEventListener('input', function () {
-            reverbGainNode.gain.value = this.value / 100;
+            let wetValue = this.value / 100;
+            wetGainNode.gain.value = wetValue;
+            dryGainNode.gain.value = 1 - wetValue;
         });
 
         const volumeSlider = document.getElementById('volumeSlider');
@@ -203,8 +192,16 @@
                 // audioElements.push(audioElement); // for let audioElement = [];
                 audioElements[audioSrc] = audioElement;
 
+                const gainNode = audioContext.createGain();
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+
                 let track = audioContext.createMediaElementSource(audioElement);
-                track.connect(volumeNode).connect(filterNode).connect(reverbGainNode).connect(reverbNode).connect(audioContext.destination);
+                track.connect(gainNode).connect(dryGainNode).connect(volumeNode).connect(filterNode).connect(audioContext.destination);
+                track.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
+                gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 1);
+                setTimeout(() => {
+                    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 5);
+                }, 9 * 1000);
             });
 
             console.log(audioElements);
@@ -280,7 +277,7 @@
                 //});
             
             // 应用缩放行为到 SVG
-            svg.call(zoom);
+            //svg.call(zoom);
 
             svg.on("click", function(event) {
                 // 获取点击位置
@@ -315,12 +312,43 @@
                 // 打乱顺序，随机播放点的音频
                 const shuffledPoints = d3.shuffle(pointsInCircle);
             
-                function playNextAudio(index) {
-                    if (index >= shuffledPoints.length) {
+                function playNextAudio(index, totalDuration) {
+                    
+                    function fadeIn(audioSource, duration = 200) {
+                        const gainNode = audioContext.createGain();
+                        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                        gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + duration / 1000);
+                        audioSource.connect(gainNode).connect(dryGainNode).connect(volumeNode).connect(filterNode).connect(reverbNode).connect(audioContext.destination);
+                        audioSource.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
+                        return gainNode;
+                    }
+                    
+                    function fadeOut(gainNode, duration = 2000) {
+                        gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration / 1000);
+                        setTimeout(() => {
+                            gainNode.disconnect(); // 断开连接，停止声音
+                        }, duration);
+                    }
+                    
+                    if (totalDuration >= 10000) {
+                        console.log("Total play time exceeded 10 seconds, stopping playback.");
                         return;
+                    }
+                    if (shuffledPoints.length === 0) {
+                        console.error("No points found in the selected circle.");
+                        return;
+                    }
+                    if (index >= shuffledPoints.length) {
+                        index = 0;
                     }
                 
                     const d = shuffledPoints[index];
+                    if (!d || !audioElements['/' + d.username + '/' + d.audiofile]) {
+                        console.error("Invalid point or audio file not found:", d);
+                        playNextAudio(index + 1, totalDuration);
+                        return;
+                    }
+                
                     const audioElement = audioElements['/' + d.username + '/' + d.audiofile];
                     const startTime = parseFloat(d.start_time_sec);
                     const endTime = parseFloat(d.end_time_sec);
@@ -328,28 +356,31 @@
                     if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
                         audioElement.currentTime = startTime;
                         audioElement.play();
-                        const duration = endTime - startTime;
-                    
+                        const duration = Math.min(endTime - startTime, 10 - totalDuration / 1000);
+                
                         setTimeout(() => {
                             audioElement.pause();
                             audioElement.currentTime = 0;
-                            playNextAudio(index + 1);  // 递归播放下一个音频
+                
+                            totalDuration += duration * 1000;
+                            playNextAudio(index + 1, totalDuration);
                         }, duration * 1000);
                     } else {
                         // 如果音频数据无效，跳到下一个
-                        playNextAudio(index + 1);
+                        console.error("Invalid start or end time for audio:", startTime, endTime);
+                        playNextAudio(index + 1, totalDuration);
                     }
                 }
-            
-                playNextAudio(0, shuffledPoints);
+                
+                playNextAudio(0, 0);
 
                 setTimeout(() => {
                     circle.transition()
-                        .duration(9000)
+                        .duration(10000)
                         .attr("fill-opacity", 0)
                         .attr("stroke-opacity", 0)
                         .remove();
-                }, 1000);
+                }, 2000);
             });
         }
     </script>
