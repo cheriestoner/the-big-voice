@@ -59,18 +59,28 @@ DEV_MODE = True
 
 # Route for the home page
 @app.route('/')
+def home():
+    return render_template('home.html')
+
+
+@app.route('/index')
 def index():
     if(DEV_MODE):
         session['logged_in'] = True
         session['username'] = 'admin'
-        session['filenames'] = []
+    if 'logged_in' in session and session['logged_in']:
+        app.logger.info(f'Current username: { session["username"] }')
+        return render_template('index.html', username=session['username'])
+    else:
+        return redirect(url_for('home'))
+    #     session['filenames'] = []
     # if 'logged_in' not in session or not session['logged_in']:
     #     return redirect(url_for('login'))
     # else:
-    # app.logger.info(f'Current username: { session['username'] }')
-    return render_template('index.html', username=session['username'])
+    #     app.logger.info(f'Current username: { session["username"] }') #更改了这一行的缩进和单引号变双引号之后可以跑了
+    # return render_template('index.html', username=session['username'])
+    
         
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -87,6 +97,7 @@ def register():
         session['filenames'] = []  # Initialize filenames list
         return redirect(url_for('index'))
     return render_template('register.html')
+
 
 # Route for the login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -108,7 +119,7 @@ def logout():
     session.pop('username', None)
     session.pop('filenames', None)
     # session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
 # icon
 @app.route('/favicon.ico')
@@ -128,6 +139,7 @@ def process_features(username):
     # feed_data = data.values.tolist() # 32 * 
     # audio_processing.process(filename, AUDIO_FOLDER, DATA_FOLDER) # move to upload
     audio_processing.embed_data(DATA_FOLDER)
+    # username = session['username']
     return render_template('audio_viz.html', username=username)
 
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path

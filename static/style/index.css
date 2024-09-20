@@ -18,7 +18,7 @@ body::-webkit-scrollbar {
 body {
     position: relative;
     margin: 0;
-    background-color: #a3b8a5;
+    background-color: #dbebc8;
     /* background: linear-gradient(-45deg, #ff7e5f, #9970bf, #feb47b, #90b5a4, #4394a4, #9970bf, #ff7e5f); */
     /* background-size: 800% 800%; */
     /* animation: gradientBG 20s ease infinite; */
@@ -42,7 +42,8 @@ header {
     top: 0;
     width: 100%;
     height: 150px;
-    background: rgba(255, 255, 255, 0.1);
+    /* background: rgba(255, 255, 255, 0.1); */
+    background: #b5c7a3;
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
@@ -61,14 +62,14 @@ header {
     }
 }
 
-header h1 {
+/* header h1 {
     color: white;
     font-size: 4em;
     font-weight: 300;
     text-transform: uppercase;
     letter-spacing: 2px;
     cursor: pointer;
-}
+} */
 
 header .user {
     position: fixed;
@@ -78,23 +79,36 @@ header .user {
 }
 
 .user #loginButton {
-    height: 100%;
-    width: 85px;
-    background-color: #ba8ac0;
+    /* height: 100%;
+    width: 85px; */
+    height: 100px; 
+    width: 100px; 
+    /* background-color: #ba8ac0; */
+    background: none;
+    padding: 0;
     cursor: pointer;
-    color: #fff;
+    /* color: #fff;
     font-size: 1.75em;
     font-weight: 600;
-    font-family: futura;
-    border: 0;
-    border-radius: 15px;
+    font-family: futura; */
+    /* border: 0; */
+    border: none; 
+    /* border-radius: 15px; */
     transition: all 0.5s ease;
 }
 
-.user #loginButton:hover {
-    background-color: transparent;
+.user #loginButton img {
+    width: 100%;
+    height: 100%;
+    border-radius: 25px; 
+}
+
+.user #loginButton:hover img{
+    /* background-color: transparent;
     color: #000;
-    border: 2px solid #000;
+    border: 2px solid #000; */
+    content: url('../images/loginHover.png'); 
+
 }
 
 #loginWindow {
@@ -388,9 +402,8 @@ canvas {
 
 .body-foot {
     width: calc(100% - 120px);
-    background-color: #f0f0f0;
+    background-color: #dbebc8;
     padding: 50px 60px 20px 60px;
-    border-top: 2px solid #36393e;
     position: fixed;
     bottom: 0;
 }
@@ -408,7 +421,7 @@ canvas {
     text-align: center;
     font-size: 1.5em;
     font-weight: 600;
-    color: #9aa1a7;
+    color: #8a9473;
     font-family: futura;
 }
 

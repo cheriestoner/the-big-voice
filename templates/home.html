@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sound Urban Diary </title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/home.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <header>
+        <!-- Info link in the header -->
+        <div class="info-button">
+            <a href="https://soundstudiesgroup.net/" target="_blank" rel="noopener noreferrer">Info</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Login Button -->
+        <div class="user">
+            <button id="loginButton">Login</button>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <!-- Login Form -->
+            <h2>Login</h2>
+            <form method="POST" action="{{ url_for('login') }}">
+                <input type="text" id="username" name="username" placeholder="Username" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
+        </div>
+    </div>
+
+    <footer class="body-foot">
+        <div class="foot-bottom">
+            &copy; 2024, Sound Studies Group, SUSTech
+        </div>
+    </footer>
+
+    <!-- JavaScript to handle modal -->
+    <script>
+        // Get elements
+        const loginButton = document.getElementById('loginButton');
+        const loginModal = document.getElementById('loginModal');
+        const closeButton = document.querySelector('.close-button');
+
+        // Open modal on button click
+        loginButton.addEventListener('click', () => {
+            loginModal.style.display = 'block';
+        });
+
+        // Close modal on close button click
+        closeButton.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside the modal content
+        window.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
