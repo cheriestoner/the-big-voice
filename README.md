@@ -39,6 +39,7 @@ Xuehua (Fullstack dev, System design)
     - ~How to mix an area of sounds: sounds from the current user as foreground, sound from tha dataset as background? Volumn control + reverb?~
     - Different modes for navigating the plot? area selection and single dot play?
     - Loop play?
+    - Fix the size of circular cursor, zoom in/out the whole plot tot select points
 
 - Backend management: /Xuehua
     - flask feed list data to html instead of d3.csv()
@@ -51,10 +52,12 @@ Xuehua (Fullstack dev, System design)
     - filter out segments under rms threshold
     - Feature extraction
         - ~MFCC first & second derivatives (delta)~
+        - the recording has to be at least 0.5*9=4.5s. (Each recording is sliced into 0.5s frames, mfcc_delta default width is 9 frames.)
     - Sound event localization?
     - Dimensionality reduction (SNE/PCA/UMAP)
         - ~Unsupervised T-SNE~
-        - T-SNE semi-supervision with user labels?
+        - ~Unsupervised UMAP~
+        - Semi-supervision with user specified labels?
 
 - UI decorations
     - ~CSS style in separate files /Lio~
