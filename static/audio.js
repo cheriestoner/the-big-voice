@@ -14,52 +14,64 @@ let canvasCtx;
 let drawVisual;
 let isRecording = false;
 let fileName;
+let minRecordTime = 5000;
+let maxRecordTime = 60000;
+let recordTimeout;
+let startTime;
 
-loginButton.addEventListener('click', async () => {
-    function popup() {
-        const loginWindow = document.createElement('div');
-        const login = document.querySelector('body');
-        login.appendChild(loginWindow);
-        loginWindow.classList.add('loginwindow');
-        loginWindow.id = 'loginWindow';
+// loginButton.addEventListener('click', async () => {
+//     function popup() {
+//         const loginWindow = document.createElement('div');
+//         const login = document.querySelector('body');
+//         login.appendChild(loginWindow);
+//         loginWindow.classList.add('loginwindow');
+//         loginWindow.id = 'loginWindow';
 
-        const loginTitle = document.createElement('span');
-        loginWindow.appendChild(loginTitle);
-        loginTitle.textContent = 'Login';
-        loginTitle.id = 'loginTitle';
+//         const loginTitle = document.createElement('span');
+//         loginWindow.appendChild(loginTitle);
+//         loginTitle.textContent = 'Login';
+//         loginTitle.id = 'loginTitle';
 
-        const inputWindow = document.createElement('input');
-        loginWindow.appendChild(inputWindow);
-        inputWindow.id = 'inputWindow';
-        inputWindow.type = 'text';
-        inputWindow.placeholder = 'username';
+//         const inputWindow = document.createElement('input');
+//         loginWindow.appendChild(inputWindow);
+//         inputWindow.id = 'inputWindow';
+//         inputWindow.type = 'text';
+//         inputWindow.placeholder = 'username';
 
-        const userButton = document.createElement('button');
-        loginWindow.appendChild(userButton);
-        userButton.id = 'userButton';
-        userButton.textContent = 'submit';
+//         const userButton = document.createElement('button');
+//         loginWindow.appendChild(userButton);
+//         userButton.id = 'userButton';
+//         userButton.textContent = 'submit';
 
-        const closeWindow = document.createElement('button');
-        loginWindow.appendChild(closeWindow);
-        closeWindow.textContent = 'close';
-        closeWindow.id = 'closeWindow';
-        closeWindow.addEventListener('click', () => {
-            loginWindow.parentNode.removeChild(loginWindow);
-            loginButton.textContent = 'Login';
-            loginButton.disabled = false;
-        });
-    }
-    popup();
+//         const closeWindow = document.createElement('button');
+//         loginWindow.appendChild(closeWindow);
+//         closeWindow.textContent = 'close';
+//         closeWindow.id = 'closeWindow';
+//         closeWindow.addEventListener('click', () => {
+//             loginWindow.parentNode.removeChild(loginWindow);
+//             loginButton.textContent = 'Login';
+//             loginButton.disabled = false;
+//         });
+//     }
+//     popup();
     
-    loginButton.textContent = 'User';
-    loginButton.disabled = true;
-})
+//     loginButton.textContent = 'User';
+//     loginButton.disabled = true;
+// })
 
 recordButton.addEventListener('click', async () => {
     if (!isRecording) {
         // 开始录制
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorder = new MediaRecorder(stream);
+
+        startTime = Date.now();
+        recordTimeout = setTimeout(() => {
+            mediaRecorder.stop(); // 超过60秒停止录制
+            isRecording = false;
+            recordButton.id = 'recordButton';
+            recordButton.textContent = 'Start';
+        }, maxRecordTime);
 
         // 初始化音频上下文和分析节点
         audioContext = new AudioContext();
@@ -203,11 +215,22 @@ recordButton.addEventListener('click', async () => {
         recordButton.id = 'stopButton';
         recordButton.textContent = 'Stop';
 
+        // 限制最少录制5秒
+        setTimeout(() => {
+            recordButton.disabled = false; // 5秒后按钮允许停止
+        }, minRecordTime);
+
+        // 在5秒内不允许停止
+        recordButton.disabled = true;
+
     } else {
         // 停止录制
-        mediaRecorder.stop();
-        isRecording = false;
-        recordButton.id = 'recordButton';
-        recordButton.textContent = 'Start';
+        if (Date.now() - startTime >= minRecordTime) {
+            clearTimeout(recordTimeout); // 清除最大录制时间的定时器
+            mediaRecorder.stop();
+            isRecording = false;
+            recordButton.id = 'recordButton';
+            recordButton.textContent = 'Start';
+        }
     }
 });
