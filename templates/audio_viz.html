@@ -70,7 +70,7 @@
 
     <!-- <svg id="myPlot" style="width:500px;height:500px"></svg> -->
     <!-- <script src="{{ url_for('static', filename='scatterplot-w3.js') }}"></script> -->
-    <script> 
+    <script>
         const backButton = document.getElementById('backButton');
         // d3 gallery https://d3-graph-gallery.com/graph/scatter_basic.html
         // set the dimensions and margins of the graph
@@ -125,15 +125,16 @@
             const zy = currentTransform.rescaleY(y).interpolate(d3.interpolateRound);
 
             gDot.attr("transform", currentTransform).attr("stroke-width", 5 / currentTransform.k);
+            //circle.attr("transform", currentTransform).attr("r", 50 * currentTransform.k);
             //gx.call(xAxis.scale(zx));
             //gy.call(yAxis.scale(zy));
         }
 
         const zoom = d3.zoom()
-            .scaleExtent([0.75, 5])
+            .scaleExtent([0.75, 4])
             .on("zoom", zoomed);
         const vo = svg.append("path");
-        const gDot = svg.append("g")
+        const gDot = svg.append("g");
         const gx = svg.append("g")
             .attr("transform", `translate(${margin.left}, ${height + margin.top})`);
         const gy = svg.append("g")
@@ -300,13 +301,13 @@
                 const transformedX = currentTransform.invertX(clickX);
                 const transformedY = currentTransform.invertY(clickY);
 
-                const scaledRadius = 50 * currentTransform.k;
+                //const scaledRadius = 50 * currentTransform.k;
 
                 // 添加一个新的圆圈到点击位置
                 const circle = svg.append("circle")
                     .attr("cx", clickX)
                     .attr("cy", clickY)
-                    .attr("r", scaledRadius)
+                    .attr("r", 50)
                     .attr("stroke", "#00000080")
                     .attr("stroke-width", 3)
                     .attr("fill", "#77777780")
@@ -319,7 +320,7 @@
                     const cx = x(d.tsne1);
                     const cy = y(d.tsne2);
                     const distance = Math.sqrt((currentTransform.applyX(cx) - clickX) ** 2 + (currentTransform.applyY(cy) - clickY) ** 2);
-                    if (distance <= scaledRadius) {
+                    if (distance <= 50) {
                         pointsInCircle.push(d);
                     }
                 });
