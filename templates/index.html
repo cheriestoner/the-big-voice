@@ -33,20 +33,21 @@
         <div id="controls">
             <div class="control-button">
                 <img 
-                    id="gotoRemixer" 
-                    src="{{ url_for('static', filename='images/analyzer.png') }}" 
-                    data-default-src="{{ url_for('static', filename='images/analyzer.png') }}" 
-                    data-hover-src="{{ url_for('static', filename='images/analyzerHover.png') }}" 
-                    alt="Go to Remixer">
-            </div>
-            <div class="control-button">
-                <img 
                     id="recordButton" 
                     src="{{ url_for('static', filename='images/recorderOff.png') }}" 
                     data-off-src="{{ url_for('static', filename='images/recorderOff.png') }}" 
                     data-on-src="{{ url_for('static', filename='images/recorderOn.png') }}" 
                     alt="Record">
             </div>
+            <div class="control-button">
+                <img 
+                    id="gotoRemixer" 
+                    src="{{ url_for('static', filename='images/analyzer.png') }}" 
+                    data-default-src="{{ url_for('static', filename='images/analyzer.png') }}" 
+                    data-hover-src="{{ url_for('static', filename='images/analyzerHover.png') }}" 
+                    alt="Go to Remixer">
+            </div>
+        </div>
         </div>
         <div id="recordingsList"></div>
 
