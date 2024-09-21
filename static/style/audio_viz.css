@@ -19,6 +19,7 @@ body {
     position: relative;
     margin: 0;
     background-color: #8f9d8c;
+    touch-action: none;
     /* background: linear-gradient(-45deg, #ff7e5f, #9970bf, #feb47b, #90b5a4, #4394a4, #9970bf, #ff7e5f); */
     /* background-size: 800% 800%; */
     /* animation: gradientBG 20s ease infinite; */

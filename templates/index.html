@@ -9,18 +9,50 @@
 
 <body>
     <header>
-        <h1>Urban Sound Diary</h1>
-        <div class="user">
-            <button id="loginButton">Login</button>
+        <!-- Info link in the header -->
+        <div class="info-button">
+            <a href="https://soundstudiesgroup.net/" target="_blank" rel="noopener noreferrer">
+                <img src="{{ url_for('static', filename='images/info.png') }}" alt="info">
+            </a>
         </div>
     </header>
     <article>
-        <button id='gotoRemixer'>Go to Sound Map ➡ </button>
+        <!-- <button id='gotoRemixer'></button>
         <div id="recordingsList"></div>
         <div id="controls">
             <button id="recordButton">Start</button>
+        </div> -->
+        <!-- <div id="controls">
+            <div class="control-button">
+                <img id="gotoRemixer" src="{{ url_for('static', filename='images/analyzer.png') }}" alt="Go to Remixer">
+            </div>
+            <div class="control-button">
+                <img id="recordButton" src="{{ url_for('static', filename='images/recorderOff.png') }}" alt="Record">
+            </div>
+        </div> -->
+        <div id="controls">
+            <div class="control-button">
+                <img 
+                    id="recordButton" 
+                    src="{{ url_for('static', filename='images/recorderOff.png') }}" 
+                    data-off-src="{{ url_for('static', filename='images/recorderOff.png') }}" 
+                    data-on-src="{{ url_for('static', filename='images/recorderOn.png') }}" 
+                    alt="Record">
+            </div>
+            <div class="control-button">
+                <img 
+                    id="gotoRemixer" 
+                    src="{{ url_for('static', filename='images/analyzer.png') }}" 
+                    data-default-src="{{ url_for('static', filename='images/analyzer.png') }}" 
+                    data-hover-src="{{ url_for('static', filename='images/analyzerHover.png') }}" 
+                    alt="Go to Remixer">
+            </div>
         </div>
+        </div>
+        <div id="recordingsList"></div>
+
     </article>
+    
 
     <script src="{{ url_for('static', filename='audio.js') }}"></script>
     <script>
@@ -30,25 +62,32 @@
             window.location.href='/loading/' + '{{ username }}'; // uncomment it to use the loading page
             // window.location.href='/remix/' + fileName; // comment it to use the loading page
         });
+    
+     // Hover Effect for Go to Remixer Button
+        gotoRemixer.addEventListener('mouseenter', () => {
+            gotoRemixer.src = gotoRemixer.getAttribute('data-hover-src');
+        });
+
+        gotoRemixer.addEventListener('mouseleave', () => {
+            gotoRemixer.src = gotoRemixer.getAttribute('data-default-src');
+        });
+
+     // Hover Effect for Recorder Button
+        recordButton.addEventListener('mouseenter', () => {
+            recordButton.src = recordButton.getAttribute('data-on-src');
+        });
+
+        recordButton.addEventListener('mouseleave', () => {
+            recordButton.src = recordButton.getAttribute('data-off-src');
+        });
+    
+    
     </script>
 
-    <footer class="body-foot">
-        <div class="foot-container">
-            <div class="catagories">
-                <div class="column">
-                    <a href="https://soundstudiesgroup.net/" target="_blank">Sound Studies Group</a>
-                </div>
-                <div class="column">
-                    <a href="https://soundstudiesgroup.net/" target="_blank">Related Links</a>
-                </div>
-                <div class="column">
-                    <a href="https://soundstudiesgroup.net/" target="_blank">About</a>
-                </div>
-            </div>
-        </div>
-        <div class="foot-bottom">
-            Copyright © 2024, Sound Studies Group, SUSTech
-        </div>
-    </footer>
+<footer class="body-foot">
+    <div class="foot-bottom">
+        &copy; 2024, Sound Studies Group, SUSTech
+    </div>
+</footer>
 </body>
 </html>
