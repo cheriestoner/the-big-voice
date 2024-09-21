@@ -18,7 +18,7 @@ body::-webkit-scrollbar {
 body {
     position: relative;
     margin: 0;
-    background-color: #dbebc8;
+    background-color: #b5c7a3;
     /* background: linear-gradient(-45deg, #ff7e5f, #9970bf, #feb47b, #90b5a4, #4394a4, #9970bf, #ff7e5f); */
     /* background-size: 800% 800%; */
     /* animation: gradientBG 20s ease infinite; */
@@ -55,6 +55,22 @@ header {
     animation: slideIn 1s ease forwards 0.5s; */
 }
 
+.info-button {
+    position: absolute;
+    top: 50%;
+    right: 0.5%;
+    transform: translateY(-50%);
+}
+
+.info-button a {
+    display: block;
+}
+
+.info-button img {
+    width: 70%;
+    height: auto;
+}
+
 /* @keyframes slideIn {
     to {
         opacity: 1;
@@ -78,38 +94,7 @@ header .user {
     height: 50px;
 }
 
-#userButton {
-    position: absolute;
-    top: 350px;
-    left: 300px;
-    width: 200px;
-    font-size: 2em;
-    font-weight: 700;
-    color: #f2f4ff;
-    background-color: #4460f1;
-    box-shadow: #4460f1 0 20px 30px -10px;
-    cursor: pointer;
-    transition: box-shadow .3s;
-    border: 0;
-    outline: 0;
-    padding: 0 20px;
-    line-height: 60px;
-    border-radius: 10px;
-    box-sizing: border-box;
-}
-
-#closeWindow {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 80px;
-    height: 40px;
-    font-size: 1.5em;
-    border-radius: 10px;
-    background-color: #ffffff;
-}
-
-article {
+/* article {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -172,7 +157,61 @@ article {
     background: transparent;
     border: 5px solid #000;
     color: #000;
+} */
+/* Flexbox for Controls */
+#controls {
+    position: fixed;
+    bottom: 433px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 240px;
+    width: 600px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    /* background-color: rgba(0, 0, 0, 0.1); */
+    backdrop-filter: blur(10px);
+    border-radius: 150px;
 }
+
+/* Control Button Container */
+.control-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px; /* Adjust as needed */
+    height: 200px; /* Adjust as needed */
+}
+
+/* Styling for Images */
+/* #gotoRemixer, #recordButton {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 20px; /* Optional: Round the corners */
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* } */ 
+
+/* #gotoRemixer:hover, #recordButton:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    /* box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+} */ 
+
+/* Responsive Adjustments */
+/* @media screen and (max-width: 720px) {
+    #controls {
+        flex-direction: column;
+        width: 80%;
+        bottom: 300px; /* Adjust as needed */
+    /* } */
+
+    /* .control-button {
+        width: 150px;
+        height: 150px;
+        margin: 10px 0;
+    }
+/* } */ 
 
 #recordingsList {
     width: 85%;
@@ -218,7 +257,7 @@ article {
     color: #000;
 }
 
-#controls #recordButton:hover {
+/* #controls #recordButton:hover {
     background: linear-gradient(45deg, #3e9875, #4fb809);
     border: 3px solid #3e9875;
     color: #fff;
@@ -228,6 +267,33 @@ article {
     background: linear-gradient(45deg, #b80000, #ff3d3d);
     border: 3px solid #b80000;
     color: #fff;
+} */
+
+/* Flexbox container for the icons */
+.image-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    margin: 50px auto; 
+    max-width: 1200px; 
+    padding: 0 20px;
+    position: fixed;
+    top: 54%;
+}
+
+/* Individual icon items */
+.image-item {
+    flex: 1; /* Each image gets equal space */
+    text-align: center; /* Center the text and image */
+    margin: 0 50px; /* Add some space between the images */
+}
+
+/* Images styling */
+.image-item img {
+    width: 100%; /* Make images responsive */
+    max-width: 300px; /* Set a maximum width for each image */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 8px; /* Optional: round the corners */
 }
 
 #recordingsList #submitButton:hover {
@@ -246,7 +312,7 @@ article {
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
 }
 
-#gotoRemixer {
+/* #gotoRemixer {
     --glow-color: rgb(204, 204, 219);
     --glow-spread-color: rgba(152, 152, 152, 0.78);
     --enhanced-glow-color: rgb(244, 244, 244);
@@ -257,7 +323,8 @@ article {
     text-shadow: 0 0 .05em var(--glow-color);
 
     cursor: pointer;
-    position: relative;
+    position: fixed;
+    top: 70%;
     padding: 30px 45px;
     margin: 100px 0;
     font-size: 2.5em;
@@ -289,7 +356,7 @@ article {
     to {
         background-position: 400%;
     }
-}
+} */
 
 audio {
     margin: 20px auto;
@@ -311,7 +378,7 @@ audio::-webkit-media-controls-panel {
 
 canvas {
     position: fixed;
-    bottom: 213px;
+    top: 0%;
     width: 100%;
 }
 
@@ -326,7 +393,7 @@ canvas {
 
 .body-foot {
     width: calc(100% - 120px);
-    background-color: #dbebc8;
+    background-color: #b5c7a3;
     padding: 50px 60px 20px 60px;
     position: fixed;
     bottom: 0;
@@ -345,7 +412,7 @@ canvas {
     text-align: center;
     font-size: 1.5em;
     font-weight: 600;
-    color: #8a9473;
+    color: #dbebc8;
     font-family: futura;
 }
 
