@@ -57,7 +57,7 @@ Xuehua (Fullstack dev, System design)
     - Dimensionality reduction (SNE/PCA/UMAP)
         - ~Unsupervised T-SNE~
         - ~Unsupervised UMAP~
-        - Semi-supervision with user specified labels?
+        - Semi-supervision with user specified labels? (but labels are only )
 
 - UI decorations
     - ~CSS style in separate files /Lio~

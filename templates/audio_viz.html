@@ -92,12 +92,12 @@
             y;
         
         d3.csv('/data/coords.csv').then(function(data) {
-            const xvalues = data.map(d => +d.tsne1);
+            const xvalues = data.map(d => +d.embedding_x);
 
             const xmaxValue = d3.max(xvalues);
             const xminValue = d3.min(xvalues);
 
-            const yvalues = data.map(d => +d.tsne2);
+            const yvalues = data.map(d => +d.embedding_y);
 
             const ymaxValue = d3.max(yvalues);
             const yminValue = d3.min(yvalues);
@@ -246,8 +246,8 @@
             gDot.selectAll("circle")
                 .data(data)
                 .join("circle")
-                .attr("cx", d => x(d.tsne1))
-                .attr("cy", d => y(d.tsne2))
+                .attr("cx", d => x(d.embedding_x))
+                .attr("cy", d => y(d.embedding_y))
                 .attr("r", 5)
                 .attr("fill", function(d) {return ((d.username == "{{ username }}")? dotColor : "#28713E")})
                 .style("opacity", 0.5)
@@ -317,8 +317,8 @@
 
                 const pointsInCircle = [];
                 gDot.selectAll("circle").each(function(d) {
-                    const cx = x(d.tsne1);
-                    const cy = y(d.tsne2);
+                    const cx = x(d.embedding_x);
+                    const cy = y(d.embedding_y);
                     const distance = Math.sqrt((currentTransform.applyX(cx) - clickX) ** 2 + (currentTransform.applyY(cy) - clickY) ** 2);
                     if (distance <= 50) {
                         pointsInCircle.push(d);
