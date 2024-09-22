@@ -137,8 +137,12 @@ def visualize():
     username = session['username']
 
     data2d_df = audio_processing.embed_data(DATA_FOLDER, export=False)
+    # visualize the whole dataset in comparison to the user's sounds
+    # if request.form['display_mode'] == 'all'
     data2d = data2d_df.to_dict('records') # list of dictionaries
-    # data2d = data2d_df.to_json(orient="records")
+    # visualize the user's sounds
+    # if request.form['display_mode'] == 'user'
+    # data2d = data2d_df[data2d_df['username'] == username].to_dict('records')
     
     return render_template('audio_viz.html', username=username, feed_data=data2d)
 
