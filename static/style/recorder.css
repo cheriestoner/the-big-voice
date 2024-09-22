@@ -238,7 +238,7 @@ header .user {
 }
 
 .recording-item span {
-    line-height: 3em;
+    line-height: 3.5em;
     font-size: 2em;
     font-weight: 600;
     color: #dbebc8;
@@ -246,20 +246,57 @@ header .user {
 
 #recordingsList #deleteButton,
 #submitButton {
-    width: 115px;
+    width: 400px;
     margin: 0 0 0 40px;
     padding: 10px;
-    font-family: futura;
+    /* font-family: futura;
     font-size: 1.75em;
     font-weight: 600;
-    text-align: center;
+    text-align: center; */
     cursor: pointer;
-    border-radius: 25px;
-    transition: all 0.5s ease;
+    /* border-radius: 25px; */
+    /* transition: all 0.5s ease; */
     background: transparent;
     /* border: 2px solid #000;
     color: #000; */
 }
+
+/* Delete Button Styles */
+.delete-button {
+    background-image: url('../images/delete.png'); 
+    background-size: cover; 
+    background-color: transparent;
+    width: 60px; 
+    height: 60px; 
+    display: block; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+    border: none;
+}
+
+.delete-button:hover {
+    background-image: url('../images/deleteHover.png'); 
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+.upload-button {
+    background-image: url('../images/upload.png'); 
+    background-size: cover; 
+    width: 60px; 
+    height: 60px; 
+    display: block; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+    background-color: transparent;
+    border: none;
+}
+
+.upload-button:hover {
+    background-image: url('../images/uploadDone.png'); 
+    opacity: 0.8;
+}
+
 
 /* #controls #recordButton:hover {
     background: linear-gradient(45deg, #3e9875, #4fb809);
@@ -287,20 +324,20 @@ header .user {
 
 /* Individual icon items */
 .image-item {
-    flex: 1; /* Each image gets equal space */
-    text-align: center; /* Center the text and image */
-    margin: 0 50px; /* Add some space between the images */
+    flex: 1; 
+    text-align: center; 
+    margin: 0 50px; 
 }
 
 /* Images styling */
 .image-item img {
-    width: 100%; /* Make images responsive */
-    max-width: 300px; /* Set a maximum width for each image */
-    height: auto; /* Maintain aspect ratio */
-    border-radius: 8px; /* Optional: round the corners */
+    width: 100%; 
+    max-width: 300px; 
+    height: auto;
+    border-radius: 8px;  
 }
 
-#recordingsList #submitButton:hover {
+/* #recordingsList #submitButton:hover {
     background: linear-gradient(-45deg, #a500a7, #f538ff);
     border: 2px solid #a500a7;
     color: #fff;
@@ -314,7 +351,7 @@ header .user {
     color: #fff;
     transform: translateY(-3px);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
-}
+} */
 
 /* #gotoRemixer {
     --glow-color: rgb(204, 204, 219);
@@ -380,6 +417,26 @@ audio::-webkit-media-controls-panel {
     background-color: #dbebc8;
 }
 
+
+audio::-webkit-media-controls-current-time-display,
+audio::-webkit-media-controls-time-remaining-display{
+    color: #8a9473; 
+    transform: scale(1.2);
+}
+
+audio::-webkit-media-controls-played-track,
+audio::-webkit-media-controls-timeline
+{
+    filter: invert(50%) sepia(16%) saturate(385%) hue-rotate(47deg) brightness(95%) contrast(92%);
+}
+
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-pause-button,
+audio::-webkit-media-controls-mute-button {
+    filter: invert(33%) sepia(70%) saturate(600%) hue-rotate(-20deg) brightness(100%) contrast(90%);
+    transform: scale(1.5); 
+    transform-origin: center;
+}
 canvas {
     position: fixed;
     top: 0%;

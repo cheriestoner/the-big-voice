@@ -126,15 +126,17 @@ recordButton.addEventListener('click', async () => {
             listItem.classList.add('recording-item');
             // 创建删除键
             const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
-            deleteButton.id = 'deleteButton';
+            // deleteButton.textContent = 'Delete';
+            // deleteButton.id = 'delete-button';
+            deleteButton.classList.add('delete-button');
             deleteButton.addEventListener('click', () => {
                 recordingsList.removeChild(listItem);
             });
             // 创建上传键
             const submitButton = document.createElement('button');
-            submitButton.textContent = 'Upload';
-            submitButton.id = 'submitButton';
+            // submitButton.textContent = 'Upload';
+            // submitButton.id = 'submit-button';
+            submitButton.classList.add('upload-button'); 
 
             submitButton.addEventListener('click', () => {
                 if (currentAudioBlob) {
@@ -148,7 +150,8 @@ recordButton.addEventListener('click', async () => {
                     .then(response => response.json())
                     .then(data => {
                         console.log('Upload Success:', data);
-                        submitButton.textContent = 'Done!';
+                        // submitButton.textContent = 'Done!';
+                        submitButton.classList.add('sumbitDone');
                         submitButton.disabled = true;
                     })
                     .catch(error => {
