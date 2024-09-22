@@ -10,7 +10,7 @@
         <header>
             <div class="back">
                 <div class="image-item">
-                    <a href="/record">
+                    <a href="/record"> 
                         <img src="{{ url_for('static', filename='images/back.png') }}" alt="Back">
                     </a>
                 </div>
@@ -24,7 +24,7 @@
         </header>
         <article>
             <div id="controls">
-                <h3>{{ username }} sound map</h3>
+                <h3>{{ username }}</h3>
                 <div id="my_dataviz"></div>
             </div>
             <div class="controlTable">
@@ -80,7 +80,6 @@
     <!-- <svg id="myPlot" style="width:500px;height:500px"></svg> -->
     <!-- <script src="{{ url_for('static', filename='scatterplot-w3.js') }}"></script> -->
     <script>
-        // const backButton = document.getElementById('backButton');
         // d3 gallery https://d3-graph-gallery.com/graph/scatter_basic.html
         // set the dimensions and margins of the graph
         // 设置图表的尺寸和边距
@@ -99,8 +98,24 @@
 
         let x,
             y;
-        
-        d3.csv('/data/coords.csv').then(function(data) {
+    
+        // parse feed data as list of dictionaries
+        const data = [
+            {% for c in feed_data %}               
+                {
+                    'username': '{{ c["username"] }}', 
+                    'audiofile': '{{ c["audiofile"] }}', 
+                    'segment_index': {{ c['segment_index'] }}, 
+                    'start_time_sec': {{ c['start_time_sec'] }}, 
+                    'end_time_sec': {{ c['end_time_sec'] }}, 
+                    'embedding_x': {{ c["embedding_x"] }}, 
+                    'embedding_y': {{ c['embedding_y'] }}
+                },
+            {% endfor %}
+        ];
+        // console.log(data);
+
+        function set_domain(data) {
             const xvalues = data.map(d => +d.embedding_x);
 
             const xmaxValue = d3.max(xvalues);
@@ -120,10 +135,9 @@
             y = d3.scaleLinear()
             .domain([yminValue * 1.05, ymaxValue * 1.05])
             .range([height, 0]);
+        }
 
-        }).catch(function(error) {
-            console.error('读取 CSV 数据时出错:', error);
-        });
+        set_domain(data);
 
         //const xAxis = d3.axisBottom(x);
         //const yAxis = d3.axisLeft(y);
@@ -150,10 +164,6 @@
             .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
         d3.select("#my_dataviz").node().appendChild(svg.node());
-
-        // backButton.addEventListener('click', () => {
-        //     window.location.href = '/record';
-        // });
 
         // 初始化 Web Audio API、混响节点和低通滤波器
         let audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -206,12 +216,16 @@
             filterNode.frequency.value = this.value;
         });
 
-        d3.csv('/data/coords.csv').then(function(data) {
-            // console.log(data);
+        var audioElements = {}; // dictionary-like
+
+        create_audioElements(data);
+
+        scatterplot_visualize(data, "#FF5C35", audioElements); 
+
+        function create_audioElements(data) {
             let audioFiles_raw = data.map(function(d) { return '/' + d.username + '/' + d.audiofile; });
             let audioFiles = Array.from(new Set(audioFiles_raw)); // merged repeated ones 
             console.log(audioFiles); 
-            var audioElements = {}; // dictionary-like
             
             audioFiles.forEach((audioSrc, index) => { // /<username>/<filename>
                 const audioElement = document.createElement('audio');
@@ -230,8 +244,7 @@
             });
 
             console.log(audioElements);
-            scatterplot_visualize(data, "#FF5C35", audioElements); 
-        });
+        }
 
         function scatterplot_visualize(data, dotColor, audioElements) {
             /*

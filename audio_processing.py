@@ -5,7 +5,7 @@ import pandas as pd
 import os
 from pydub import AudioSegment
 import librosa
-# from umap import UMAP
+from umap import UMAP
 
 SEGMENT_SIZE = 500 # millisecond
 HOPPING = 1 # 100% hopping, 0 overlapping. for feature extraction
@@ -149,7 +149,7 @@ def process(username='admin', audiofile="test1.wav", audio_folder='audio', data_
 
     # return data_df
 
-def embed_data(data_folder='data'):
+def embed_data(data_folder='data', export=True):
     '''
     Reduce dimensionality of the whole dataset of features
     '''
@@ -178,16 +178,18 @@ def embed_data(data_folder='data'):
 
     # print(features.shape[0], items.shape[0])
     # umap_2d = UMAP(n_components=2, n_jobs=1, init='random', random_state=0)
-    # umap_2d = UMAP(n_jobs=1, metric='cosine', random_state=42, low_memory=True)
+    umap_2d = UMAP(n_jobs=1, metric='cosine', random_state=42, low_memory=True)
     # umap_2d = UMAP(n_jobs=1, metric='hellinger', random_state=42) # only non-negative values
-    # features_embedded = umap_2d.fit_transform(features)
-    tsne = TSNE(n_components=2, learning_rate='auto', perplexity=30)
-    features_embedded = tsne.fit_transform(features)
+    features_embedded = umap_2d.fit_transform(features)
+    # tsne = TSNE(n_components=2, learning_rate='auto', perplexity=30)
+    # features_embedded = tsne.fit_transform(features)
     # print(features_embedded.shape)
     data_2d = np.append(items, features_embedded, axis=1)
     
     # save 2D coordinates
-    filepath = os.path.join(data_folder, 'coords.csv')
     columns = ['username', 'audiofile', 'segment_index', 'start_time_sec', 'end_time_sec', 'embedding_x', 'embedding_y']
     data_df = pd.DataFrame(data_2d, columns = columns)
+    if not export: 
+        return data_df
+    filepath = os.path.join(data_folder, 'coords.csv')
     data_df.to_csv(filepath, mode='w', header=True, index=False)

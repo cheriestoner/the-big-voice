@@ -130,14 +130,17 @@ def favicon():
 def loading_page():
     return render_template('loading.html') # or change it to loading_jy.html
 
-@app.route('/remix')
-def process_features():
+@app.route('/remix', methods=['GET', 'POST'])
+def visualize():
     if 'logged_in' not in session or not session['logged_in']:
         return redirect(url_for('index')) # todo: pop up a warning for logging in
-    
-    audio_processing.embed_data(DATA_FOLDER)
     username = session['username']
-    return render_template('audio_viz.html', username=username)
+
+    data2d_df = audio_processing.embed_data(DATA_FOLDER, export=False)
+    data2d = data2d_df.to_dict('records') # list of dictionaries
+    # data2d = data2d_df.to_json(orient="records")
+    
+    return render_template('audio_viz.html', username=username, feed_data=data2d)
 
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
 def get_file(subpath=''):
