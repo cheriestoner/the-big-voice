@@ -9,7 +9,11 @@
     <body>
         <header>
             <div class="back">
-                <button id="backButton"><</button>
+                <div class="image-item">
+                    <a href="/record">
+                        <img src="{{ url_for('static', filename='images/back.png') }}" alt="Back">
+                    </a>
+                </div>
             </div>
             <!-- Info link in the header -->
             <div class="info-button">
@@ -76,7 +80,7 @@
     <!-- <svg id="myPlot" style="width:500px;height:500px"></svg> -->
     <!-- <script src="{{ url_for('static', filename='scatterplot-w3.js') }}"></script> -->
     <script>
-        const backButton = document.getElementById('backButton');
+        // const backButton = document.getElementById('backButton');
         // d3 gallery https://d3-graph-gallery.com/graph/scatter_basic.html
         // set the dimensions and margins of the graph
         // 设置图表的尺寸和边距
@@ -147,9 +151,9 @@
 
         d3.select("#my_dataviz").node().appendChild(svg.node());
 
-        backButton.addEventListener('click', () => {
-            window.location.href = '/record';
-        });
+        // backButton.addEventListener('click', () => {
+        //     window.location.href = '/record';
+        // });
 
         // 初始化 Web Audio API、混响节点和低通滤波器
         let audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -394,6 +398,10 @@
         }
     </script>
     <!-- <script src="{{ url_for('static', filename='scatterplot.js') }}"></script> -->
-
+    <footer class="body-foot">
+        <div class="foot-bottom">
+            &copy; 2024, Sound Studies Group, SUSTech
+        </div>
+    </footer>
     </body>
 </html>

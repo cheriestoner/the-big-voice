@@ -79,6 +79,29 @@ header {
     height: auto;
 }
 
+.back {
+    position: fixed;
+    top: 52%;
+    left: 5%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.image-item {
+    display: block;
+    width: 80%;
+    height: auto; 
+}
+
+.image-item img {
+    width: 70%;      
+    height: auto;  
+    background-color: transparent;  
+    transition: all 0.5s ease;  
+    border-radius: 15px;  
+}
+
+
 header h1 {
     color: white;
     font-size: 4em;
@@ -88,7 +111,7 @@ header h1 {
     cursor: pointer;
 }
 
-header .back {
+/* header .back {
     position: fixed;
     top: 50px;
     left: 40px;
@@ -113,7 +136,7 @@ header .back {
     background-color: transparent;
     color: #000;
     border: 2px solid #000;
-}
+} */
 
 article {
     display: flex;
@@ -138,6 +161,7 @@ article {
 
 #controls h3 {
     font-size: 2.5em;
+    color: #e37b3f;
 }
 
 #my_dataviz {
@@ -159,6 +183,7 @@ article {
     font-size: 2em;
     font-weight: 500;
     text-align: right;
+    color: #7d7665;
 }
 
 .wrapper {
@@ -207,4 +232,75 @@ input[type=range]::-moz-range-thumb {
   border: none;
   width: 0;
   box-shadow: -20rem 0 0 20rem rgba(255, 255, 255, 0.2);
+}
+
+.body-foot {
+    width: calc(100% - 120px);
+    background-color: #dbebc8;
+    padding: 50px 60px 20px 60px;
+    position: fixed;
+    bottom: 0;
+}
+
+.body-foot .foot-container {
+    flex: 1 1 0%;
+    position: relative;
+    border-bottom: 1px solid #5c657f;
+}
+
+.body-foot .foot-bottom {
+    display: block;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #b5c7a3;
+    font-family: futura;
+    height: 15px;
+}
+
+.catagories {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.catagories .column {
+    margin: 0 0 50px 0;
+    width: 215px;
+    text-align: center;
+}
+
+.catagories .column>a {
+    color: #b5c7a3;
+    background-color: transparent;
+    font-size: 1.5em;
+    line-height: 50px;
+    font-weight: 700;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.catagories .column a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -3px;
+    left: 50%;
+    background-color: #4a4ade;
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+.catagories .column a:hover {
+    color: #4a4ade;
+}
+
+.catagories .column a:hover::after {
+    width: 100%;
+    left: 0;
 }

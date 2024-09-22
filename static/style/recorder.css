@@ -152,6 +152,7 @@ header .user {
     color: #000;
 }
 
+
 #controls #stopButton {
     margin: 20px 40px 20px 385px;
     background: transparent;
@@ -161,10 +162,10 @@ header .user {
 /* Flexbox for Controls */
 #controls {
     position: fixed;
-    bottom: 233px;
+    bottom: 153px;
     left: 50%;
     transform: translateX(-50%);
-    height: 240px;
+    height: 155px;
     width: 100%;
     display: flex;
     justify-content: space-evenly;
@@ -179,7 +180,7 @@ header .user {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%; 
+    width: 140%; 
     height: auto; 
 }
 
@@ -213,14 +214,29 @@ header .user {
     }
 /* } */ 
 
+
 #recordingsList {
     position: fixed;
-    top: 8.5%;
+    top: 30%;
     left: 0%;
     width: 100%;
-    height: 50vh;
+    height: 40vh;
     padding: 10px;
-    overflow: hidden;
+    overflow-y: auto;
+}
+
+#recordingTimer {
+    position: absolute;          
+    bottom: 0px;                  
+    right: 10px;                
+    font-size: 3em;
+    font-family: futura;
+    font-weight: bold;
+    color: #e37b3f;
+    background-color: #dbebc8;
+    padding: 5px;
+    border-radius: 5px;
+    display: none;                 /* Hide by default */
 }
 
 .recording-item {
@@ -230,12 +246,13 @@ header .user {
     align-content: center;
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 10px 20px;
+    padding: 10px 15px;
     margin-bottom: 20px;
     background-color: #8a9473;
     border-radius: 30px;
     /* box-shadow: 0 0 6px 3px rgba(0, 0, 0, .2); */
 }
+
 
 .recording-item span {
     line-height: 3.5em;
@@ -331,8 +348,8 @@ header .user {
 
 /* Images styling */
 .image-item img {
-    width: 100%; 
-    max-width: 300px; 
+    width: 50%; 
+    max-width: 250px; 
     height: auto;
     border-radius: 8px;  
 }
@@ -475,6 +492,7 @@ canvas {
     font-weight: 600;
     color: #dbebc8;
     font-family: futura;
+    height: 15px;
 }
 
 .catagories {

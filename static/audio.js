@@ -2,6 +2,7 @@ const loginButton = document.getElementById('loginButton');
 const recordButton = document.getElementById('recordButton');
 const stopButton = document.getElementById('stopButton');
 const recordingsList = document.getElementById('recordingsList');
+const recordingTimer = document.getElementById('recordingTimer');
 
 let mediaRecorder;
 let audioChunks = [];
@@ -20,17 +21,96 @@ let recordTimeout;
 let startTime;
 let viewWidth = window.innerWidth;
 let viewHeight = window.innerHeight;
+let visualTime;
+let timerInterval;
 
-recordButton.addEventListener('click', async () => {
+// 实时录制时间,格式mm:ss.ms
+function formatTime(duration) {
+    const milliseconds = Math.floor((duration % 1000) / 10);
+    const seconds = Math.floor((duration / 1000) % 60);
+    const minutes = Math.floor((duration / (1000 * 60)) % 60);
+
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+    const formattedSeconds = seconds.toString().padStart(2, '0');
+    const formattedMilliseconds = milliseconds.toString().padStart(2, '0');
+
+    return `${formattedMinutes}:${formattedSeconds}.${formattedMilliseconds}`;
+}
+
+// 开始timer
+function startRecordingTimer() {
+    visualTime = Date.now();
+    recordingTimer.style.display = 'block'; 
+    recordingTimer.style.position = 'absolute';  
+    recordingTimer.style.bottom = '10px'; 
+    recordingTimer.style.right = '10px';  
+    timerInterval = setInterval(() => {
+        const elapsedTime = Date.now() - visualTime;
+        recordingTimer.textContent = formatTime(elapsedTime);
+    }, 10); // 每10ms更新时间
+}
+
+// 停止timer
+function stopRecordingTimer() {
+    clearInterval(timerInterval);
+    recordingTimer.textContent = '00:00.00'; // 重置timer
+    recordingTimer.style.display = 'none'; // 隐藏
+}
+
+// debug recordButton
+function updateRecordButtonState(isRecording) {
+    if (isRecording) {
+        recordButton.src = recordButton.getAttribute('data-on-src');
+    } else {
+        recordButton.src = recordButton.getAttribute('data-off-src');
+    }
+    console.log(`Record button updated: isRecording = ${isRecording}`);
+}
+
+
+recordButton.addEventListener('click', async (event) => {
+    event.stopPropagation();
+    
     if (!isRecording) {
         // 开始录制
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorder = new MediaRecorder(stream);
 
+        // 创建timer
+        const visualContainer = document.createElement('div');
+        visualContainer.style.position = 'relative'; 
+        visualContainer.style.width = '100%';
+        visualContainer.style.height = '520px';  // Increased height to include both canvas and timer
+        document.body.appendChild(visualContainer);
+
+        // 获取Canvas元素和上下文
+        canvas = document.createElement('canvas');
+        // 将Canvas插入到article元素之后
+        // const article = document.querySelector('body');
+        // article.appendChild(canvas);
+        visualContainer.appendChild(canvas);
+        // const audio = document.querySelector('audio');
+        // audio.insertAdjacentElement('beforebegin', canvas);
+        canvasCtx = canvas.getContext('2d');
+        canvas.width = viewWidth;
+        canvas.height = viewHeight * 0.3;
+
+        // 将计时器移入容器并置于canvas下方
+        recordingTimer.style.position = 'absolute';
+        recordingTimer.style.bottom = '10px';
+        recordingTimer.style.right = '10px';
+        visualContainer.appendChild(recordingTimer);
+
+        // 显示和启动timer
+        startRecordingTimer(); 
+        mediaRecorder.start();
+        isRecording = true;
+
         startTime = Date.now();
         recordTimeout = setTimeout(() => {
             mediaRecorder.stop(); // 超过60秒停止录制
             isRecording = false;
+            stopRecordingTimer(); 
             // recordButton.id = 'recordButton';
             // recordButton.textContent = 'Start';
             recordButton.src = recordButton.getAttribute('data-off-src'); 
@@ -47,18 +127,14 @@ recordButton.addEventListener('click', async () => {
         dataArray = new Uint8Array(bufferLength);
 
         source.connect(analyser);
-    
-        // 获取Canvas元素和上下文
-        canvas = document.createElement('canvas');
-        // 将Canvas插入到article元素之后
-        // const article = document.querySelector('body');
-        // article.appendChild(canvas);
-        document.body.appendChild(canvas);
-        // const audio = document.querySelector('audio');
-        // audio.insertAdjacentElement('beforebegin', canvas);
-        canvasCtx = canvas.getContext('2d');
-        canvas.width = viewWidth;
-        canvas.height = viewHeight * 0.3;
+
+        startTime = Date.now();
+        recordTimeout = setTimeout(() => {
+            mediaRecorder.stop(); // Stop recording after max time
+            isRecording = false;
+            stopRecordingTimer(); 
+            recordButton.src = recordButton.getAttribute('data-off-src');
+        }, maxRecordTime);
     
         function draw() {
             drawVisual = requestAnimationFrame(draw);
@@ -103,7 +179,8 @@ recordButton.addEventListener('click', async () => {
             audioChunks = [];
             // 停止绘图，移除Canvas
             cancelAnimationFrame(drawVisual);
-            canvas.remove();
+            // canvas.remove();
+            visualContainer.remove();
 
             function addTimeToFileName(originalFileName) {
                 const now = new Date();
@@ -179,9 +256,11 @@ recordButton.addEventListener('click', async () => {
             // 重置fileName
             fileName = addTimeToFileName('recording');
         };
-        
-        mediaRecorder.start();
-        isRecording = true;
+
+        // 移上去
+        // startRecordingTimer();
+        // mediaRecorder.start();
+        // isRecording = true;
 
         // 限制最少录制5秒
         setTimeout(() => {
@@ -192,7 +271,8 @@ recordButton.addEventListener('click', async () => {
         recordButton.disabled = true;
 
         // 改变录音按钮的图片 
-        recordButton.src = recordButton.getAttribute('data-on-src')
+        // recordButton.src = recordButton.getAttribute('data-on-src')
+        updateRecordButtonState(true);  //避免global click改变图片
 
     } else {
         // 停止录制
@@ -200,13 +280,15 @@ recordButton.addEventListener('click', async () => {
             clearTimeout(recordTimeout); // 清除最大录制时间的定时器
             mediaRecorder.stop();
             isRecording = false;
+            stopRecordingTimer(); 
             // recordButton.id = 'recordButton';
             // recordButton.textContent = 'Start';
-            recordButton.src = recordButton.getAttribute('data-off-src');
+            // recordButton.src = recordButton.getAttribute('data-off-src');
+            updateRecordButtonState(false);  //避免global click改变图片
             // recordButton.id = 'stopButton';
             // recordButton.textContent = 'Stop';
             // 改变录音按钮的图片
-            // recordButton.getAttribute('data-on-src');
+            recordButton.getAttribute('data-off-src');
         } else {
         // 停止录制
         // mediaRecorder.stop();
