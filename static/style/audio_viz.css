@@ -18,7 +18,7 @@ body::-webkit-scrollbar {
 body {
     position: relative;
     margin: 0;
-    background-color: #8f9d8c;
+    background-color: #dbebc8;
     touch-action: none;
     /* background: linear-gradient(-45deg, #ff7e5f, #9970bf, #feb47b, #90b5a4, #4394a4, #9970bf, #ff7e5f); */
     /* background-size: 800% 800%; */
@@ -42,26 +42,41 @@ body {
 header {
     position: fixed;
     top: 0;
-    left: 0;
     width: 100%;
     height: 150px;
-    background: rgba(255, 255, 255, 0.1);
+    /* background: rgba(255, 255, 255, 0.1); */
+    background: #7d7665;
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
     z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 0;
+    /* opacity: 0;
     transform: translateY(-100%);
-    animation: slideIn 1s ease forwards 0.5s;
+    animation: slideIn 1s ease forwards 0.5s; */
 }
 
-@keyframes slideIn {
+/* @keyframes slideIn {
     to {
         opacity: 1;
         transform: translateY(0);
     }
+} */
+.info-button {
+    position: absolute;
+    top: 50%;
+    right: 0.5%;
+    transform: translateY(-50%);
+}
+
+.info-button a {
+    display: block;
+}
+
+.info-button img {
+    width: 70%;
+    height: auto;
 }
 
 header h1 {
@@ -132,8 +147,8 @@ article {
 
 #my_dataviz svg {
     overflow: visible;
-    border: 2px solid #000;
-    background-color: #ddd;
+    border: 2px solid #dbebc8;
+    background-color: #dbebc8;
 }
 
 .controlTable {
