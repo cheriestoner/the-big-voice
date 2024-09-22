@@ -55,30 +55,30 @@ if not os.path.exists(RECORDINGS_CSV):
         writer = csv.writer(csvfile)
         writer.writerow(['username', 'filename', 'timestamp'])
 
-DEV_MODE = True
+DEV_MODE = False
 
 # Route for the home page
 @app.route('/')
-def home():
-    return render_template('home.html')
-
-
-@app.route('/index')
 def index():
+    return render_template('index.html')
+
+
+@app.route('/record')
+def recorder():
     if(DEV_MODE):
         session['logged_in'] = True
         session['username'] = 'admin'
     if 'logged_in' in session and session['logged_in']:
         app.logger.info(f'Current username: { session["username"] }')
-        return render_template('index.html', username=session['username'])
+        return render_template('recorder.html', username=session['username'])
     else:
-        return redirect(url_for('home'))
+        return redirect(url_for('index'))
     #     session['filenames'] = []
     # if 'logged_in' not in session or not session['logged_in']:
     #     return redirect(url_for('login'))
     # else:
     #     app.logger.info(f'Current username: { session["username"] }') #更改了这一行的缩进和单引号变双引号之后可以跑了
-    # return render_template('index.html', username=session['username'])
+    # return render_template('recorder.html', username=session['username'])
     
         
 @app.route('/register', methods=['GET', 'POST'])
@@ -92,10 +92,10 @@ def register():
         with open(USERS_CSV, mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([username])
-        session['logged_in'] = True
-        session['username'] = username
-        session['filenames'] = []  # Initialize filenames list
-        return redirect(url_for('index'))
+        # session['logged_in'] = True
+        # session['username'] = username
+        # session['filenames'] = []  # Initialize filenames list
+        return redirect(url_for('login'))
     return render_template('register.html')
 
 
@@ -108,7 +108,7 @@ def login():
             session['logged_in'] = True
             session['username'] = username
             session['filenames'] = []  # Initialize filenames list
-            return redirect(url_for('index'))
+            return redirect(url_for('recorder'))
         else:
             return redirect(url_for('register'))
     return render_template('login.html')
@@ -119,27 +119,24 @@ def logout():
     session.pop('username', None)
     session.pop('filenames', None)
     # session.clear()
-    return redirect(url_for('home'))
+    return redirect(url_for('index'))
 
 # icon
 @app.route('/favicon.ico')
 def favicon():
     return send_file(os.path.join(BASE_DIR, 'favicon.ico'))
 
-@app.route('/loading/<string:username>', methods=['GET', 'POST'])
-def loading_page(username):
-    return render_template('loading.html', username=username) # or change it to loading_jy.html
+@app.route('/loading', methods=['GET', 'POST'])
+def loading_page():
+    return render_template('loading.html') # or change it to loading_jy.html
 
-@app.route('/remix/<string:username>')
-def process_features(username):
+@app.route('/remix')
+def process_features():
     if 'logged_in' not in session or not session['logged_in']:
-        return redirect(url_for('login'))
-    # filename = os.path.join(DATA_FOLDER, 'test_office/xyz.csv')
-    # data = pd.read_csv(filename, header=0)
-    # feed_data = data.values.tolist() # 32 * 
-    # audio_processing.process(filename, AUDIO_FOLDER, DATA_FOLDER) # move to upload
+        return redirect(url_for('index')) # todo: pop up a warning for logging in
+    
     audio_processing.embed_data(DATA_FOLDER)
-    # username = session['username']
+    username = session['username']
     return render_template('audio_viz.html', username=username)
 
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
