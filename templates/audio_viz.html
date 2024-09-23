@@ -106,19 +106,18 @@
                         </div>
                          <!-- eraser -->
                         <div class="controlItem">
-                            <img src="{{ url_for('static', filename='images/eraser.png') }}" alt="Placeholder Icon 1">
+                            <img src="{{ url_for('static', filename='images/eraser.png') }}" alt="Placeholder Icon 1" id="eraser">
                         <!-- 这里添加function -->
                         </div>
 
-                        <!-- user only & group switch -->
-                        <!-- user/group input text control -->
+                        <!-- userinput text -->
                         <div class="controlItem">
-                             <img src="{{ url_for('static', filename='images/user.png') }}" alt="User Icon" id="toggleIcon">
+                            <img src="{{ url_for('static', filename='images/userText.png') }}" alt="Placeholder Icon 2">
+                        <!-- 这里添加function -->
                         </div>
                 </div>
             </div>
         </article>
-        <div id="scatterPlotContainer"></div>
 
     <!-- <svg id="myPlot" style="width:500px;height:500px"></svg> -->
     <!-- <script src="{{ url_for('static', filename='scatterplot-w3.js') }}"></script> -->
@@ -129,30 +128,6 @@
         const margin = { top: 0, right: 0, bottom: 15, left: 25 };
         let width = window.innerWidth * 1 - margin.left - margin.right;
         let height = window.innerHeight * 0.6 - margin.top - margin.bottom;
-
-        // Function to update the scatter plot with the new data
-        function updateScatterPlot(newData) {
-            // Clear existing dots
-            gDot.selectAll("circle").remove();
-
-            // Update the domain of the scatter plot
-            set_domain(newData);
-
-            // Add the new dots
-            gDot.selectAll("circle")
-                .data(newData)
-                .join("circle")
-                .attr("cx", d => x(d.embedding_x))
-                .attr("cy", d => y(d.embedding_y))
-                .attr("r", 5)
-                .attr("fill", function (d) {
-                    return ((d.username == "{{ username }}") ? "#FF5C35" : "#28713E");
-                })
-                .style("opacity", 0.5);
-
-            // Reapply zoom
-            svg.call(zoom);
-        }
 
         // 创建SVG对象
         const svg = d3.create("svg")
@@ -383,6 +358,19 @@
             
             // 应用缩放行为到 SVG
             svg.call(zoom);
+            
+            let eraserMode = false;
+
+            document.getElementById("eraser").addEventListener("click", function() {
+                eraserMode = !eraserMode; // 切换eraser模式
+                if (eraserMode) {
+                    console.log("Eraser mode enabled");
+                    this.textContent = "Exit Eraser Mode";
+                } else {
+                    console.log("Eraser mode disabled");
+                    this.textContent = "Eraser Mode";
+                }
+            });
 
             svg.on("click", function(event) {
                 // 获取点击位置
@@ -390,96 +378,99 @@
                 const transformedX = currentTransform.invertX(clickX);
                 const transformedY = currentTransform.invertY(clickY);
 
-                //const scaledRadius = 50 * currentTransform.k;
-
-                // 添加一个新的圆圈到点击位置
-                const circle = svg.append("circle")
-                    .attr("cx", clickX)
-                    .attr("cy", clickY)
-                    .attr("r", 50)
-                    .attr("stroke", "#00000080")
-                    .attr("stroke-width", 3)
-                    .attr("fill", "#77777780")
-                    .attr("fill-opacity", 1)
-                    .attr("stroke-opacity", 1)
-                    .attr("class", "selection-circle");
-
-                const pointsInCircle = [];
-                gDot.selectAll("circle").each(function(d) {
-                    const cx = x(d.embedding_x);
-                    const cy = y(d.embedding_y);
-                    const distance = Math.sqrt((currentTransform.applyX(cx) - clickX) ** 2 + (currentTransform.applyY(cy) - clickY) ** 2);
-                    if (distance <= 50) {
-                        pointsInCircle.push(d);
-                    }
-                });
+                if (eraserMode) {
+                    // 删除在点击范围内的点
+                    gDot.selectAll("circle").each(function(d, i) {
+                        const cx = x(d.embedding_x);
+                        const cy = y(d.embedding_y);
+                        const distance = Math.sqrt((currentTransform.applyX(cx) - clickX) ** 2 + (currentTransform.applyY(cy) - clickY) ** 2);
+                        if (distance <= 50) {
+                            d3.select(this).remove();  // 删除点
+                        }
+                    });
+                } else {
+                    // 添加新的圆圈
+                    const circle = svg.append("circle")
+                        .attr("cx", clickX)
+                        .attr("cy", clickY)
+                        .attr("r", 50)
+                        .attr("stroke", "#00000080")
+                        .attr("stroke-width", 3)
+                        .attr("fill", "#77777780")
+                        .attr("fill-opacity", 1)
+                        .attr("stroke-opacity", 1)
+                        .attr("class", "selection-circle");
+                
+                    const pointsInCircle = [];
+                    gDot.selectAll("circle").each(function(d) {
+                        const cx = x(d.embedding_x);
+                        const cy = y(d.embedding_y);
+                        const distance = Math.sqrt((currentTransform.applyX(cx) - clickX) ** 2 + (currentTransform.applyY(cy) - clickY) ** 2);
+                        if (distance <= 50) {
+                            pointsInCircle.push(d);
+                        }
+                    });
+                        const shuffledPoints = d3.shuffle(pointsInCircle);
+                        function playNextAudio(index, totalDuration) {
+                            //if (eraserMode) return;
             
-                // 打乱顺序，随机播放点的音频
-                const shuffledPoints = d3.shuffle(pointsInCircle);
-            
-                function playNextAudio(index, totalDuration) {
-                    
-                    if (totalDuration >= 10000) {
-                        console.log("Total play time exceeded 10 seconds, stopping playback.");
-                        return;
+                            if (totalDuration >= 10000) {
+                                console.log("Total play time exceeded 10 seconds, stopping playback.");
+                                return;
+                            }
+                            if (shuffledPoints.length === 0) {
+                                console.error("No points found in the selected circle.");
+                                return;
+                            }
+                            if (index >= shuffledPoints.length) {
+                                index = 0;
+                            }
+                        
+                            const d = shuffledPoints[index];
+                            if (!d || !audioElements['/' + d.username + '/' + d.audiofile]) {
+                                console.error("Invalid point or audio file not found:", d);
+                                playNextAudio(index + 1, totalDuration);
+                                return;
+                            }
+                        
+                            const audioElement = audioElements['/' + d.username + '/' + d.audiofile];
+                            const startTime = parseFloat(d.start_time_sec);
+                            const endTime = parseFloat(d.end_time_sec);
+                        
+                            if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
+                                audioElement.currentTime = startTime;
+                                audioElement.play();
+                                const duration = Math.min(endTime - startTime, 10 - totalDuration / 1000)
+                                //setTimeout(() => {
+                                //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
+                                //}, 2000);
+                            
+                                setTimeout(() => {
+                                    audioElement.pause();
+                                    audioElement.currentTime = 0;
+                                
+                                    totalDuration += duration * 1000;
+                                    playNextAudio(index + 1, totalDuration);
+                                }, duration * 1000);
+                            } else {
+                                // 如果音频数据无效，跳到下一个
+                                console.error("Invalid start or end time for audio:", startTime, endTime);
+                                playNextAudio(index + 1, totalDuration);
+                            }
                     }
-                    if (shuffledPoints.length === 0) {
-                        console.error("No points found in the selected circle.");
-                        return;
-                    }
-                    if (index >= shuffledPoints.length) {
-                        index = 0;
-                    }
-                
-                    const d = shuffledPoints[index];
-                    if (!d || !audioElements['/' + d.username + '/' + d.audiofile]) {
-                        console.error("Invalid point or audio file not found:", d);
-                        playNextAudio(index + 1, totalDuration);
-                        return;
-                    }
-                
-                    const audioElement = audioElements['/' + d.username + '/' + d.audiofile];
-                    const startTime = parseFloat(d.start_time_sec);
-                    const endTime = parseFloat(d.end_time_sec);
-                
-                    if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
-                        audioElement.currentTime = startTime;
-                        audioElement.play();
-                        const duration = Math.min(endTime - startTime, 10 - totalDuration / 1000);
-
-                        //setTimeout(() => {
-                        //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
-                        //}, 2000);
-                
-                        setTimeout(() => {
-                            audioElement.pause();
-                            audioElement.currentTime = 0;
-                
-                            totalDuration += duration * 1000;
-                            playNextAudio(index + 1, totalDuration);
-                        }, duration * 1000);
-                    } else {
-                        // 如果音频数据无效，跳到下一个
-                        console.error("Invalid start or end time for audio:", startTime, endTime);
-                        playNextAudio(index + 1, totalDuration);
-                    }
+                        
+                    playNextAudio(0, 0)
+                    setTimeout(() => {
+                        circle.transition()
+                            .duration(10000)
+                            .attr("fill-opacity", 0)
+                            .attr("stroke-opacity", 0)
+                            .remove();
+                    }, 2000);
                 }
-                
-                playNextAudio(0, 0);
-
-                setTimeout(() => {
-                    circle.transition()
-                        .duration(10000)
-                        .attr("fill-opacity", 0)
-                        .attr("stroke-opacity", 0)
-                        .remove();
-                }, 2000);
             });
         }
     </script>
-    <div class="textBoxContainer">
-        <textarea placeholder="Enter text here..."></textarea>
-    </div>
     <!-- <script src="{{ url_for('static', filename='scatterplot.js') }}"></script> -->
     <footer class="body-foot">
         <div class="foot-bottom">
@@ -513,44 +504,4 @@
     </script>
 
     </body>
-    <script>
-
-        // Store the URLs for both icons as variables
-        const userIconUrl = "{{ url_for('static', filename='images/user.png') }}";
-        const groupIconUrl = "{{ url_for('static', filename='images/group.png') }}";
-
-        // Add toggle functionality for switching between 'user' and 'global' datasets
-        let currentMode = 'user';  // Initialize with 'user' mode
-
-        document.getElementById('toggleIcon').addEventListener('click', function () {
-        // Toggle between user and group mode
-        currentMode = (currentMode === 'user') ? 'all' : 'user';
-
-        // Change icon image accordingly
-        let iconSrc = (currentMode === 'user') ? userIconUrl : groupIconUrl;
-        document.getElementById('toggleIcon').src = iconSrc;
-
-        // Create a FormData object to send form data via POST
-        const formData = new FormData();
-        formData.append('display_mode', currentMode);
-
-        // Send an AJAX request to get the new data based on the selected mode
-        fetch('/remix', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.text();  // Get the raw HTML response
-            }
-            throw new Error('Network response was not ok.');
-        })
-        .then(html => {
-            // Replace the current content with the new HTML
-            document.querySelector('#scatterPlotContainer').innerHTML = html;
-        })
-        .catch(error => console.error('Error:', error));
-    });
-
-    </script>
 </html>
