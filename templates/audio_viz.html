@@ -114,6 +114,11 @@
                         <!-- user/group input text control -->
                         <div class="controlItem">
                              <img src="{{ url_for('static', filename='images/user.png') }}" alt="User Icon" id="toggleIcon">
+                             <!-- <form action=/remix method="post" class="myForm">
+                                <label class="switch">
+                                  <input type="checkbox" name="checkbox" value="dark" onclick="clickFn(event)">       <span class="slider round"></span>
+                                </label>
+                              </form> -->
                         </div>
                 </div>
             </div>
@@ -165,22 +170,59 @@
 
         let x,
             y;
-    
+        
         // parse feed data as list of dictionaries
-        const data = [
-            {% for c in feed_data %}               
-                {
-                    'username': '{{ c["username"] }}', 
-                    'audiofile': '{{ c["audiofile"] }}', 
-                    'segment_index': {{ c['segment_index'] }}, 
-                    'start_time_sec': {{ c['start_time_sec'] }}, 
-                    'end_time_sec': {{ c['end_time_sec'] }}, 
-                    'embedding_x': {{ c["embedding_x"] }}, 
-                    'embedding_y': {{ c['embedding_y'] }}
-                },
-            {% endfor %}
-        ];
-        // console.log(data);
+        // const data = [
+        //     {% for c in feed_data %}               
+        //         {
+        //             'username': '{{ c["username"] }}', 
+        //             'audiofile': '{{ c["audiofile"] }}', 
+        //             'segment_index': {{ c['segment_index'] }}, 
+        //             'start_time_sec': {{ c['start_time_sec'] }}, 
+        //             'end_time_sec': {{ c['end_time_sec'] }}, 
+        //             'embedding_x': {{ c["embedding_x"] }}, 
+        //             'embedding_y': {{ c['embedding_y'] }}
+        //         },
+        //     {% endfor %}
+        // ];
+        const data = {{ feed_data | tojson}};
+        console.log('json:', data);
+        var audioElements = {}; // dictionary-like
+
+        // Store the URLs for both icons as variables
+        const userIconUrl = "{{ url_for('static', filename='images/user.png') }}";
+        const groupIconUrl = "{{ url_for('static', filename='images/group.png') }}";
+
+        // Add toggle functionality for switching between 'user' and 'global' datasets
+        let currentMode = 'user';  // Initialize with 'user' mode
+
+        document.getElementById('toggleIcon').addEventListener('click', function () {
+            // Toggle between user and group mode
+            currentMode = (currentMode === 'user') ? 'all' : 'user';
+
+            // Change icon image accordingly
+            let iconSrc = (currentMode === 'user') ? userIconUrl : groupIconUrl;
+            document.getElementById('toggleIcon').src = iconSrc;
+
+            // Create a FormData object to send form data via POST
+            const formData = new FormData();
+            formData.append('display_mode', currentMode);
+
+            fetch('/get-data/' + currentMode, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('data', data);
+                set_domain(data);
+                // var audioElements = {}; // dictionary-like
+                create_audioElements(data);
+                scatterplot_visualize(data, "#FF5C35", audioElements);
+            });
+        });
+
+        set_domain(data);
 
         function set_domain(data) {
             const xvalues = data.map(d => +d.embedding_x);
@@ -192,6 +234,7 @@
 
             const ymaxValue = d3.max(yvalues);
             const yminValue = d3.min(yvalues);
+            // console.log('domain: ', xminValue, ',', yminValue);
 
             // Add X axis
             x = d3.scaleLinear()
@@ -204,7 +247,30 @@
             .range([height, 0]);
         }
 
-        set_domain(data);
+        function load_audioElements_all() {
+            var audioElements = {}; // dictionary-like
+            d3.csv('/data/recordings.csv').then(function(data) {
+                let audioFiles = data.map(function(d) { return '/' + d.username + '/' + d.recording_file; });
+                console.log(audioFiles);
+                const audioElement = document.createElement('audio');
+                audioFiles.forEach((audioSrc, index) => { // /<username>/<filename>
+                    const audioElement = document.createElement('audio');
+                    audioElement.src = '/audio'.concat(audioSrc); // concat folder with filename
+                    document.body.appendChild(audioElement);
+                    // audioElements.push(audioElement); // for let audioElement = [];
+                    audioElements[audioSrc] = audioElement;
+
+                    let track = audioContext.createMediaElementSource(audioElement);
+                    track.connect(gainNode).connect(dryGainNode).connect(volumeNode).connect(filterNode).connect(audioContext.destination);
+                    track.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
+                    //gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 3);
+                    //setTimeout(() => {
+                    //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
+                    //}, 10 * 1000);
+                });
+            })
+            return audioElements;
+        }
 
         //const xAxis = d3.axisBottom(x);
         //const yAxis = d3.axisLeft(y);
@@ -283,7 +349,7 @@
             filterNode.frequency.value = this.value;
         });
 
-        var audioElements = {}; // dictionary-like
+        // var audioElements = {}; // dictionary-like
 
         create_audioElements(data);
 
@@ -503,6 +569,11 @@
     </script>
     <div class="textBoxContainer">
         <textarea placeholder="Enter text here..."></textarea>
+        <!-- <form action=/remix method="post" class="myForm">
+            <label class="switch">
+                <input type="checkbox" name="checkbox" value="dark" onclick="clickFn(event)">       <span class="slider round"></span>
+            </label>
+        </form> -->
     </div>
     <!-- <script src="{{ url_for('static', filename='scatterplot.js') }}"></script> -->
     <footer class="body-foot">
@@ -539,42 +610,34 @@
     </body>
     <script>
 
-        // Store the URLs for both icons as variables
-        const userIconUrl = "{{ url_for('static', filename='images/user.png') }}";
-        const groupIconUrl = "{{ url_for('static', filename='images/group.png') }}";
+    //     // Store the URLs for both icons as variables
+    //     const userIconUrl = "{{ url_for('static', filename='images/user.png') }}";
+    //     const groupIconUrl = "{{ url_for('static', filename='images/group.png') }}";
 
-        // Add toggle functionality for switching between 'user' and 'global' datasets
-        let currentMode = 'user';  // Initialize with 'user' mode
+    //     // Add toggle functionality for switching between 'user' and 'global' datasets
+    //     let currentMode = 'user';  // Initialize with 'user' mode
 
-        document.getElementById('toggleIcon').addEventListener('click', function () {
-        // Toggle between user and group mode
-        currentMode = (currentMode === 'user') ? 'all' : 'user';
+    //     document.getElementById('toggleIcon').addEventListener('click', function () {
+    //     // Toggle between user and group mode
+    //     currentMode = (currentMode === 'user') ? 'all' : 'user';
 
-        // Change icon image accordingly
-        let iconSrc = (currentMode === 'user') ? userIconUrl : groupIconUrl;
-        document.getElementById('toggleIcon').src = iconSrc;
+    //     // Change icon image accordingly
+    //     let iconSrc = (currentMode === 'user') ? userIconUrl : groupIconUrl;
+    //     document.getElementById('toggleIcon').src = iconSrc;
 
-        // Create a FormData object to send form data via POST
-        const formData = new FormData();
-        formData.append('display_mode', currentMode);
+    //     // Create a FormData object to send form data via POST
+    //     const formData = new FormData();
+    //     formData.append('display_mode', currentMode);
 
-        // Send an AJAX request to get the new data based on the selected mode
-        fetch('/remix', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.text();  // Get the raw HTML response
-            }
-            throw new Error('Network response was not ok.');
-        })
-        .then(html => {
-            // Replace the current content with the new HTML
-            document.querySelector('#scatterPlotContainer').innerHTML = html;
-        })
-        .catch(error => console.error('Error:', error));
-    });
+    //     fetch('/get-data/' + currentMode, {
+    //         method: 'POST',
+    //         body: formData
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log('data:', data)
+    //     });
+    // });
 
     </script>
 </html>

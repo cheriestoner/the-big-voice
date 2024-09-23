@@ -136,23 +136,31 @@ def visualize():
         return redirect(url_for('index')) # todo: pop up a warning for logging in
     username = session['username']
 
-    # if request.form['display_mode'] == 'all'
-    if request.method == 'GET':
-        user = 'all'
-    else:
-        # app.logger.info(request.json.get('display_mode'))
-        display_mode = request.form['display_mode']
+    # if request.method == 'GET':
+    #     user = 'all'
+    # else:
+    #     # app.logger.info(request.json.get('display_mode'))
+    #     display_mode = request.form['display_mode']
+    #     app.logger.info(display_mode)
+    #     if display_mode == 'user':
+    #         user = username
+    #     else:
+    #         user = 'all'
         
-        if display_mode == 'user':
-            user = username
-        else:
-            user = 'all'
-        
-    data2d_df = audio_processing.embed_data(user=user, data_folder=DATA_FOLDER, export=False)
+    data2d_df = audio_processing.embed_data(user=username, data_folder=DATA_FOLDER, export=False) # default display
     data2d = data2d_df.to_dict('records')
     # return jsonify(data2d)  # Send data as JSON
 
     return render_template('audio_viz.html', username=username, feed_data=data2d)
+
+@app.route('/get-data/<string:display_mode>', methods=['GET', 'POST'])
+def get_data(display_mode):
+    if display_mode == 'all': 
+        data2d_df = audio_processing.embed_data(user='all', data_folder=DATA_FOLDER, export=False)
+    else:
+        data2d_df = audio_processing.embed_data(user=session['username'], data_folder=DATA_FOLDER, export=False)
+    data2d = data2d_df.to_dict('records')
+    return data2d
 
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
 def get_file(subpath=''):
