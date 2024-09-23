@@ -175,7 +175,8 @@ article {
     background-color: #dbebc8;
 }
 
-.controlTable {
+
+/* .controlTable {
     margin-top: 30px;
 }
 
@@ -208,21 +209,90 @@ article {
 .wrapper::after {
   content: "−";
   left: 0;
+} */
+
+.controlContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5vh auto; 
+    width: 90%; 
+    position: relative;
+    flex-wrap: nowrap; 
 }
 
-input[type=range] {
-  appearance: none;
-  background-color: rgba(255, 255, 255, 0.2);
-  margin: 0;
-  padding: 0;
-  width: 25rem;
-  height: 3.5rem;
-  border-radius: 1rem;
-  overflow: hidden;
-  cursor: row-resize;
+.controlItem {
+    text-align: center;
+    position: relative;
+    width: 25vw; 
+    margin: 2vh 0; 
 }
+
+.controlItem img {
+    cursor: pointer;
+    width: 15vw; 
+    height: auto;
+    margin-left: 10px;
+}
+
+.sliderWrapper {
+    position: absolute;
+    display: none;
+    bottom: calc(15vh + 20px); 
+    left: 50%; /* 垂直放在icon上 */
+    transform: translateX(-50%); /* 确保slider是垂直的 */
+    text-align: center;
+}
+
+.sliderWrapper label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.sliderWrapper input[type="range"] {
+    appearance: none;
+    width: 40vw; /* slider 高度 */
+    height: 5vh; /* 宽度 */
+    background: #b5c7a3;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    transform: rotate(-90deg);
+}
+
 
 input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10vw;
+    height: 20px;
+    background: #7d7665;
+    cursor: pointer;
+    /* border-radius: 50%; */
+    transform: rotate(-90deg);
+}
+
+input[type=range]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #7d7665;
+    cursor: pointer;
+    border-radius: 50%;
+    transform: rotate(-90deg);
+}
+
+.sliderWrapper span {
+    display: inline-block;
+    width: 60px; /* Adjust to fit labels */
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px; 
+    /* Adds some space between the label and the slider */
+}
+
+/* input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 0;
   box-shadow: -20rem 0 0 20rem rgba(255, 255, 255, 0.2);
@@ -232,7 +302,7 @@ input[type=range]::-moz-range-thumb {
   border: none;
   width: 0;
   box-shadow: -20rem 0 0 20rem rgba(255, 255, 255, 0.2);
-}
+} */
 
 .body-foot {
     width: calc(100% - 120px);
