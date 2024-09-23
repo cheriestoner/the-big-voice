@@ -4,6 +4,8 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='style/audio_viz.css') }}">
         <title>Remix | The Big Voice</title>
+        <style>
+        </style>
     </head>
     <script src="https://d3js.org/d3.v7.js"></script>
     <body>
@@ -27,8 +29,8 @@
                 <h3>{{ username }}</h3>
                 <div id="my_dataviz"></div>
             </div>
-            <div class="controlTable">
-                <table>
+            <div class="controlContainer">
+                <!-- <table>
                     <tbody>
                         <tr id="volume-control">
                             <td style="padding: 15px 20px 20px; font-weight: 900;">
@@ -43,8 +45,18 @@
                             <td style="padding: 15px 5px 20px 20px;">
                                 <span>HIGH</span>
                             </td>
-                        </tr>
-                        <tr id="reverb-control">
+                        </tr> -->
+                        <div class="controlItem">
+                            <img src="{{ url_for('static', filename='images/volume.png') }}" alt="Volume Icon" id="volumeIcon">
+                            <div class="sliderWrapper" id="volumeSliderWrapper">
+                                <label for="volumeSlider"></label>
+                                <span>LOW</span>
+                                <input type="range" id="volumeSlider" min="0.0" max="100" value="75">
+                                <span>HIGH</span>
+                            </div>
+                        </div>
+
+                        <!-- <tr id="reverb-control">
                             <td style="padding: 15px 20px 20px; font-weight: 900;">
                                 <label for="reverbSlider">REVERB:</label>
                             </td>
@@ -57,8 +69,17 @@
                             <td style="padding: 15px 5px 20px 20px; text-align: left;">
                                 <span>WET</span>
                             </td>
-                        </tr>
-                        <tr id="filter-control">
+                        </tr> -->
+                        <div class="controlItem">
+                            <img src="{{ url_for('static', filename='images/reverb.png') }}" alt="Reverb Icon" id="reverbIcon">
+                            <div class="sliderWrapper" id="reverbSliderWrapper">
+                                <label for="reverbSlider"></label>
+                                <span>DRY</span>
+                                <input type="range" id="reverbSlider" min="0" max="100" value="25">
+                                <span>WET</span>
+                            </div>
+                        </div>
+                        <!-- <tr id="filter-control">
                             <td style="padding: 15px 20px 20px; font-weight: 900;">
                                 <label for="filterSlider">LOWPASS FILTER:</label>
                             </td>
@@ -73,7 +94,28 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
+                        <div class="controlItem">
+                            <img src="{{ url_for('static', filename='images/lpFilter.png') }}" alt="Filter Icon" id="filterIcon">
+                            <div class="sliderWrapper" id="filterSliderWrapper">
+                                <label for="filterSlider"></label>
+                                <span>LOW</span>
+                                <input type="range" id="filterSlider" min="50" max="15000" value="8000">
+                                <span>HIGH</span>
+                            </div>
+                        </div>
+                         <!-- eraser -->
+                        <div class="controlItem">
+                            <img src="{{ url_for('static', filename='images/eraser.png') }}" alt="Placeholder Icon 1">
+                        <!-- 这里添加function -->
+                        </div>
+
+                        <!-- userinput text -->
+                        <div class="controlItem">
+                            <img src="{{ url_for('static', filename='images/userText.png') }}" alt="Placeholder Icon 2">
+                        <!-- 这里添加function -->
+                        </div>
+                </div>
             </div>
         </article>
 
@@ -416,5 +458,31 @@
             &copy; 2024, Sound Studies Group, SUSTech
         </div>
     </footer>
+
+    <script>
+        // 只有在用户点击icon时slider才出现
+        document.getElementById('volumeIcon').addEventListener('click', function() {
+            toggleSlider('volumeSliderWrapper');
+        });
+
+        document.getElementById('reverbIcon').addEventListener('click', function() {
+            toggleSlider('reverbSliderWrapper');
+        });
+
+        document.getElementById('filterIcon').addEventListener('click', function() {
+            toggleSlider('filterSliderWrapper');
+        });
+
+        // toggle slider
+        function toggleSlider(sliderId) {
+            const slider = document.getElementById(sliderId);
+            if (slider.style.display === 'none' || slider.style.display === '') {
+                slider.style.display = 'block';
+            } else {
+                slider.style.display = 'none';
+            }
+        }
+    </script>
+
     </body>
 </html>
