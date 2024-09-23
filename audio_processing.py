@@ -99,12 +99,13 @@ def process(username='admin', audiofile="test1.wav", audio_folder='audio', data_
 
     # return data_df
 
-def embed_data(data_folder='data', export=True):
+def embed_data( user='all', data_folder='data', export=True):
     '''
     Reduce dimensionality of the whole dataset of features
     '''
     from sklearn.manifold import TSNE
     recordings = pd.read_csv(os.path.join(data_folder, 'recordings.csv'))#['recording_file'].tolist()
+    if (user != 'all'): recordings = recordings[recordings['username'] == user]
     features = []
     items = []
     for idx in recordings.index: # loop over all recording files
