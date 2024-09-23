@@ -136,13 +136,14 @@ def visualize():
         return redirect(url_for('index')) # todo: pop up a warning for logging in
     username = session['username']
 
+    # if request.form['display_mode'] == 'all'
     data2d_df = audio_processing.embed_data(DATA_FOLDER, export=False)
     # visualize the whole dataset in comparison to the user's sounds
-    # if request.form['display_mode'] == 'all'
     data2d = data2d_df.to_dict('records') # list of dictionaries
     # visualize the user's sounds
     # if request.form['display_mode'] == 'user'
-    # data2d = data2d_df[data2d_df['username'] == username].to_dict('records')
+    # data2d_df = audio_processing.embed_data(DATA_FOLDER, user=username, export=False) # re-calculate embedding
+    # data2d = data2d_df[data2d_df['username'] == username].to_dict('records') # the same embedding but partial display
     
     return render_template('audio_viz.html', username=username, feed_data=data2d)
 

@@ -30,52 +30,6 @@ def calculate_frame_num(num_sample, sr, frame_size, hopping):
     hop_size = int(hopping * frame_size)
     return int(np.ceil(num_sample-frame_size)/hop_size) + 1
 
-# add your code below
-def extractSpectralCentroid(samples, sample_rate, frame_size, hop_size):
-    '''
-    samples: audio in samples
-    sample_rate: sample rate, 48000 for iPhone recordings
-    frame_size: frame size in millisecond
-    hop_size: percentage of frame size
-    '''
-    frame_size = int(frame_size*sample_rate*1e-3) # convert from ms to number of samples
-    hop_size = int(hop_size*frame_size) # hop size into number of samples
-    frame_number = int(np.ceil((len(samples)-frame_size)/hop_size) + 1) #number of frames
-    spectral_centroids = []
-    
-    for i in range(frame_number):
-        current_frame = samples[i*hop_size: i*hop_size+frame_size]
-        N = len(current_frame)
-        fft_frame = np.abs(fft(current_frame))[0:((N//2)+1)]
-        numerator_factors = []
-        for k in range(len(fft_frame)):
-            numerator_factors.append((sample_rate*k*fft_frame[k])//N)
-            
-        numerator = np.sum(numerator_factors)
-        denominator = np.sum(fft_frame)
-        
-        spectral_centroids.append(numerator//denominator)
-        
-    return spectral_centroids
-
-def extractRMS(samples, sample_rate, frame_size, hop_size):
-    '''
-    samples: audio in samples
-    sample_rate: sample rate, normally 48000
-    frame_size: frame size in millisecond
-    hop_size: percentage of frame size
-    '''
-    frame_size = int(frame_size*sample_rate*1e-3) #convert from ms to number of samples
-    hop_size = int(hop_size*frame_size) #hop size into number of samples
-    frame_number = int(np.ceil((len(samples)-frame_size)/hop_size) + 1) #number of frames
-    rms = []
-
-    for i in range(frame_number):
-        current_frame = samples[i*hop_size: i*hop_size+frame_size]
-        rms.append(np.sqrt(np.mean(current_frame**2)))
-    
-    return rms
-
 def normalizeFeature(x):
     '''
     x: ndarray
@@ -119,18 +73,14 @@ def process(username='admin', audiofile="test1.wav", audio_folder='audio', data_
     mfcc_delta = librosa.feature.delta(mfccs)
     mfcc_delta2 = librosa.feature.delta(mfcc_delta)
 
-    # spectral_centroids = extractSpectralCentroid(sound_arr, sr, SEGMENT_SIZE, HOPPING)
-    # rms = extractRMS(sound_arr, sr, SEGMENT_SIZE, HOPPING)
-    # spectral_centroids = normalizeFeature(spectral_centroids)
-    # rms = normalizeFeature(rms)
-
     # Save extracted features to dataframe
     # [audiofile, segment number (file sub index), start time, end time, features]
     data = []
     for i in range(sc.shape[-1]): # loop over num segments
-        end_time = (i+1)*SEGMENT_SIZE*1e-3
+        start_time = i*HOPPING*SEGMENT_SIZE*1e-3
+        end_time = start_time + SEGMENT_SIZE*1e-3
         if end_time >= duration: end_time = duration
-        data_i = [i, i*SEGMENT_SIZE*1e-3, end_time, rms[i], zcr[i], sc[i], sf[i]]
+        data_i = [i, start_time, end_time, rms[i], zcr[i], sc[i], sf[i]]
         data_i.extend(mfccs.T[i].tolist() + mfcc_delta.T[i].tolist() + mfcc_delta2.T[i].tolist())
         data.append(data_i)
 
