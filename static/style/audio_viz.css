@@ -39,6 +39,15 @@ body {
     }
 } */
 
+.toggle-button {
+    position: absolute;
+    top: 10%;
+    right: 5%;
+    cursor: pointer;
+    width: 100px;
+    height: auto;
+}
+
 header {
     position: fixed;
     top: 0;
