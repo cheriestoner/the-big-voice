@@ -187,7 +187,7 @@ body {
   background-size: cover;
 }
 
-.toggle::before {
+/* .toggle::before {
   content: "";
   height: 80px;
   width: 80px;
@@ -201,7 +201,7 @@ body {
 #checkbox:checked + .toggle::before {
   position: absolute;
   left: calc(100% - 80px);
-}
+} */
 
 article {
     display: flex;
