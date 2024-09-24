@@ -39,14 +39,6 @@ body {
     }
 } */
 
-.toggle-button {
-    position: absolute;
-    top: 10%;
-    right: 5%;
-    cursor: pointer;
-    width: 100px;
-    height: auto;
-}
 
 header {
     position: fixed;
@@ -145,6 +137,70 @@ header h1 {
     background-color: transparent;
     color: #000;
     border: 2px solid #000;
+} */
+
+.switchState {
+    position: absolute;
+    top: 10%; 
+    right: 20px; 
+  }
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  width: 100%;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+#checkbox {
+  display: none;
+
+}
+
+.toggle {
+  height: 80px;
+  width: 200px;
+  border-radius: 9999px;
+  background-image: url('../images/tsne.png');
+  background-size: cover;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  box-shadow: 6px 6px 10px #0000003d;
+}
+
+#checkbox:checked + .toggle {
+  background-image: url('../images/umap.png');
+  background-size: cover;
+}
+
+/* .toggle::before {
+  content: "";
+  height: 80px;
+  width: 80px;
+  position: absolute;
+  left: 0;
+  border-radius: 50%;
+  background-color: #f4f4f4;
+  transition: all 0.5s ease-in-out;
+}
+
+#checkbox:checked + .toggle::before {
+  position: absolute;
+  left: calc(100% - 80px);
 } */
 
 article {
@@ -346,7 +402,7 @@ input[type=range]::-moz-range-thumb {
 
 .body-foot {
     width: calc(100% - 120px);
-    background-color: #dbebc8;
+    background-color: transparent;
     padding: 50px 60px 20px 60px;
     position: fixed;
     bottom: 0;
@@ -360,7 +416,7 @@ input[type=range]::-moz-range-thumb {
 
 .body-foot .foot-bottom {
     display: block;
-    margin-top: 10px;
+    margin-top: 50px;
     width: 100%;
     text-align: center;
     font-size: 1.5em;
