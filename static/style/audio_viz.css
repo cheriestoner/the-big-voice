@@ -170,6 +170,22 @@ body {
 
 }
 
+.toggle {
+    height: 60px;
+    width: 150px;
+    border-radius: 9999px;
+    background-image: url('../images/tsne.png');
+    background-size: cover;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    box-shadow: 6px 6px 10px #0000003d;
+  }
+  
+  #checkbox:checked + .toggle {
+    background-image: url('../images/umap.png');
+    background-size: cover;
+  }
 /* .toggle::before {
   content: "";
   height: 80px;
@@ -186,28 +202,9 @@ body {
   left: calc(100% - 80px);
 } */
 
-
-.toggle {
-  height: 60px;
-  width: 150px;
-  border-radius: 9999px;
-  background-image: url('../images/tsne.png');
-  background-size: cover;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.5s ease-in-out;
-  box-shadow: 6px 6px 10px #0000003d;
-}
-
-#checkbox:checked + .toggle {
-  background-image: url('../images/umap.png');
-  background-size: cover;
-}
-
-
 .switchUser{
     position: absolute;
-    top: 20%; 
+    top: 15%; 
     right: 20px; 
   }
 

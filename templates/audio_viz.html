@@ -127,8 +127,8 @@
 
         <!-- 切换user和all -->
         <body>
-            <div class="controlItem">
                 <div class="switchUser">
+                    <div class="personCrowd">
                     <label for="checkboxUser">
                         <input type="checkbox" id="checkboxUser">
                         <div class="toggleGroup">
@@ -233,6 +233,29 @@
         const data = {{ feed_data | tojson}};
         console.log('json:', data);
         var audioElements = {}; // dictionary-like
+
+        // 将umap和tsne状态传到后台
+        document.getElementById('checkbox').addEventListener('change', function () {
+        const selectedAlgorithm = this.checked ? 'umap' : 'tsne';
+
+        // Create a FormData object to send data via POST
+        const formData = new FormData();
+        formData.append('embed_mode', selectedAlgorithm);
+
+        fetch('/embed-data' + selectedAlgorithm, { 
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Algorithm changed to:', selectedAlgorithm);
+            // Handle the response as needed
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
 
         // // Store the URLs for both icons as variables
         const userIconUrl = "{{ url_for('static', filename='images/user.png') }}";
