@@ -112,33 +112,25 @@
 
                         <!-- user only & group switch -->
                         <!-- user/group input text control -->
-                        <!-- <div class="controlItem">
-                             <img src="{{ url_for('static', filename='images/user.png') }}" alt="User Icon" id="toggleIcon"> -->
-                             <!-- <form action=/remix method="post" class="myForm">
-                                <label class="switch">
-                                  <input type="checkbox" name="checkbox" value="dark" onclick="clickFn(event)">       <span class="slider round"></span>
+                        <!-- 切换user和all -->
+                        <div class="controlItem">
+                            <div class="switchUser">
+                                <div class="personCrowd">
+                                <label for="checkboxUser">
+                                    <input type="checkbox" id="checkboxUser">
+                                    <div class="toggleGroup">
+                                        <div class = "group" ></div>
+                                        <div class="user"></div>
+                                    </div>
                                 </label>
-                              </form> -->
+                            </div>
+                        </div>
+                    </body>
                         </div>
                 </div>
             </div>
         </article>
         <div id="scatterPlotContainer"></div>
-
-        <!-- 切换user和all -->
-        <body>
-                <div class="switchUser">
-                    <div class="personCrowd">
-                    <label for="checkboxUser">
-                        <input type="checkbox" id="checkboxUser">
-                        <div class="toggleGroup">
-                            <div class = "group" ></div>
-                            <div class="user"></div>
-                        </div>
-                    </label>
-                </div>
-            </div>
-        </body>
 
          <!-- 算法切换umap和tsne -->
          <body>

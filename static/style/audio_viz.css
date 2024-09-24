@@ -202,53 +202,6 @@ body {
   left: calc(100% - 80px);
 } */
 
-.switchUser{
-    position: absolute;
-    top: 15%; 
-    right: 20px; 
-  }
-
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  height: 100vh;
-  width: 100%;
-}
-
-.container {
-  height: 100%;
-  width: 100%;
-  display: grid;
-  place-items: center;
-}
-
-#checkboxUser {
-  display: none;
-
-}
-
-.toggleGroup {
-  height: 60px;
-  width: 150px;
-  border-radius: 9999px;
-  background-image: url('../images/group.png');
-  background-size: cover;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.5s ease-in-out;
-}
-
-#checkboxUser:checked + .toggleGroup {
-  background-image: url('../images/user.png');
-  background-size: cover;
-}
-
 
 article {
     display: flex;
@@ -377,6 +330,53 @@ article {
     width: 15vw; 
     height: auto;
     margin-left: 10px;
+}
+
+/* .switchUser{
+    position: absolute;
+    top: 15%; 
+    right: 20px; 
+  } */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  width: 100%;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+#checkboxUser {
+  display: none;
+
+}
+
+.toggleGroup {
+  height: 150px;
+  width: 150px;
+  border-radius: 9999px;
+  background-image: url('../images/crowd.png');
+  background-size: cover;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+
+#checkboxUser:checked + .toggleGroup {
+  background-image: url('../images/person.png');
+  background-size: cover;
 }
 
 
