@@ -99,7 +99,7 @@ def process(username='admin', audiofile="test1.wav", audio_folder='audio', data_
 
     # return data_df
 
-def embed_data( user='all', data_folder='data', export=True):
+def embed_data(user='all', embed='umap', data_folder='data', export=True):
     '''
     Reduce dimensionality of the whole dataset of features
     '''
@@ -128,12 +128,16 @@ def embed_data( user='all', data_folder='data', export=True):
     # print(features.shape)
 
     # print(features.shape[0], items.shape[0])
-    # umap_2d = UMAP(n_components=2, n_jobs=1, init='random', random_state=0)
-    umap_2d = UMAP(n_jobs=1, metric='cosine', random_state=42, low_memory=True)
-    # umap_2d = UMAP(n_jobs=1, metric='hellinger', random_state=42) # only non-negative values
-    features_embedded = umap_2d.fit_transform(features)
-    # tsne = TSNE(n_components=2, learning_rate='auto', perplexity=30)
-    # features_embedded = tsne.fit_transform(features)
+    if embed == 'tsne':
+        tsne = TSNE(n_components=2, learning_rate='auto', perplexity=30)
+        features_embedded = tsne.fit_transform(features)
+    else:
+        embed = 'umap' # kinda brute forcing
+        # umap_2d = UMAP(n_components=2, n_jobs=1, init='random', random_state=0)
+        umap_2d = UMAP(n_jobs=1, metric='cosine', random_state=42, low_memory=True)
+        # umap_2d = UMAP(n_jobs=1, metric='hellinger', random_state=42) # only non-negative values
+        features_embedded = umap_2d.fit_transform(features)
+
     # print(features_embedded.shape)
     data_2d = np.append(items, features_embedded, axis=1)
     
