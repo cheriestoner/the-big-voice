@@ -179,13 +179,13 @@ body {
     position: relative;
     cursor: pointer;
     transition: all 0.5s ease-in-out;
-    box-shadow: 6px 6px 10px #0000003d;
   }
   
   #checkbox:checked + .toggle {
     background-image: url('../images/umap.png');
     background-size: cover;
   }
+
 /* .toggle::before {
   content: "";
   height: 80px;
@@ -242,10 +242,9 @@ body {
   position: relative;
   cursor: pointer;
   transition: all 0.5s ease-in-out;
-  box-shadow: 6px 6px 10px #0000003d;
 }
 
-#checkboxUser:checked + .toggle {
+#checkboxUser:checked + .toggleGroup {
   background-image: url('../images/group.png');
   background-size: cover;
 }
