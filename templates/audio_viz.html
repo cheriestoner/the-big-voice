@@ -126,21 +126,34 @@
         <div id="scatterPlotContainer"></div>
 
          <!-- 算法切换umap和tsne -->
+         <body>
+            <div class="switchState">
+              <div class="algorithm">
+                <label  for="checkbox">
+                 <input type="checkbox" name="" id="checkbox">
+                  <div class="toggle">
+                    <div class="tsne"></div>
+                    <div class="umap"></div>
+                  </div>
+                </label>
+              </div>
+            </div>
+           </body>
 
-        <img src="{{ url_for('static', filename='images/umap.png') }}" alt="UMAP Icon" class="toggle-button" id="toggleButton" onclick="toggleAlgorithm()">
+        <!-- <img src="{{ url_for('static', filename='images/umap.png') }}" alt="UMAP Icon" class="toggle-button" id="toggleButton" onclick="toggleAlgorithm()"> -->
 
-        <script>
-            let isUMAP = true;
-            function toggleAlgorithm() {
-                const toggleButton = document.getElementById('toggleButton');
-                if (isUMAP) {
-                    toggleButton.src = "{{ url_for('static', filename='images/tsne.png') }}"; 
-                } else {
-                    toggleButton.src = "{{ url_for('static', filename='images/umap.png') }}"; 
-                }
-                isUMAP = !isUMAP; // 切换
-            }
-        </script>
+            <!-- // let isUMAP = true;
+            // function toggleAlgorithm() {
+            //     const toggleButton = document.getElementById('toggleButton');
+            //     if (isUMAP) {
+            //         toggleButton.src = "{{ url_for('static', filename='images/tsne.png') }}"; 
+            //     } else {
+            //         toggleButton.src = "{{ url_for('static', filename='images/umap.png') }}"; 
+            //     }
+            //     isUMAP = !isUMAP; // 切换
+            // }
+         -->
+
 
     <!-- <svg id="myPlot" style="width:500px;height:500px"></svg> -->
     <!-- <script src="{{ url_for('static', filename='scatterplot-w3.js') }}"></script> -->
