@@ -162,6 +162,12 @@ def get_data(display_mode):
     data2d = data2d_df.to_dict('records')
     return data2d
 
+@app.route('/embed-data/<string:embedding_mode>', methods=['GET', 'POST'])
+def embed_data(embedding_mode):
+    data2d_df = audio_processing.embed_data(user='all', embed=embedding_mode, data_folder=DATA_FOLDER, export=False)
+    data2d = data2d_df.to_dict('records')
+    return data2d
+
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
 def get_file(subpath=''):
     return send_file(os.path.join(DATA_FOLDER, subpath))
