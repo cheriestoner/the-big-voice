@@ -170,23 +170,6 @@ body {
 
 }
 
-.toggle {
-  height: 80px;
-  width: 200px;
-  border-radius: 9999px;
-  background-image: url('../images/tsne.png');
-  background-size: cover;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.5s ease-in-out;
-  box-shadow: 6px 6px 10px #0000003d;
-}
-
-#checkbox:checked + .toggle {
-  background-image: url('../images/umap.png');
-  background-size: cover;
-}
-
 /* .toggle::before {
   content: "";
   height: 80px;
@@ -202,6 +185,74 @@ body {
   position: absolute;
   left: calc(100% - 80px);
 } */
+
+
+.toggle {
+  height: 60px;
+  width: 150px;
+  border-radius: 9999px;
+  background-image: url('../images/tsne.png');
+  background-size: cover;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  box-shadow: 6px 6px 10px #0000003d;
+}
+
+#checkbox:checked + .toggle {
+  background-image: url('../images/umap.png');
+  background-size: cover;
+}
+
+
+.switchUser{
+    position: absolute;
+    top: 20%; 
+    right: 20px; 
+  }
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  width: 100%;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+#checkboxUser {
+  display: none;
+
+}
+
+.toggleGroup {
+  height: 60px;
+  width: 150px;
+  border-radius: 9999px;
+  background-image: url('../images/user.png');
+  background-size: cover;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  box-shadow: 6px 6px 10px #0000003d;
+}
+
+#checkboxUser:checked + .toggle {
+  background-image: url('../images/group.png');
+  background-size: cover;
+}
+
 
 article {
     display: flex;
@@ -331,6 +382,7 @@ article {
     height: auto;
     margin-left: 10px;
 }
+
 
 .sliderWrapper {
     position: absolute;

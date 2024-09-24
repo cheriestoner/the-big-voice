@@ -112,8 +112,8 @@
 
                         <!-- user only & group switch -->
                         <!-- user/group input text control -->
-                        <div class="controlItem">
-                             <img src="{{ url_for('static', filename='images/user.png') }}" alt="User Icon" id="toggleIcon">
+                        <!-- <div class="controlItem">
+                             <img src="{{ url_for('static', filename='images/user.png') }}" alt="User Icon" id="toggleIcon"> -->
                              <!-- <form action=/remix method="post" class="myForm">
                                 <label class="switch">
                                   <input type="checkbox" name="checkbox" value="dark" onclick="clickFn(event)">       <span class="slider round"></span>
@@ -124,6 +124,21 @@
             </div>
         </article>
         <div id="scatterPlotContainer"></div>
+
+        <!-- 切换user和all -->
+        <body>
+            <div class="controlItem">
+                <div class="switchUser">
+                    <label for="checkboxUser">
+                        <input type="checkbox" id="checkboxUser">
+                        <div class="toggleGroup">
+                            <div class = "all" ></div>
+                            <div class="user"></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </body>
 
          <!-- 算法切换umap和tsne -->
          <body>
@@ -219,20 +234,20 @@
         console.log('json:', data);
         var audioElements = {}; // dictionary-like
 
-        // Store the URLs for both icons as variables
+        // // Store the URLs for both icons as variables
         const userIconUrl = "{{ url_for('static', filename='images/user.png') }}";
         const groupIconUrl = "{{ url_for('static', filename='images/group.png') }}";
 
-        // Add toggle functionality for switching between 'user' and 'global' datasets
+        // // Add toggle functionality for switching between 'user' and 'global' datasets
         let currentMode = 'user';  // Initialize with 'user' mode
 
-        document.getElementById('toggleIcon').addEventListener('click', function () {
+        document.getElementById('checkboxUser').addEventListener('change', function () {
             // Toggle between user and group mode
             currentMode = (currentMode === 'user') ? 'all' : 'user';
 
             // Change icon image accordingly
             let iconSrc = (currentMode === 'user') ? userIconUrl : groupIconUrl;
-            document.getElementById('toggleIcon').src = iconSrc;
+            // document.getElementById('toggleIcon').src = iconSrc;
 
             // Create a FormData object to send form data via POST
             const formData = new FormData();
