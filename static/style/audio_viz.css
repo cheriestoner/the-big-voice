@@ -174,7 +174,7 @@ body {
     height: 60px;
     width: 150px;
     border-radius: 9999px;
-    background-image: url('../images/tsne.png');
+    background-image: url('../images/umap.png');
     background-size: cover;
     position: relative;
     cursor: pointer;
@@ -182,7 +182,7 @@ body {
   }
   
   #checkbox:checked + .toggle {
-    background-image: url('../images/umap.png');
+    background-image: url('../images/tsne.png');
     background-size: cover;
   }
 
@@ -237,7 +237,7 @@ body {
   height: 60px;
   width: 150px;
   border-radius: 9999px;
-  background-image: url('../images/user.png');
+  background-image: url('../images/group.png');
   background-size: cover;
   position: relative;
   cursor: pointer;
@@ -245,7 +245,7 @@ body {
 }
 
 #checkboxUser:checked + .toggleGroup {
-  background-image: url('../images/group.png');
+  background-image: url('../images/user.png');
   background-size: cover;
 }
 

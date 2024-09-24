@@ -6,7 +6,7 @@ from flask_cors import CORS
 # import subprocess
 # import sys
 # import time
-# import pandas as pd
+import pandas as pd
 import csv
 # import json
 import logging
@@ -147,7 +147,7 @@ def visualize():
     #     else:
     #         user = 'all'
         
-    data2d_df = audio_processing.embed_data(user=username, data_folder=DATA_FOLDER, export=False) # default display
+    data2d_df = audio_processing.embed_data(user='all', embed='umap', data_folder=DATA_FOLDER, export=True) # default display
     data2d = data2d_df.to_dict('records')
     # return jsonify(data2d)  # Send data as JSON
 
@@ -155,16 +155,18 @@ def visualize():
 
 @app.route('/get-data/<string:display_mode>', methods=['GET', 'POST'])
 def get_data(display_mode):
-    if display_mode == 'all': 
-        data2d_df = audio_processing.embed_data(user='all', data_folder=DATA_FOLDER, export=False)
-    else:
-        data2d_df = audio_processing.embed_data(user=session['username'], data_folder=DATA_FOLDER, export=False)
+    data2d_df = pd.read_csv(os.path.join(DATA_FOLDER, 'coords.csv'), header=0)
+    if display_mode == 'user': 
+        # data2d_df = audio_processing.embed_data(user='all', data_folder=DATA_FOLDER, export=False)
+        data2d_df = data2d_df[data2d_df['username'] == session['username']]
+    # else:
+        # data2d_df = audio_processing.embed_data(user=session['username'], data_folder=DATA_FOLDER, export=False)
     data2d = data2d_df.to_dict('records')
     return data2d
 
-@app.route('/embed-data/<string:embedding_mode>', methods=['GET', 'POST'])
-def embed_data(embedding_mode):
-    data2d_df = audio_processing.embed_data(user='all', embed=embedding_mode, data_folder=DATA_FOLDER, export=False)
+@app.route('/embed-data/<string:embed_mode>', methods=['GET', 'POST'])
+def embed_data(embed_mode):
+    data2d_df = audio_processing.embed_data(user='all', embed=embed_mode, data_folder=DATA_FOLDER, export=True)
     data2d = data2d_df.to_dict('records')
     return data2d
 

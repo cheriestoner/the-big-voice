@@ -144,7 +144,8 @@ def embed_data(user='all', embed='umap', data_folder='data', export=True):
     # save 2D coordinates
     columns = ['username', 'audiofile', 'segment_index', 'start_time_sec', 'end_time_sec', 'embedding_x', 'embedding_y']
     data_df = pd.DataFrame(data_2d, columns = columns)
-    if not export: 
-        return data_df
-    filepath = os.path.join(data_folder, 'coords.csv')
-    data_df.to_csv(filepath, mode='w', header=True, index=False)
+    if export: 
+        filepath = os.path.join(data_folder, 'coords.csv')
+        data_df.to_csv(filepath, mode='w', header=True, index=False)
+
+    return data_df

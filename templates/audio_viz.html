@@ -236,19 +236,21 @@
 
         // 将umap和tsne状态传到后台
         document.getElementById('checkbox').addEventListener('change', function () {
-        const selectedAlgorithm = this.checked ? 'umap' : 'tsne';
+        const selectedAlgorithm = this.checked ? 'tsne' : 'umap';
 
         // Create a FormData object to send data via POST
         const formData = new FormData();
         formData.append('embed_mode', selectedAlgorithm);
 
-        fetch('/embed-data' + selectedAlgorithm, { 
+        fetch('/embed-data/' + selectedAlgorithm, { 
             method: 'POST',
-            body: formData
+            // body: formData
         })
         .then(response => response.json())
         .then(data => {
             console.log('Algorithm changed to:', selectedAlgorithm);
+            set_domain(data);
+            scatterplot_visualize(data, "#FF5C35", audioElements);
             // Handle the response as needed
         })
         .catch(error => {
@@ -262,7 +264,7 @@
         const groupIconUrl = "{{ url_for('static', filename='images/group.png') }}";
 
         // // Add toggle functionality for switching between 'user' and 'global' datasets
-        let currentMode = 'user';  // Initialize with 'user' mode
+        let currentMode = 'all';  // Initialize with 'user' mode
 
         document.getElementById('checkboxUser').addEventListener('change', function () {
             // Toggle between user and group mode
@@ -283,9 +285,9 @@
             .then(response => response.json())
             .then(data => {
                 console.log('data', data);
-                set_domain(data);
+                // set_domain(data);
                 // var audioElements = {}; // dictionary-like
-                create_audioElements(data);
+                // create_audioElements(data);
                 scatterplot_visualize(data, "#FF5C35", audioElements);
             });
         });
