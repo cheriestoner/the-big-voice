@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 from scipy.fft import fft
 import pandas as pd
@@ -11,6 +11,7 @@ SEGMENT_SIZE = 500 # millisecond
 HOPPING = 1 # 100% hopping, 0 overlapping. for feature extraction
 
 def load_audio_pydub(filepath):
+    print('file: ' + filepath)
     file_text = filepath.rsplit('.', 1)[0].lower() # or file[:-3]
     file_extension = filepath.rsplit('.', 1)[1].lower() # or audiofile[-3:]
     if file_extension == "mp3":
@@ -70,8 +71,12 @@ def process(username='admin', audiofile="test1.wav", audio_folder='audio', data_
     sc = librosa.feature.spectral_centroid(y=sound_arr, sr=sr, **spectral_args)[0]
     sf = librosa.feature.spectral_flatness(y=sound_arr, **spectral_args)[0]
     mfccs = librosa.feature.mfcc(y=sound_arr, sr=sr, n_mfcc=20, **spectral_args) # matrix
-    mfcc_delta = librosa.feature.delta(mfccs)
-    mfcc_delta2 = librosa.feature.delta(mfcc_delta)
+    try:
+        mfcc_delta = librosa.feature.delta(mfccs, width=5)
+        mfcc_delta2 = librosa.feature.delta(mfcc_delta, width=5)
+    except:
+        print(f'{username} {audiofile} {duration}')
+    
 
     # Save extracted features to dataframe
     # [audiofile, segment number (file sub index), start time, end time, features]
@@ -80,11 +85,13 @@ def process(username='admin', audiofile="test1.wav", audio_folder='audio', data_
         start_time = i*HOPPING*SEGMENT_SIZE*1e-3
         end_time = start_time + SEGMENT_SIZE*1e-3
         if end_time >= duration: end_time = duration
-        data_i = [i, start_time, end_time, rms[i], zcr[i], sc[i], sf[i]]
+        data_i = [i, start_time, end_time]
+        data_i.extend([rms[i], zcr[i], sc[i], sf[i]])
         data_i.extend(mfccs.T[i].tolist() + mfcc_delta.T[i].tolist() + mfcc_delta2.T[i].tolist())
         data.append(data_i)
 
     columns = ['segment_index', 'start_time_sec', 'end_time_sec', 'rms', 'zero_crossing_rate', 'spectral_centroid', 'spectral_flatness']
+    # columns = ['segment_index', 'start_time_sec', 'end_time_sec']
     # mfcc_columns = [f'mfcc_{j+1}' for j in range(mfccs.shape[0])]
     for j in range(mfccs.shape[0]):
         columns.append(f'mfcc_{j+1}')
@@ -145,7 +152,8 @@ def embed_data(user='all', embed='umap', data_folder='data', export=True):
     columns = ['username', 'audiofile', 'segment_index', 'start_time_sec', 'end_time_sec', 'embedding_x', 'embedding_y']
     data_df = pd.DataFrame(data_2d, columns = columns)
     if export: 
-        filepath = os.path.join(data_folder, 'coords.csv')
+        filename = 'coords_' + embed + '.csv'
+        filepath = os.path.join(data_folder, filename)
         data_df.to_csv(filepath, mode='w', header=True, index=False)
 
     return data_df

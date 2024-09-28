@@ -56,6 +56,7 @@ if not os.path.exists(RECORDINGS_CSV):
         writer.writerow(['username', 'filename', 'timestamp'])
 
 DEV_MODE = False
+USER_STUDY_MODE = False
 
 # Route for the home page
 @app.route('/')
@@ -147,7 +148,9 @@ def visualize():
     #     else:
     #         user = 'all'
         
-    data2d_df = audio_processing.embed_data(user='all', embed='umap', data_folder=DATA_FOLDER, export=True) # default display
+    if USER_STUDY_MODE: data2d_df = pd.read_csv(os.path.join(DATA_FOLDER, 'coords_umap.csv'), header=0)
+    else: data2d_df = audio_processing.embed_data(user='all', embed='umap', data_folder=DATA_FOLDER, export=True) # default display
+    
     data2d = data2d_df.to_dict('records')
     # return jsonify(data2d)  # Send data as JSON
 
@@ -166,7 +169,11 @@ def get_data(display_mode):
 
 @app.route('/embed-data/<string:embed_mode>', methods=['GET', 'POST'])
 def embed_data(embed_mode):
-    data2d_df = audio_processing.embed_data(user='all', embed=embed_mode, data_folder=DATA_FOLDER, export=True)
+    if USER_STUDY_MODE:
+        data_filename = 'coords_' + embed_mode + '.csv'
+        data2d_df = pd.read_csv(os.path.join(DATA_FOLDER, data_filename), header=0)
+    else:
+        data2d_df = audio_processing.embed_data(user='all', embed=embed_mode, data_folder=DATA_FOLDER, export=True)
     data2d = data2d_df.to_dict('records')
     return data2d
 
