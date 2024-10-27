@@ -1,208 +1,705 @@
-<!-- <!DOCTYPE html>
-<html>
-<script src="https://d3js.org/d3.v7.js"></script>
-<body>
-<h2>Scatter-Plot</h2>
-
-<div id="d3_scatterplot"></div>
-
-<script src="static/scatterplot.js"></script>
-
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='style/audio_viz.css') }}">
-        <link rel="shortcut icon" href="/favicon.ico"/>
         <title>Remix | The Big Voice</title>
+        <style>
+        </style>
     </head>
     <script src="https://d3js.org/d3.v7.js"></script>
     <body>
         <header>
-            <h1>The Big Voice</h1>
-        </header>
-        <article>
-            <button id='backtoRecorder'> ⬅ Back to Recorder</button>
-            <div id="controls">
-                <h3>{{ audiofile }} in scatterplot</h3>
-                <div id="my_dataviz"></div>
-            </div>
-        </article>
-
-        <footer class="body-foot">
-            <div class="foot-container">
-                <div class="catagories">
-                    <div class="column">
-                        <a href="https://soundstudiesgroup.net/" target="_blank">Sound Studies Group</a>
-                    </div>
-                    <div class="column">
-                        <a href="https://soundstudiesgroup.net/" target="_blank">Related Links</a>
-                    </div>
-                    <div class="column">
-                        <a href="https://soundstudiesgroup.net/" target="_blank">About</a>
-                    </div>
+            <div class="back">
+                <div class="image-item">
+                    <a href="/record"> 
+                        <img src="{{ url_for('static', filename='images/back.png') }}" alt="Back">
+                    </a>
                 </div>
             </div>
-            <div class="foot-bottom">
-                Copyright © 2024, Sound Studies Group, SUSTech
+            <!-- Info link in the header -->
+            <div class="info-button">
+                <a href="https://soundstudiesgroup.net/" target="_blank" rel="noopener noreferrer">
+                <img src="{{ url_for('static', filename='images/info.png') }}" alt="info">
+                </a>
             </div>
-        </footer>
+        </header>
+        <article>
+            <div id="controls">
+                <h3>{{ username }}</h3>
+                <div id="my_dataviz"></div>
+            </div>
+            <div class="controlContainer">
+                <!-- <table>
+                    <tbody>
+                        <tr id="volume-control">
+                            <td style="padding: 15px 20px 20px; font-weight: 900;">
+                                <label for="volumeSlider">VOLUME:</label>
+                            </td>
+                            <td style="padding: 15px 20px 20px 5px;">
+                                <span>LOW</span>
+                            </td>
+                            <td class="wrapper" style="padding: 20px 0;">
+                                <input type="range" id="volumeSlider" min="0.0" max="100" value="75">
+                            </td>
+                            <td style="padding: 15px 5px 20px 20px;">
+                                <span>HIGH</span>
+                            </td>
+                        </tr> -->
+                        <div class="controlItem">
+                            <img src="{{ url_for('static', filename='images/volume.png') }}" alt="Volume Icon" id="volumeIcon">
+                            <div class="sliderWrapper" id="volumeSliderWrapper">
+                                <label for="volumeSlider"></label>
+                                <span>LOW</span>
+                                <input type="range" id="volumeSlider" min="0.0" max="100" value="75">
+                                <span>HIGH</span>
+                            </div>
+                        </div>
 
-<!-- <svg id="myPlot" style="width:500px;height:500px"></svg> -->
-<!-- <script src="{{ url_for('static', filename='scatterplot-w3.js') }}"></script> -->
-    <script> 
-        const backButton = document.getElementById('backtoRecorder');
+                        <!-- <tr id="reverb-control">
+                            <td style="padding: 15px 20px 20px; font-weight: 900;">
+                                <label for="reverbSlider">REVERB:</label>
+                            </td>
+                            <td style="padding: 15px 20px 20px 5px;">
+                                <span>DRY</span>
+                            </td>
+                            <td class="wrapper" style="padding: 20px 0;">
+                                <input type="range" id="reverbSlider" min="0" max="100" value="25">
+                            </td>
+                            <td style="padding: 15px 5px 20px 20px; text-align: left;">
+                                <span>WET</span>
+                            </td>
+                        </tr> -->
+                        <div class="controlItem">
+                            <img src="{{ url_for('static', filename='images/reverb.png') }}" alt="Reverb Icon" id="reverbIcon">
+                            <div class="sliderWrapper" id="reverbSliderWrapper">
+                                <label for="reverbSlider"></label>
+                                <span>DRY</span>
+                                <input type="range" id="reverbSlider" min="0" max="100" value="25">
+                                <span>WET</span>
+                            </div>
+                        </div>
+                        <!-- <tr id="filter-control">
+                            <td style="padding: 15px 20px 20px; font-weight: 900;">
+                                <label for="filterSlider">LOWPASS FILTER:</label>
+                            </td>
+                            <td style="padding: 15px 20px 20px 5px;">
+                                <span>LOW</span>
+                            </td>
+                            <td class="wrapper" style="padding: 20px 0;">
+                                <input type="range" id="filterSlider" min="50" max="15000" value="8000">
+                            </td>
+                            <td style="padding: 15px 5px 20px 20px;">
+                                <span>HIGH</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> -->
+                        <div class="controlItem">
+                            <img src="{{ url_for('static', filename='images/lpFilter.png') }}" alt="Filter Icon" id="filterIcon">
+                            <div class="sliderWrapper" id="filterSliderWrapper">
+                                <label for="filterSlider"></label>
+                                <span>LOW</span>
+                                <input type="range" id="filterSlider" min="50" max="15000" value="8000">
+                                <span>HIGH</span>
+                            </div>
+                        </div>
+                         <!-- eraser -->
+                        <div class="controlItem">
+                            <img src="{{ url_for('static', filename='images/eraser.png') }}" alt="Placeholder Icon 1" id="eraser">
+                        <!-- 这里添加function -->
+                        </div>
+
+                        <!-- user only & group switch -->
+                        <!-- user/group input text control -->
+                        <!-- 切换user和all -->
+                        <div class="controlItem">
+                            <div class="switchUser">
+                                <div class="personCrowd">
+                                <label for="checkboxUser">
+                                    <input type="checkbox" id="checkboxUser">
+                                    <div class="toggleGroup">
+                                        <div class = "group" ></div>
+                                        <div class="user"></div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </body>
+                        </div>
+                </div>
+            </div>
+        </article>
+        <div id="scatterPlotContainer"></div>
+
+         <!-- 算法切换umap和tsne -->
+         <body>
+            <div class="switchState">
+              <div class="algorithm">
+                <label  for="checkbox">
+                 <input type="checkbox" name="" id="checkbox">
+                  <div class="toggle">
+                    <div class="tsne"></div>
+                    <div class="umap"></div>
+                  </div>
+                </label>
+              </div>
+            </div>
+           </body>
+
+        <!-- <img src="{{ url_for('static', filename='images/umap.png') }}" alt="UMAP Icon" class="toggle-button" id="toggleButton" onclick="toggleAlgorithm()"> -->
+
+            <!-- // let isUMAP = true;
+            // function toggleAlgorithm() {
+            //     const toggleButton = document.getElementById('toggleButton');
+            //     if (isUMAP) {
+            //         toggleButton.src = "{{ url_for('static', filename='images/tsne.png') }}"; 
+            //     } else {
+            //         toggleButton.src = "{{ url_for('static', filename='images/umap.png') }}"; 
+            //     }
+            //     isUMAP = !isUMAP; // 切换
+            // }
+         -->
+
+
+    <!-- <svg id="myPlot" style="width:500px;height:500px"></svg> -->
+    <!-- <script src="{{ url_for('static', filename='scatterplot-w3.js') }}"></script> -->
+    <script>
         // d3 gallery https://d3-graph-gallery.com/graph/scatter_basic.html
         // set the dimensions and margins of the graph
-        const margin = {top: 10, right: 30, bottom: 30, left: 60},
-                width = 720 - margin.left - margin.right,
-                height = 640 - margin.top - margin.bottom;
+        // 设置图表的尺寸和边距
+        const margin = { top: 0, right: 0, bottom: 15, left: 25 };
+        let width = window.innerWidth * 1 - margin.left - margin.right;
+        let height = window.innerHeight * 0.6 - margin.top - margin.bottom;
+
+        // Function to update the scatter plot with the new data
+        function updateScatterPlot(newData) {
+            // Clear existing dots
+            gDot.selectAll("circle").remove();
+
+            // Update the domain of the scatter plot
+            set_domain(newData);
+
+            // Add the new dots
+            gDot.selectAll("circle")
+                .data(newData)
+                .join("circle")
+                .attr("cx", d => x(d.embedding_x))
+                .attr("cy", d => y(d.embedding_y))
+                .attr("r", 5)
+                .attr("fill", function (d) {
+                    return ((d.username == "{{ username }}") ? "#FF5C35" : "#28713E");
+                })
+                .style("opacity", 0.5);
+
+            // Reapply zoom
+            svg.call(zoom);
+        }
 
         // 创建SVG对象
-        const svg = d3.select("#my_dataviz")
-            .append("svg")
+        const svg = d3.create("svg")
+            .attr("viewBox", [0, 0, width + margin.left + margin.right, height + margin.top + margin.bottom])
             .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left}, ${margin.top})`);
+            .attr("height", height + margin.top + margin.bottom);
 
-        backButton.addEventListener('click', () => {
-            window.location.href='/';
+        // 追踪当前的缩放变换
+        let currentTransform = d3.zoomIdentity;
+
+        let x,
+            y;
+        
+        // parse feed data as list of dictionaries
+        // const data = [
+        //     {% for c in feed_data %}               
+        //         {
+        //             'username': '{{ c["username"] }}', 
+        //             'audiofile': '{{ c["audiofile"] }}', 
+        //             'segment_index': {{ c['segment_index'] }}, 
+        //             'start_time_sec': {{ c['start_time_sec'] }}, 
+        //             'end_time_sec': {{ c['end_time_sec'] }}, 
+        //             'embedding_x': {{ c["embedding_x"] }}, 
+        //             'embedding_y': {{ c['embedding_y'] }}
+        //         },
+        //     {% endfor %}
+        // ];
+        const data = {{ feed_data | tojson}};
+        console.log('json:', data);
+        var audioElements = {}; // dictionary-like
+
+        // 将umap和tsne状态传到后台
+        document.getElementById('checkbox').addEventListener('change', function () {
+        const selectedAlgorithm = this.checked ? 'tsne' : 'umap';
+
+        // Create a FormData object to send data via POST
+        const formData = new FormData();
+        formData.append('embed_mode', selectedAlgorithm);
+
+        fetch('/embed-data/' + selectedAlgorithm, { 
+            method: 'POST',
+            // body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Algorithm changed to:', selectedAlgorithm);
+            set_domain(data);
+            scatterplot_visualize(data, "#FF5C35", audioElements);
+            // Handle the response as needed
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+
+        // // Store the URLs for both icons as variables
+        const userIconUrl = "{{ url_for('static', filename='images/user.png') }}";
+        const groupIconUrl = "{{ url_for('static', filename='images/group.png') }}";
+
+        // // Add toggle functionality for switching between 'user' and 'global' datasets
+        let currentMode = 'all';  // Initialize with 'user' mode
+
+        document.getElementById('checkboxUser').addEventListener('change', function () {
+            // Toggle between user and group mode
+            currentMode = (currentMode === 'user') ? 'all' : 'user';
+
+            // Change icon image accordingly
+            let iconSrc = (currentMode === 'user') ? userIconUrl : groupIconUrl;
+            // document.getElementById('toggleIcon').src = iconSrc;
+
+            // Create a FormData object to send form data via POST
+            const formData = new FormData();
+            formData.append('display_mode', currentMode);
+
+            fetch('/get-data/' + currentMode, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('data', data);
+                // set_domain(data);
+                // var audioElements = {}; // dictionary-like
+                // create_audioElements(data);
+                scatterplot_visualize(data, "#FF5C35", audioElements);
+            });
         });
 
-        // 使用 PapaParse 解析 CSV 文件
-        // Papa.parse("/data/data_2d.csv", {
-        //     header: true,
-        //     complete: function(results) {
-        //         const data = results.data;
-            
-        //         data.forEach(row => {
-        //             let audioFile = row['audiofile'];
-        //             let segmentIndex = row['segment_index'];
-        //             let startTime = row['start_time_sec'];
-        //             let endTime = row['end_time_sec'];
-        //             let csvPath = `segments/${audioFile}_segment_${segmentIndex}.csv`;
-            
-        //             console.log('Audio File:', audioFile);
-        //             console.log('CSV Path:', csvPath);
-        //         });
-        //     }
-        // });
-  
+        set_domain(data);
 
-        // const csvPath = [//'/data/{{ audiofile }}/data.csv', 
-        // '/data/test_office/test1.csv', '/data/test_office/test2.csv', '/data/test_office/test3.csv', '/data/test_office/test4.csv'];
-        // const audioFile = [//'/audio/{{ audiofile }}.wav', 
-        // '/audio/test1.wav', '/audio/test2.wav', '/audio/test3.wav', '/audio/test4.wav'];
-        // const color = [//'#24d00a', 
-        // '#563f2e', '#f7c242', '#bec23f', '#000000bc'];
+        function set_domain(data) {
+            const xvalues = data.map(d => +d.embedding_x);
 
-        // // Create an audio element
-        // let audioElements = [];
-        // audioFile.forEach((audioSrc, index) => {
-        //     const audioElement = document.createElement('audio');
-        //     audioElement.src = audioSrc;
-        //     document.body.appendChild(audioElement);
-        //     audioElements.push(audioElement);
-        // });
+            const xmaxValue = d3.max(xvalues);
+            const xminValue = d3.min(xvalues);
 
-        // csvPath.forEach((csvPath, index) => {
-        //     d3.csv(csvPath).then(function(data) {
-        //         scatterplot_visualize(data, color[index], audioElements[index]);
-        //     });
-        // });
+            const yvalues = data.map(d => +d.embedding_y);
 
-        d3.csv('/data/data_2d.csv').then(function(data) {
-            // console.log(data);
-            let audioFiles_raw = data.map(function(d) { return d.audiofile; }); // locally available
-            let audioFiles = Array.from(new Set(audioFiles_raw)); // merged repeated ones
-            console.log(audioFiles);
+            const ymaxValue = d3.max(yvalues);
+            const yminValue = d3.min(yvalues);
+            // console.log('domain: ', xminValue, ',', yminValue);
+
+            // Add X axis
+            x = d3.scaleLinear()
+            .domain([xminValue * 1.05, xmaxValue * 1.05])
+            .range([0, width]);
+
+            // Add Y axis
+            y = d3.scaleLinear()
+            .domain([yminValue * 1.05, ymaxValue * 1.05])
+            .range([height, 0]);
+        }
+
+        function load_audioElements_all() {
             var audioElements = {}; // dictionary-like
-            audioFiles.forEach((audioSrc, index) => {
+            d3.csv('/data/recordings.csv').then(function(data) {
+                let audioFiles = data.map(function(d) { return '/' + d.username + '/' + d.recording_file; });
+                console.log(audioFiles);
                 const audioElement = document.createElement('audio');
-                audioElement.src = '/audio/'.concat(audioSrc); // concat folder with filename
+                audioFiles.forEach((audioSrc, index) => { // /<username>/<filename>
+                    const audioElement = document.createElement('audio');
+                    audioElement.src = '/audio'.concat(audioSrc); // concat folder with filename
+                    document.body.appendChild(audioElement);
+                    // audioElements.push(audioElement); // for let audioElement = [];
+                    audioElements[audioSrc] = audioElement;
+
+                    let track = audioContext.createMediaElementSource(audioElement);
+                    track.connect(gainNode).connect(dryGainNode).connect(volumeNode).connect(filterNode).connect(audioContext.destination);
+                    track.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
+                    //gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 3);
+                    //setTimeout(() => {
+                    //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
+                    //}, 10 * 1000);
+                });
+            })
+            return audioElements;
+        }
+
+        //const xAxis = d3.axisBottom(x);
+        //const yAxis = d3.axisLeft(y);
+
+        function zoomed(event) {
+            currentTransform = event.transform;
+            const zx = currentTransform.rescaleX(x).interpolate(d3.interpolateRound);
+            const zy = currentTransform.rescaleY(y).interpolate(d3.interpolateRound);
+
+            gDot.attr("transform", currentTransform).attr("stroke-width", 5 / currentTransform.k);
+            //circle.attr("transform", currentTransform).attr("r", 50 * currentTransform.k);
+            //gx.call(xAxis.scale(zx));
+            //gy.call(yAxis.scale(zy));
+        }
+
+        const zoom = d3.zoom()
+            .scaleExtent([0.75, 4])
+            .on("zoom", zoomed);
+        const vo = svg.append("path");
+        const gDot = svg.append("g");
+        const gx = svg.append("g")
+            .attr("transform", `translate(${margin.left}, ${height + margin.top})`);
+        const gy = svg.append("g")
+            .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+        d3.select("#my_dataviz").node().appendChild(svg.node());
+
+        // 初始化 Web Audio API、混响节点和低通滤波器
+        let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let reverbNode = audioContext.createConvolver();
+        let filterNode = audioContext.createBiquadFilter();
+        filterNode.type = 'lowpass';
+        let volumeNode = audioContext.createGain();
+        let dryGainNode = audioContext.createGain();
+        let wetGainNode = audioContext.createGain();
+        const gainNode = audioContext.createGain();
+        gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+
+        // 在用户交互后恢复 AudioContext
+        function resumeAudioContext() {
+            if (audioContext.state === 'suspended') {
+                audioContext.resume().then(() => {
+                    console.log('AudioContext resumed.');
+                });
+            }
+        }
+
+        // 在用户首次交互时恢复 AudioContext
+        document.body.addEventListener('click', resumeAudioContext, { once: true });
+
+        // 加载 IR 文件，并将其应用到卷积节点
+        fetch('/audio/cardiod-rear-levelled.wav')
+            .then(response => response.arrayBuffer())
+            .then(undecodedAudio => audioContext.decodeAudioData(undecodedAudio))
+            .then(audioBuffer => {
+                reverbNode.buffer = audioBuffer;
+            })
+            .catch(error => console.error('Error loading IR file:', error));
+        
+        const reverbSlider = document.getElementById('reverbSlider');
+        reverbSlider.addEventListener('input', function () {
+            let wetValue = this.value / 100;
+            wetGainNode.gain.value = wetValue;
+            dryGainNode.gain.value = 1 - wetValue;
+        });
+
+        const volumeSlider = document.getElementById('volumeSlider');
+        volumeNode.gain.value = volumeSlider.value / 100;
+        volumeSlider.addEventListener('input', function () {
+            volumeNode.gain.value = this.value / 100;
+        });
+
+        const filterSlider = document.getElementById('filterSlider');
+        filterNode.frequency.value = filterSlider.value;
+        filterSlider.addEventListener('input', function () {
+            filterNode.frequency.value = this.value;
+        });
+
+        // var audioElements = {}; // dictionary-like
+
+        create_audioElements(data);
+
+        scatterplot_visualize(data, "#FF5C35", audioElements); 
+
+        function create_audioElements(data) {
+            let audioFiles_raw = data.map(function(d) { return '/' + d.username + '/' + d.audiofile; });
+            let audioFiles = Array.from(new Set(audioFiles_raw)); // merged repeated ones 
+            console.log(audioFiles); 
+            
+            audioFiles.forEach((audioSrc, index) => { // /<username>/<filename>
+                const audioElement = document.createElement('audio');
+                audioElement.src = '/audio'.concat(audioSrc); // concat folder with filename
                 document.body.appendChild(audioElement);
                 // audioElements.push(audioElement); // for let audioElement = [];
                 audioElements[audioSrc] = audioElement;
+
+                let track = audioContext.createMediaElementSource(audioElement);
+                track.connect(gainNode).connect(dryGainNode).connect(volumeNode).connect(filterNode).connect(audioContext.destination);
+                track.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
+                //gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 3);
+                //setTimeout(() => {
+                //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
+                //}, 10 * 1000);
             });
+
             console.log(audioElements);
-            scatterplot_visualize(data, "#69b3a2", audioElements);
-        });
+        }
 
         function scatterplot_visualize(data, dotColor, audioElements) {
-            // Add X axis
-            const x = d3.scaleLinear()
-            .domain([-40, 40])
-            .range([ 0, width ]);
-            svg.append("g")
-            .attr("transform", `translate(0, ${height})`)
-            .call(d3.axisBottom(x));
+            /*
+            dotColor: highlight sounds of the current user
+            */
+            const z = d3.scaleOrdinal()
+                .domain(data.map(d => d.audiofile))
+                .range(d3.schemeCategory10);
 
-            // Add Y axis
-            const y = d3.scaleLinear()
-            .domain([-5, 5])
-            .range([ height, 0]);
-            svg.append("g")
-            .call(d3.axisLeft(y));
-
+            // Add X & Y axis
+            //gx.call(xAxis);
+            //gy.call(yAxis);
+        
             let isUserInteracted = false;
             // Listen for user interaction
             document.body.addEventListener('pointerdown', function () {
                 isUserInteracted = true;
             });
-            
-            // Add dots
-            svg.append('g')
-            .selectAll("dot")
-            .data(data)
-            .join("circle")
-                .attr("cx", function (d) { return x(d.tsne1); } )
-                .attr("cy", function (d) { return y(d.tsne2); } )
-                .attr("r", 7.5)
-                .style("fill", dotColor)
-            
-                .on("mouseover", function(event, d) {
-                    d3.select(this)
-                    .transition()
-                    .duration(200)
-                    .attr("r", 15);
-                    // audioELement = audioElements[d.audiofile]; // access audiofile
 
-                    if (isUserInteracted) {
+            // Add dots
+            gDot.selectAll("circle")
+                .data(data)
+                .join("circle")
+                .attr("cx", d => x(d.embedding_x))
+                .attr("cy", d => y(d.embedding_y))
+                .attr("r", 5)
+                .attr("fill", function(d) {return ((d.username == "{{ username }}")? dotColor : "#28713E")})
+                .style("opacity", 0.5)
+                // .style("stroke", "white")
+                //.on("mouseover", function(event, d) {
+                //    d3.select(this)
+                //        .transition()
+                //        .duration(200)
+                //        .attr("r", 10);
+                //
+                //    if (isUserInteracted) {
+                //        const startTime = parseFloat(d.start_time_sec);
+                //        const endTime = parseFloat(d.end_time_sec);
+                //        // console.log(startTime);
+                //        if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
+                //            // Set audio to start time and play
+                //            Object.values(audioElements).forEach(audio => {
+                //                audio.pause();
+                //                audio.currentTime = 0;
+                //            });
+                //            audioElements['/' + d.username + '/' + d.audiofile].currentTime = startTime;
+                //            audioElements['/' + d.username + '/' + d.audiofile].play();
+                //            // Calculate duration
+                //            const duration = endTime - startTime;
+                //            // Stop audio
+                //            setTimeout(() => {
+                //                audioElements['/' + d.username + '/' + d.audiofile].pause();
+                //                audioElements['/' + d.username + '/' + d.audiofile].currentTime = 0; // Reset to start
+                //            }, duration * 1000); // Convert duration to milliseconds
+                //        } else {
+                //            console.error("Invalid start or end time:", d.start_time_sec, d.end_time_sec);
+                //        }
+                //    }
+                //})
+                //.on("mouseleave", function(event, d) {
+                //    d3.select(this)
+                //    .transition()
+                //    .duration(200)
+                //    .attr("r", 5);
+                //    //停止播放
+                //    audioElements['/' + d.username + '/' + d.audiofile].pause();
+                //    audioElements['/' + d.username + '/' + d.audiofile].currentTime = 0; //重置
+                //});
+            
+            // 应用缩放行为到 SVG
+            svg.call(zoom);
+
+            let eraserMode = false;
+
+            document.getElementById("eraser").addEventListener("click", function() {
+                eraserMode = !eraserMode; // 切换eraser模式
+                if (eraserMode) {
+                    console.log("Eraser mode enabled");
+                    this.textContent = "Exit Eraser Mode";
+                } else {
+                    console.log("Eraser mode disabled");
+                    this.textContent = "Eraser Mode";
+                }
+            });
+
+            svg.on("click", function(event) {
+                // 获取点击位置
+                const [clickX, clickY] = d3.pointer(event);
+                const transformedX = currentTransform.invertX(clickX);
+                const transformedY = currentTransform.invertY(clickY);
+
+                if (eraserMode) {
+                    // 删除在点击范围内的点
+                    gDot.selectAll("circle").each(function(d, i) {
+                        const cx = x(d.embedding_x);
+                        const cy = y(d.embedding_y);
+                        const distance = Math.sqrt((currentTransform.applyX(cx) - clickX) ** 2 + (currentTransform.applyY(cy) - clickY) ** 2);
+                        if (distance <= 50) {
+                            d3.select(this).remove();  // 删除点
+                        }
+                    });
+                } else {
+
+                    // 添加一个新的圆圈到点击位置
+                    const circle = svg.append("circle")
+                        .attr("cx", clickX)
+                        .attr("cy", clickY)
+                        .attr("r", 50)
+                        .attr("stroke", "#00000080")
+                        .attr("stroke-width", 3)
+                        .attr("fill", "#77777780")
+                        .attr("fill-opacity", 1)
+                        .attr("stroke-opacity", 1)
+                        .attr("class", "selection-circle");
+
+                    const pointsInCircle = [];
+                    gDot.selectAll("circle").each(function(d) {
+                        const cx = x(d.embedding_x);
+                        const cy = y(d.embedding_y);
+                        const distance = Math.sqrt((currentTransform.applyX(cx) - clickX) ** 2 + (currentTransform.applyY(cy) - clickY) ** 2);
+                        if (distance <= 50) {
+                            pointsInCircle.push(d);
+                        }
+                    });
+                
+                    // 打乱顺序，随机播放点的音频
+                    const shuffledPoints = d3.shuffle(pointsInCircle);
+                
+                    function playNextAudio(index, totalDuration) {
+
+                        if (totalDuration >= 10000) {
+                            console.log("Total play time exceeded 10 seconds, stopping playback.");
+                            return;
+                        }
+                        if (shuffledPoints.length === 0) {
+                            console.error("No points found in the selected circle.");
+                            return;
+                        }
+                        if (index >= shuffledPoints.length) {
+                            index = 0;
+                        }
+                    
+                        const d = shuffledPoints[index];
+                        if (!d || !audioElements['/' + d.username + '/' + d.audiofile]) {
+                            console.error("Invalid point or audio file not found:", d);
+                            playNextAudio(index + 1, totalDuration);
+                            return;
+                        }
+                    
+                        const audioElement = audioElements['/' + d.username + '/' + d.audiofile];
                         const startTime = parseFloat(d.start_time_sec);
                         const endTime = parseFloat(d.end_time_sec);
-                        console.log(startTime);
+                    
                         if (!isNaN(startTime) && !isNaN(endTime) && startTime < endTime) {
-                            // Set audio to start time and play
-                            audioElements[d.audiofile].currentTime = startTime;
-                            audioElements[d.audiofile].play();
-                            // Calculate duration
-                            const duration = endTime - startTime;
-                            // Stop audio
+                            audioElement.currentTime = startTime;
+                            audioElement.play();
+                            const duration = Math.min(endTime - startTime, 10 - totalDuration / 1000);
+
+                            //setTimeout(() => {
+                            //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
+                            //}, 2000);
+                        
                             setTimeout(() => {
-                                audioElements[d.audiofile].pause();
-                                audioElements[d.audiofile].currentTime = 0; // Reset to start
-                            }, duration * 1000); // Convert duration to milliseconds
+                                audioElement.pause();
+                                audioElement.currentTime = 0;
+                            
+                                totalDuration += duration * 1000;
+                                playNextAudio(index + 1, totalDuration);
+                            }, duration * 1000);
                         } else {
-                            console.error("Invalid start or end time:", d.start_time_sec, d.end_time_sec);
+                            // 如果音频数据无效，跳到下一个
+                            console.error("Invalid start or end time for audio:", startTime, endTime);
+                            playNextAudio(index + 1, totalDuration);
                         }
                     }
-                })
-                .on("mouseleave", function(event, d) {
-                    d3.select(this)
-                    .transition()
-                    .duration(200)
-                    .attr("r", 7.5);
-                    //停止播放
-                    audioElements[d.audiofile].pause();
-                    audioElements[d.audiofile].currentTime = 0; //重置
-                })
+
+                    playNextAudio(0, 0);
+
+                    setTimeout(() => {
+                        circle.transition()
+                            .duration(10000)
+                            .attr("fill-opacity", 0)
+                            .attr("stroke-opacity", 0)
+                            .remove();
+                    }, 2000);
+                }
+            });
         }
     </script>
+    <div class="textBoxContainer">
+        <textarea placeholder="Enter text here..."></textarea>
+        <!-- <form action=/remix method="post" class="myForm">
+            <label class="switch">
+                <input type="checkbox" name="checkbox" value="dark" onclick="clickFn(event)">       <span class="slider round"></span>
+            </label>
+        </form> -->
+    </div>
     <!-- <script src="{{ url_for('static', filename='scatterplot.js') }}"></script> -->
+    <footer class="body-foot">
+        <div class="foot-bottom">
+            &copy; 2024, Sound Studies Group, SUSTech
+        </div>
+    </footer>
+
+    <script>
+        // 只有在用户点击icon时slider才出现
+        document.getElementById('volumeIcon').addEventListener('click', function() {
+            toggleSlider('volumeSliderWrapper');
+        });
+
+        document.getElementById('reverbIcon').addEventListener('click', function() {
+            toggleSlider('reverbSliderWrapper');
+        });
+
+        document.getElementById('filterIcon').addEventListener('click', function() {
+            toggleSlider('filterSliderWrapper');
+        });
+
+        // toggle slider
+        function toggleSlider(sliderId) {
+            const slider = document.getElementById(sliderId);
+            if (slider.style.display === 'none' || slider.style.display === '') {
+                slider.style.display = 'block';
+            } else {
+                slider.style.display = 'none';
+            }
+        }
+    </script>
 
     </body>
+    <script>
+
+    //     // Store the URLs for both icons as variables
+    //     const userIconUrl = "{{ url_for('static', filename='images/user.png') }}";
+    //     const groupIconUrl = "{{ url_for('static', filename='images/group.png') }}";
+
+    //     // Add toggle functionality for switching between 'user' and 'global' datasets
+    //     let currentMode = 'user';  // Initialize with 'user' mode
+
+    //     document.getElementById('toggleIcon').addEventListener('click', function () {
+    //     // Toggle between user and group mode
+    //     currentMode = (currentMode === 'user') ? 'all' : 'user';
+
+    //     // Change icon image accordingly
+    //     let iconSrc = (currentMode === 'user') ? userIconUrl : groupIconUrl;
+    //     document.getElementById('toggleIcon').src = iconSrc;
+
+    //     // Create a FormData object to send form data via POST
+    //     const formData = new FormData();
+    //     formData.append('display_mode', currentMode);
+
+    //     fetch('/get-data/' + currentMode, {
+    //         method: 'POST',
+    //         body: formData
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log('data:', data)
+    //     });
+    // });
+
+    </script>
 </html>

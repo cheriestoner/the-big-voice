@@ -2,13 +2,13 @@ import os
 import io
 from flask import Flask, render_template, request, flash, redirect, jsonify, make_response, send_file, session, url_for
 from flask_cors import CORS
-from werkzeug.utils import secure_filename
+# from werkzeug.utils import secure_filename
 # import subprocess
 # import sys
 # import time
 import pandas as pd
 import csv
-import json
+# import json
 import logging
 logging.basicConfig(level=logging.DEBUG)
 import audio_processing
@@ -21,7 +21,6 @@ CORS(app)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FOLDER = os.path.join(BASE_DIR, 'data')
 AUDIO_FOLDER = os.path.join(BASE_DIR, 'audio')
-FONT_FOLDER = os.path.join(BASE_DIR, 'fonts')
 # UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 USERS_CSV = os.path.join(DATA_FOLDER, 'users.csv')
 RECORDINGS_CSV = os.path.join(DATA_FOLDER, 'recordings.csv')
@@ -56,21 +55,33 @@ if not os.path.exists(RECORDINGS_CSV):
         writer = csv.writer(csvfile)
         writer.writerow(['username', 'filename', 'timestamp'])
 
-DEV_MODE = True
+DEV_MODE = False
+USER_STUDY_MODE = False
 
 # Route for the home page
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+
+@app.route('/record')
+def recorder():
     if(DEV_MODE):
         session['logged_in'] = True
         session['username'] = 'admin'
-        session['filenames'] = []
+    if 'logged_in' in session and session['logged_in']:
+        app.logger.info(f'Current username: { session["username"] }')
+        return render_template('recorder.html', username=session['username'])
+    else:
+        return redirect(url_for('index'))
+    #     session['filenames'] = []
     # if 'logged_in' not in session or not session['logged_in']:
     #     return redirect(url_for('login'))
     # else:
-    return render_template('index.html')#, username=session['username'])
+    #     app.logger.info(f'Current username: { session["username"] }') #更改了这一行的缩进和单引号变双引号之后可以跑了
+    # return render_template('recorder.html', username=session['username'])
+    
         
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -82,11 +93,12 @@ def register():
         with open(USERS_CSV, mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([username])
-        session['logged_in'] = True
-        session['username'] = username
-        session['filenames'] = []  # Initialize filenames list
-        return redirect(url_for('index'))
+        # session['logged_in'] = True
+        # session['username'] = username
+        # session['filenames'] = []  # Initialize filenames list
+        return redirect(url_for('login'))
     return render_template('register.html')
+
 
 # Route for the login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -97,7 +109,7 @@ def login():
             session['logged_in'] = True
             session['username'] = username
             session['filenames'] = []  # Initialize filenames list
-            return redirect(url_for('index'))
+            return redirect(url_for('recorder'))
         else:
             return redirect(url_for('register'))
     return render_template('login.html')
@@ -115,22 +127,55 @@ def logout():
 def favicon():
     return send_file(os.path.join(BASE_DIR, 'favicon.ico'))
 
-@app.route('/fonts/<path:subpath>', methods=['GET'])
-def get_fonts(subpath=''):
-    return send_file(os.path.join(FONT_FOLDER, subpath))
+@app.route('/loading', methods=['GET', 'POST'])
+def loading_page():
+    return render_template('loading.html') # or change it to loading_jy.html
 
-@app.route('/loading/<string:filename>', methods=['GET', 'POST'])
-def loading_page(filename):
-    return render_template('loading_xh.html', filename=filename) # or change it to loading_jy.html
+@app.route('/remix', methods=['GET', 'POST'])
+def visualize():
+    if 'logged_in' not in session or not session['logged_in']:
+        return redirect(url_for('index')) # todo: pop up a warning for logging in
+    username = session['username']
 
-@app.route('/remix/<string:filename>')
-def process_features(filename):
-    # filename = os.path.join(DATA_FOLDER, 'test_office/xyz.csv')
-    # data = pd.read_csv(filename, header=0)
-    # feed_data = data.values.tolist() # 32 * 
-    audio_processing.process(filename, AUDIO_FOLDER, DATA_FOLDER)
-    audio_processing.embed_data(DATA_FOLDER)
-    return render_template('audio_viz.html', audiofile=filename.rsplit('.', 1)[0])
+    # if request.method == 'GET':
+    #     user = 'all'
+    # else:
+    #     # app.logger.info(request.json.get('display_mode'))
+    #     display_mode = request.form['display_mode']
+    #     app.logger.info(display_mode)
+    #     if display_mode == 'user':
+    #         user = username
+    #     else:
+    #         user = 'all'
+        
+    if USER_STUDY_MODE: data2d_df = pd.read_csv(os.path.join(DATA_FOLDER, 'coords_umap.csv'), header=0)
+    else: data2d_df = audio_processing.embed_data(user='all', embed='umap', data_folder=DATA_FOLDER, export=True) # default display
+    
+    data2d = data2d_df.to_dict('records')
+    # return jsonify(data2d)  # Send data as JSON
+
+    return render_template('audio_viz.html', username=username, feed_data=data2d)
+
+@app.route('/get-data/<string:display_mode>', methods=['GET', 'POST'])
+def get_data(display_mode):
+    data2d_df = pd.read_csv(os.path.join(DATA_FOLDER, 'coords.csv'), header=0)
+    if display_mode == 'user': 
+        # data2d_df = audio_processing.embed_data(user='all', data_folder=DATA_FOLDER, export=False)
+        data2d_df = data2d_df[data2d_df['username'] == session['username']]
+    # else:
+        # data2d_df = audio_processing.embed_data(user=session['username'], data_folder=DATA_FOLDER, export=False)
+    data2d = data2d_df.to_dict('records')
+    return data2d
+
+@app.route('/embed-data/<string:embed_mode>', methods=['GET', 'POST'])
+def embed_data(embed_mode):
+    if USER_STUDY_MODE:
+        data_filename = 'coords_' + embed_mode + '.csv'
+        data2d_df = pd.read_csv(os.path.join(DATA_FOLDER, data_filename), header=0)
+    else:
+        data2d_df = audio_processing.embed_data(user='all', embed=embed_mode, data_folder=DATA_FOLDER, export=True)
+    data2d = data2d_df.to_dict('records')
+    return data2d
 
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
 def get_file(subpath=''):
@@ -153,10 +198,16 @@ def upload_audio():
             app.logger.error('No selected file')
             return jsonify({'error': 'No selected file'})
         if file:
+            user_dir = os.path.join(AUDIO_FOLDER, session['username'])
+            if not os.path.exists(user_dir):
+                os.makedirs(user_dir)
             filename = file.filename
-            file_path = os.path.join(AUDIO_FOLDER, filename) # save to AUDIO_FOLDER
+            file_path = os.path.join(user_dir, filename) # save to AUDIO_FOLDER
             file.save(file_path)
             file.close()
+
+            ## feature extraction for each upload
+            audio_processing.process(session['username'], filename, AUDIO_FOLDER, DATA_FOLDER)
 
             # Save filename to session and CSV
             session['filenames'].append(filename)
@@ -169,5 +220,5 @@ def upload_audio():
             return jsonify({'success': 'File uploaded successfully', 'file_path': file_path})
 
 if __name__ == '__main__':
-    app.run(port=3000, debug=True)
+    app.run(host='0.0.0.0',port=3000, debug=True)
 

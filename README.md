@@ -12,7 +12,7 @@ Xuehua (Fullstack dev, System design)
 
 **To-dos for developers:**
 
-- Cloud deployment \Jiayi
+- Cloud deployment /Jiayi
     - Git
 
 - Recorder page: /Jiayi
@@ -22,7 +22,9 @@ Xuehua (Fullstack dev, System design)
     - ~User recording filename as a variable & send to remixer /Xuehua~
     - ~Naming user recording with timestamp (inside audio.js) /Lio~
     - ~Upload and store recording data in recordings.csv~
+    - ~Improve layout: waveform below the start button, footnote fixed at the bottom~
     - Limit the recording duration
+    - LPF and HPF to enhance recording
 
 - Loading page (low priority for now)
     - ~Placeholder animation~
@@ -30,29 +32,32 @@ Xuehua (Fullstack dev, System design)
 
 - Remixer page: /Lio
     - ~mouseOver play audio~
-    - ~Button to go back to recorder~
-    - ~Plot a list of .csv files on one graph with color highlights~
     - ~Recording list~
-    - Visualize 'data_2d.csv'
-    - Play a neighborhood of sounds (mouse cursor with a collision area instead of a dot)
-    - How to mix an area of sounds: sounds from the current user as foreground, sound from tha dataset as background? Volumn control + reverb?
+    - ~Visualize 'data_2d.csv' /Xuehua~
+    - ~Play a neighborhood of sounds (mouse cursor with a collision area instead of a dot)~
+    - ~Circle selection disappears after 10 sec~
+    - ~How to mix an area of sounds: sounds from the current user as foreground, sound from tha dataset as background? Volumn control + reverb?~
     - Different modes for navigating the plot? area selection and single dot play?
     - Loop play?
+    - Fix the size of circular cursor, zoom in/out the whole plot tot select points
 
 - Backend management: /Xuehua
     - flask feed list data to html instead of d3.csv()
-    - maintain a global value range (variable) for each feature, calculated from the current dataset
     - ~flask user session, without authentication, login with username~
     - maintain a CONSTANTS.py?
     - store recording metadata: date, time, location
 
 - Audio processing: /Xuehua
+    - dynamic segmentation
+    - filter out segments under rms threshold
     - Feature extraction
         - ~MFCC first & second derivatives (delta)~
+        - the recording has to be at least 0.5*9=4.5s. (Each recording is sliced into 0.5s frames, mfcc_delta default width is 9 frames.)
     - Sound event localization?
     - Dimensionality reduction (SNE/PCA/UMAP)
         - ~Unsupervised T-SNE~
-        - T-SNE semi-supervision with user labels?
+        - ~Unsupervised UMAP~
+        - Semi-supervision with user specified labels? (but labels are only )
 
 - UI decorations
     - ~CSS style in separate files /Lio~
@@ -87,12 +92,22 @@ Xuehua (Fullstack dev, System design)
 
 **Installation instructions**
 
-- Install the latest version of [Python](https://www.python.org/downloads/). Check if it is installed successfully by running `python --version` in Terminal.
-
 - Install ffmpeg and add to path
 
-- Clone the repository on your on laptop.
+- Install Miniconda
 
-- In Terminal, go to the project folder. Install package dependencies by running `pip install requirements.txt`.
+- Clone the repository on your on laptop via Git
+
+- Use conda to create an virtual environment:
+
+    `conda env create -f environment.yml`
+
+- Activate the environment
+
+    `source activate the-big-voice`
+
+- Run the flask app in the environment:
+
+    `(the-big-voice) $ python app.py`
 
 - Start the app on your local server by running `python app.py` in Terminal, and go to the website via the url.

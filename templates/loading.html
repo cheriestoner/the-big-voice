@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Page</title>
+<style>
+    html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #b5c7a3; /* Background color */
+    }
+    body::-webkit-scrollbar {
+        display: none;
+    }
+    .loader-container {
+        background-color: #b5c7a3;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .progress-bar {
+        width: 80%;
+        max-width: 400px;
+        height: 20px;
+        background-color: #dbebc8;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .progress {
+        width: 0;
+        height: 100%;
+        background-color: #e37b3f;
+        animation: fill 4s infinite;
+        /* JavaScript to fetch loading information */
+        /* transition: width 0.2s; */ 
+    }
+    @keyframes fill {
+        0% {
+            width: 0;
+        }
+        100% {
+            width: 100%;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <div class="loader-container">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+    </div>
+
+    <script> 
+        // window.location.replace('/remix/{{ username }}'); 
+        window.location.replace('/remix'); 
+    </script>
+
+    <!-- <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        const progressElement = document.getElementById("progress");
+
+        // Simulate backend loading progress
+        let progress = 0;
+
+        const interval = setInterval(() => {
+            // Simulate progress update from backend
+            progress += 10;
+            if (progress > 100) {
+                progress = 100;
+                clearInterval(interval);
+            }
+            // Update progress bar width
+            progressElement.style.width = progress + "%";
+        }, 500);
+    });
+    </script> -->
+</body>
+</html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Login</title>
@@ -11,4 +11,21 @@
         <input type="submit" value="Login">
     </form>
 </body>
+</html> -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/login.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form method="post" action="/login"> <!-- Point to a login route -->
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <button type="submit"></button>
+        </form>
+    </div>
+</body>
 </html>
+

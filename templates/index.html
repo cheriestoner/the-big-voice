@@ -2,51 +2,99 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='style/index.css') }}">
-    <link rel="shortcut icon" href="/favicon.ico"/>
-    <title>Welcome The Big Voice</title>
+    <title>Urban Sound Diary </title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/home.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
-
 <body>
     <header>
-        <h1>The Big Voice</h1>
-        <div class="user">
-            <button id="loginButton">Login</button>
+        <!-- Info link in the header -->
+        <div class="info-button">
+            <a href="https://soundstudiesgroup.net/" target="_blank" rel="noopener noreferrer">
+                <img src="{{ url_for('static', filename='images/info.png') }}" alt="info">
+            </a>
         </div>
     </header>
-    <article>
-        <div id="elements">
-            <div id="controls">
-                <button id="recordButton">Start</button>
-            </div>
-            <div id="recordingsList"></div>
-        </div>
-        <div class="index-popup">
-            <span>Please login before record!</span> <br>
-        </div>
-        <button id='gotoRemixer'>Go to Remixer ➡ </button>
-        
-    <script src="{{ url_for('static', filename='audio.js') }}"></script>
+    
 
-    </article>
+    <main>
+        <!-- Login Button -->
+        <div class="user">
+            <button id="loginButton"></button>
+        </div>
+
+         <!-- Paragraph of text using 'futura' font -->
+        <section class="info-section">
+            <p class="intro-text">
+                Welcome to Urban Sound Diary. You can record, browse and play with your own segmented sounds using this app. Please login to continue.
+        </section>
+
+        <!-- Image Container -->
+        <div class="image-container">
+            <!-- Recorder -->
+            <div class="image-item">
+                <img src="{{ url_for('static', filename='images/recorderOff.png') }}" alt="Recorder">
+                <p>Recorder</p>
+            </div>
+            
+            <!-- Analyzer -->
+            <div class="image-item">
+                <img src="{{ url_for('static', filename='images/analyzer.png') }}" alt="Analyzer">
+                <p>Analyzer</p>
+            </div>
+
+            <!-- Browser -->
+            <div class="image-item">
+                <img src="{{ url_for('static', filename='images/browser.png') }}" alt="Browser">
+                <p>Browser</p>
+            </div>
+        </div>
+    </main>
+    
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <!-- Login Form -->
+            <!-- <h2>Login</h2> -->
+            <form method="POST" action="{{ url_for('login') }}">
+                <input type="text" id="username" name="username" placeholder="Username" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
+        </div>
+    </div>
 
     <footer class="body-foot">
-        <div class="foot-container">
-            <div class="catagories">
-                <div class="column">
-                    <a href="https://soundstudiesgroup.net/" target="_blank">Sound Studies Group</a>
-                </div>
-                <div class="column">
-                    <a href="https://soundstudiesgroup.net/" target="_blank">Related Links</a>
-                </div>
-                <div class="column">
-                    <a href="https://soundstudiesgroup.net/" target="_blank">About</a>
-                </div>
-            </div>
-        </div>
         <div class="foot-bottom">
-            Copyright © 2024, Sound Studies Group, SUSTech
+            &copy; 2024, Sound Studies Group, SUSTech
         </div>
     </footer>
+
+    <!-- JavaScript to handle modal -->
+    <script>
+        // Get elements
+        const loginButton = document.getElementById('loginButton');
+        const loginModal = document.getElementById('loginModal');
+        const closeButton = document.querySelector('.close-button');
+
+        // Open modal on button click
+        loginButton.addEventListener('click', () => {
+            loginModal.style.display = 'block';
+        });
+
+        // Close modal on close button click
+        closeButton.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside the modal content
+        window.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

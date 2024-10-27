@@ -12,3 +12,4 @@ dependencies:
     - pydub
     - scipy
     - matplotlib
+    - umap-learn
