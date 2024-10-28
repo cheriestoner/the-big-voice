@@ -1,6 +1,6 @@
 name: the-big-voice
 dependencies:
-  - python
+  - python=3.12
   - pip
   - pip:
     - numpy
