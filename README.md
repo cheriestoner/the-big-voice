@@ -10,6 +10,8 @@ Jiayi (Frontend dev, Fullstack dev)
 
 Xuehua (Fullstack dev, System design)
 
+Hao (Frontend dev, UI design)
+
 **To-dos for developers:**
 
 - Cloud deployment /Jiayi

@@ -314,7 +314,8 @@ article {
     align-items: center;
     margin: 5vh auto; /* Top and bottom margin */
     width: 90%;
-    position: relative;
+    position: fixed;
+    top:70%;
     flex-wrap: nowrap; /* Prevent wrapping into multiple rows */
 }
 
