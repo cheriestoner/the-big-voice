@@ -85,7 +85,7 @@ Jiayi:
 
 On Huawei Cloud, go to console and then
 
-1. Activate virtual environment by `conda acitvate the-big-voice`
+1. Activate virtual environment by `conda activate the-big-voice`
 
 2. Go to the project folder: `cd /www/wwwroot/the-big-voice`
 
