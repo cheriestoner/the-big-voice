@@ -28,11 +28,12 @@ Xuehua:
 - Change segmentation duration to 1 sec
 - Optimize the data pipeline
 - Optimze database with SQL? (or is Jiayi interested in trying this?)
-- Fix audio replay lagging: Preload audio files on the HTML?
+- Fix audio replay lagging: Preload audio files on the HTML (or Jiayi?)
 - Redesign the remixer (sound browser) UI with Hao
 
 Jiayi:
-- (Optimze database with SQL?)
+- (Optimze database with SQL)
+- (Fix audio replay lagging: Preload audio files on the HTML)
 - 公安备案？？？
 
 ### Tasks
