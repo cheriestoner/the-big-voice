@@ -31,7 +31,7 @@ Xuehua:
 - Redesign the remixer (sound browser) UI with Hao
 
 Jiayi:
-
+- (Optimze database with SQL?)
 
 ### Tasks
 
