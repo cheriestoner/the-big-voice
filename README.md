@@ -12,8 +12,9 @@ Xuehua (Fullstack dev, System design)
 
 Hao (UI design, Frontend dev)
 
-** Cloud server usage **
-On Huawei Cloud.
+**Cloud server usage:**
+
+On Huawei Cloud:
 
 1. Activate virtual environment
 
