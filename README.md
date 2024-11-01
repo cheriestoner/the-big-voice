@@ -4,11 +4,38 @@ Keylab
 
 **Team:** 
 
-Lio (Frontend dev, UI design)
+Lio (Frontend dev)
 
-Jiayi (Frontend dev, Fullstack dev)
+Jiayi (Fullstack dev)
 
 Xuehua (Fullstack dev, System design)
+
+Hao (UI design, Frontend dev)
+
+** Cloud server usage **
+On Huawei Cloud.
+
+1. Activate virtual environment
+
+    `conda acitvate the-big-voice`
+
+2. Go to the project folder
+
+    `cd /www/wwwroot/the-big-voice`
+
+3. Run Flask app in the background using `nohup`
+
+    `nohup python app.py &`
+
+4. Check status of the app
+
+    `tail -n 20 nohup.out` shows the last 20 lines of the log
+    
+5. How to kill the process
+    - Find the process ID by
+    `ps aux | grep python`
+    - Kill the process by ID
+    `kill <PID>`
 
 **To-dos for developers:**
 
@@ -16,30 +43,16 @@ Xuehua (Fullstack dev, System design)
     - Git
 
 - Recorder page: /Jiayi
-    - ~Upload audio to server~
-    - ~Next button go to remixer /Jiayi~
-        - ~call audio_processing.main() on server end/Xuehua~
-    - ~User recording filename as a variable & send to remixer /Xuehua~
-    - ~Naming user recording with timestamp (inside audio.js) /Lio~
-    - ~Upload and store recording data in recordings.csv~
-    - ~Improve layout: waveform below the start button, footnote fixed at the bottom~
     - Limit the recording duration
     - LPF and HPF to enhance recording
 
-- Loading page (low priority for now)
-    - ~Placeholder animation~
+- Loading page (low priority)
     - Skeleton screen (loading scatterplot)
 
 - Remixer page: /Lio
-    - ~mouseOver play audio~
-    - ~Recording list~
-    - ~Visualize 'data_2d.csv' /Xuehua~
-    - ~Play a neighborhood of sounds (mouse cursor with a collision area instead of a dot)~
-    - ~Circle selection disappears after 10 sec~
-    - ~How to mix an area of sounds: sounds from the current user as foreground, sound from tha dataset as background? Volumn control + reverb?~
-    - Different modes for navigating the plot? area selection and single dot play?
-    - Loop play?
-    - Fix the size of circular cursor, zoom in/out the whole plot tot select points
+    - ~Area play mode~
+    - ~Loop play (10 seconds)~
+    - 
 
 - Backend management: /Xuehua
     - flask feed list data to html instead of d3.csv()
@@ -61,32 +74,6 @@ Xuehua (Fullstack dev, System design)
 
 - UI decorations
     - ~CSS style in separate files /Lio~
-
-
----
-
-**Concept**
-
-(briefly write our concept here)
-
-**Main objectives**
-
-1. User record, upload, and remix
-2. Specific feature set (for environmental soundscape?)
-3. Feature dimensionality reduction (soundscape descriptors?)
-4. Cluster
-4. Interactive scatterplot
-4. GPU rendering
-
-**Possible innovations**
-
-- User annotation/user specified descriptors for the recordings
-- Guided user interface: theme/category/hints for users to record certain sounds
-- Concatenative visualization playability: area-wise sound composition/design/remix, creative play mode, link to images/locations/other descriptives
-
-**Technical extensions**
-
-- 
 
 ---
 
