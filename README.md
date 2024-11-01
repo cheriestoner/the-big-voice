@@ -20,12 +20,15 @@ Hao:
 - Redesign the recorder page with LPF and HPF functionalities
 
 Lio:
-- Fix the audio player bug on iOS
+- Fix the bug with audio replaying on iPhones
 - LPF and HPF functionalities for the recorder
+- Reduce loop play duration from 10 seconds to 3-5 seconds on the remixer page
 
 Xuehua:
 - Optimize the data pipeline
+- Optimze database with SQL? (or is Jiayi interested in trying this?)
 - Fix audio replay lagging: Preload audio files on the HTML?
+- Redesign the remixer (sound browser) UI with Hao
 
 Jiayi:
 
