@@ -1,6 +1,4 @@
-# the-big-voice
-
-Keylab
+# Keylab - The Big Voice
 
 **Team:** 
 
