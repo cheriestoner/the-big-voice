@@ -25,6 +25,7 @@ Lio:
 - Reduce loop play duration from 10 seconds to 3-5 seconds on the remixer page
 
 Xuehua:
+- Change segmentation duration to 1 sec
 - Optimize the data pipeline
 - Optimze database with SQL? (or is Jiayi interested in trying this?)
 - Fix audio replay lagging: Preload audio files on the HTML?
