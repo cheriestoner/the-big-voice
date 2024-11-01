@@ -14,34 +14,50 @@ Hao (UI design, Frontend dev)
 
 ## For developers:
 
-### TODOs
+### TODOs for the next days:
+Hao:
+- Design the user registration webpage
+- Redesign the recorder page with LPF and HPF functionalities
 
-- Frontend functionalities:
-    - Recorder page:
-        - ~Limit the recording duration~
-        - LPF and HPF to enhance recording
-    - Remixer page: /Lio
-        - ~Area play mode, loop play (10 seconds)~
-        - Customize colors
+Lio:
+- Fix the audio player bug on iOS
+- LPF and HPF functionalities for the recorder
+
+Xuehua:
+- Optimize the data pipeline
+- Fix audio replay lagging: Preload audio files on the HTML?
+
+Jiayi:
+
+
+### Tasks
+
+#### Frontend functionalities:
+- Recorder page:
+    - ~Limit the recording duration~
+    - LPF and HPF to enhance recording
+- Remixer page:
+    - ~Area play mode, loop play (10 seconds)~
+    - Customize colors
       
-- UI design / Hao
-    - Webpage for user account registration
-    - **Recorder page:**
-        - allow the user to apply low-pass filter, high-pass filter, or none and choose one result to upload
-    - Loading page (low priority): Skeleton screen (loading scatterplot)
-      
-- Backend management:
-    - File storage
-        - store recording metadata: date, time, location
-    - Audio processing: /Xuehua
-        - dynamic segmentation
-        - filter out segments under rms threshold
-        - Feature extraction
-            - ~MFCC first & second derivatives (delta)~ (`mfcc_delta` default width = 9 frames)
-        - Dimensionality reduction (t-SNE/PCA/UMAP)
-            - ~Unsupervised t-SNE & UMAP~
-            - Semi-supervision with user specified class labels/tags?
-    - Cloud deployment /Jiayi
+#### UI design / Hao
+- Webpage for user account registration
+- **Recorder page:**
+    - allow the user to apply low-pass filter, high-pass filter, or none and choose one result to upload
+- Loading page (low priority): Skeleton screen (loading scatterplot)
+
+#### Backend management:
+- File storage
+    - store recording metadata: date, time, location
+- Audio processing: /Xuehua
+    - dynamic segmentation
+    - filter out segments under rms threshold
+    - Feature extraction
+        - ~MFCC first & second derivatives (delta)~ (`mfcc_delta` default width = 9 frames)
+    - Dimensionality reduction (t-SNE/PCA/UMAP)
+        - ~Unsupervised t-SNE & UMAP~
+        - Semi-supervision with user specified class labels/tags?
+- Cloud deployment /Jiayi
 
 ### Installation instructions
 
