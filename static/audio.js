@@ -81,6 +81,7 @@ recordButton.addEventListener('click', async (event) => {
         visualContainer.style.position = 'relative'; 
         visualContainer.style.width = '100%';
         visualContainer.style.height = '520px';  // Increased height to include both canvas and timer
+        visualContainer.style.margin = '150px 0 0';
         document.body.appendChild(visualContainer);
 
         // 获取Canvas元素和上下文
@@ -94,6 +95,7 @@ recordButton.addEventListener('click', async (event) => {
         canvasCtx = canvas.getContext('2d');
         canvas.width = viewWidth;
         canvas.height = viewHeight * 0.3;
+        canvas.style.margin = '150px 0 0';
 
         // 将计时器移入容器并置于canvas下方
         recordingTimer.style.position = 'absolute';
