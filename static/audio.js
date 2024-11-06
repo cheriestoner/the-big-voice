@@ -128,6 +128,18 @@ recordButton.addEventListener('click', async (event) => {
         const bufferLength = analyser.fftSize;
         dataArray = new Uint8Array(bufferLength);
 
+        // 在用户交互后恢复 AudioContext
+        function resumeAudioContext() {
+            if (audioContext.state === 'suspended') {
+                audioContext.resume().then(() => {
+                    console.log('AudioContext resumed.');
+                });
+            }
+        }
+
+        // 在用户首次交互时恢复 AudioContext
+        document.body.addEventListener('click', resumeAudioContext, { once: true });
+
         source.connect(analyser);
 
         startTime = Date.now();

@@ -228,27 +228,27 @@
 
         // 将umap和tsne状态传到后台
         document.getElementById('checkbox').addEventListener('change', function () {
-        const selectedAlgorithm = this.checked ? 'tsne' : 'umap';
+            const selectedAlgorithm = this.checked ? 'tsne' : 'umap';
 
-        // Create a FormData object to send data via POST
-        const formData = new FormData();
-        formData.append('embed_mode', selectedAlgorithm);
+            // Create a FormData object to send data via POST
+            const formData = new FormData();
+            formData.append('embed_mode', selectedAlgorithm);
 
-        fetch('/embed-data/' + selectedAlgorithm, { 
-            method: 'POST',
-            // body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Algorithm changed to:', selectedAlgorithm);
-            set_domain(data);
-            scatterplot_visualize(data, "#FF5C35", audioElements);
-            // Handle the response as needed
-        })
-        .catch(error => {
-            console.error('Error:', error);
+            fetch('/embed-data/' + selectedAlgorithm, { 
+                method: 'POST',
+                // body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Algorithm changed to:', selectedAlgorithm);
+                set_domain(data);
+                scatterplot_visualize(data, "#FF5C35", audioElements);
+                // Handle the response as needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
-    });
 
 
         // // Store the URLs for both icons as variables
@@ -570,7 +570,7 @@
                 
                     function playNextAudio(index, totalDuration) {
 
-                        if (totalDuration >= 10000) {
+                        if (totalDuration >= 5000) {
                             console.log("Total play time exceeded 10 seconds, stopping playback.");
                             return;
                         }
@@ -620,7 +620,7 @@
 
                     setTimeout(() => {
                         circle.transition()
-                            .duration(10000)
+                            .duration(5000)
                             .attr("fill-opacity", 0)
                             .attr("stroke-opacity", 0)
                             .remove();
