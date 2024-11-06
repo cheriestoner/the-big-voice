@@ -181,21 +181,19 @@ body {
 
 /* Modal Styles */
 .modal {
-    display: none; /* Hidden by default */
+    display: none; 
     position: fixed;
-    z-index: 1001; /* Sit on top of everything */
+    z-index: 1001; 
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Enable scroll if needed */
-    /* Black background with opacity */
-    /* background-color: rgba(0, 0, 0, 0.5); */
+    overflow: auto; 
 }
 
 .modal-content {
     background-color: #e37b3f;
-    margin: 35% auto; /* Centered */
+    margin: 35% auto;
     padding: 20px;
     border: 1px solid #e37b3f;
     width: 90%;
@@ -210,7 +208,7 @@ body {
     position: absolute;
     top: 15px;
     right: 20px;
-    font-size: 36px;
+    font-size: 6vw;
     font-weight: bold;
     cursor: pointer;
 }
@@ -222,7 +220,7 @@ body {
     cursor: pointer;
 }
 
-/* Modal Content Styles */
+
 .modal-content h2 {
     text-align: center;
     margin-top: 0;
@@ -259,12 +257,16 @@ body {
 }
 
 .modal-content p {
+    color: #2b3323;
     text-align: center;
+    margin-top: 20px;
+    font-size: 1.5vh;
 }
 
 .modal-content a {
-    color: #7d7665;
+    color: #dbebc8;
     text-decoration: none;
+    font-weight: bold;
 }
 
 .modal-content a:hover {

@@ -83,25 +83,23 @@ header {
 .back {
     position: fixed;
     top: 52%;
-    left: 5%;
+    left: 0;
     transform: translateY(-50%);
     cursor: pointer;
 }
 
 .image-item {
-    display: block;
-    width: 80%;
-    height: auto; 
+    flex: 1; 
+    text-align: center; 
+    margin: 0 50px; 
 }
 
 .image-item img {
-    width: 70%;      
-    height: auto;  
-    background-color: transparent;  
-    transition: all 0.5s ease;  
-    border-radius: 15px;  
+    width: 70%; 
+    max-width: 250px; 
+    height: auto;
+    border-radius: 8px;  
 }
-
 
 header h1 {
     color: white;

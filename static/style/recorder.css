@@ -71,6 +71,28 @@ header {
     height: auto;
 }
 
+.back {
+    position: fixed;
+    top: 52%;
+    left: 0;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.image-item {
+    flex: 1; 
+    text-align: center; 
+    margin: 0 50px; 
+}
+
+.image-item img {
+    width: 70%; 
+    max-width: 250px; 
+    height: auto;
+    border-radius: 8px;  
+}
+
+
 /* @keyframes slideIn {
     to {
         opacity: 1;
@@ -159,7 +181,7 @@ header .user {
     border: 5px solid #000;
     color: #000;
 } */
-/* Flexbox for Controls */
+
 #controls {
     position: fixed;
     bottom: 153px;
@@ -326,33 +348,6 @@ header .user {
     border: 3px solid #b80000;
     color: #fff;
 } */
-
-/* Flexbox container for the icons */
-.image-container {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    margin: 50px auto; 
-    max-width: 1200px; 
-    padding: 0 20px;
-    position: fixed;
-    top: 54%;
-}
-
-/* Individual icon items */
-.image-item {
-    flex: 1; 
-    text-align: center; 
-    margin: 0 50px; 
-}
-
-/* Images styling */
-.image-item img {
-    width: 50%; 
-    max-width: 250px; 
-    height: auto;
-    border-radius: 8px;  
-}
 
 /* #recordingsList #submitButton:hover {
     background: linear-gradient(-45deg, #a500a7, #f538ff);

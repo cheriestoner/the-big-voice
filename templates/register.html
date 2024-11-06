@@ -2,13 +2,31 @@
 <html>
 <head>
     <title>Register</title>
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='style/register.css') }}">
 </head>
 <body>
+    <header>
+        <div class="back">
+            <div class="image-item">
+                <a href="/"> 
+                    <img src="{{ url_for('static', filename='images/back.png') }}" alt="Back">
+                </a>
+            </div>
+        </div>
+        <!-- Info link in the header -->
+        <div class="info-button">
+            <a href="https://soundstudiesgroup.net/" target="_blank" rel="noopener noreferrer">
+            <img src="{{ url_for('static', filename='images/info.png') }}" alt="info">
+            </a>
+        </div>
+    </header>
+
     <h1>Register</h1>
     <form method="POST">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
         <button type="submit">Register</button>
+
     </form>
     <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a>.</p>
     {% with messages = get_flashed_messages() %}
@@ -20,5 +38,11 @@
             </ul>
         {% endif %}
     {% endwith %}
+
+    <footer class="body-foot">
+        <div class="foot-bottom">
+            &copy; 2024, Sound Studies Group, SUSTech
+        </div>
+    </footer>
 </body>
 </html>

@@ -9,10 +9,17 @@
 
 <body>
     <header>
+        <div class="back">
+            <div class="image-item">
+                <a href="/"> 
+                    <img src="{{ url_for('static', filename='images/back.png') }}" alt="Back">
+                </a>
+            </div>
+        </div>
         <!-- Info link in the header -->
         <div class="info-button">
             <a href="https://soundstudiesgroup.net/" target="_blank" rel="noopener noreferrer">
-                <img src="{{ url_for('static', filename='images/info.png') }}" alt="info">
+            <img src="{{ url_for('static', filename='images/info.png') }}" alt="info">
             </a>
         </div>
     </header>
