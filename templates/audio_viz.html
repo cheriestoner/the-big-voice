@@ -424,7 +424,12 @@
             
             audioFiles.forEach((audioSrc, index) => { // /<username>/<filename>
                 const audioElement = document.createElement('audio');
+                
                 audioElement.src = '/audio'.concat(audioSrc); // concat folder with filename
+                audioElement.preload = 'auto'; // Explicitly set to preload
+                audioElement.addEventListener('canplaythrough', () => {
+                    console.log(`${audioSrc} is preloaded and ready to play.`);
+                });
                 document.body.appendChild(audioElement);
                 // audioElements.push(audioElement); // for let audioElement = [];
                 audioElements[audioSrc] = audioElement;
