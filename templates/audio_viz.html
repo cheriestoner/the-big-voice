@@ -252,9 +252,6 @@
             });
         });
 
-        console.log('Current Algorithm:', selectedAlgorithm);
-
-
         // // Store the URLs for both icons as variables
         const userIconUrl = "{{ url_for('static', filename='images/user.png') }}";
         const groupIconUrl = "{{ url_for('static', filename='images/group.png') }}";
@@ -264,7 +261,8 @@
 
         document.getElementById('checkboxUser').addEventListener('change', function () {
             // Toggle between user and group mode
-            currentMode = (currentMode === 'user') ? 'all' : 'user';
+            this.check = true;
+            currentMode = this.checked ? 'user' : 'all';
 
             // Change icon image accordingly
             let iconSrc = (currentMode === 'user') ? userIconUrl : groupIconUrl;
