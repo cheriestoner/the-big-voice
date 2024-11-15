@@ -7,7 +7,7 @@ from pydub import AudioSegment
 import librosa
 from umap import UMAP
 
-SEGMENT_SIZE = 500 # millisecond
+SEGMENT_SIZE = 1000 # millisecond
 HOPPING = 1 # 100% hopping, 0 overlapping. for feature extraction
 
 def load_audio_pydub(filepath):
