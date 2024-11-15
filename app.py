@@ -156,9 +156,12 @@ def visualize():
 
     return render_template('audio_viz.html', username=username, feed_data=data2d)
 
-@app.route('/get-data/<string:display_mode>', methods=['GET', 'POST'])
-def get_data(display_mode):
-    data2d_df = pd.read_csv(os.path.join(DATA_FOLDER, 'coords.csv'), header=0)
+@app.route('/get-data', methods=['GET', 'POST'])
+def get_data():
+    display_mode = request.form.get('display_mode')
+    embed_mode = request.form.get('embed_mode')
+    data_filename = 'coords_' + embed_mode + '.csv'
+    data2d_df = pd.read_csv(os.path.join(DATA_FOLDER, data_filename), header=0)
     if display_mode == 'user': 
         # data2d_df = audio_processing.embed_data(user='all', data_folder=DATA_FOLDER, export=False)
         data2d_df = data2d_df[data2d_df['username'] == session['username']]
@@ -167,15 +170,17 @@ def get_data(display_mode):
     data2d = data2d_df.to_dict('records')
     return data2d
 
-@app.route('/embed-data/<string:embed_mode>', methods=['GET', 'POST'])
-def embed_data(embed_mode):
-    if USER_STUDY_MODE:
-        data_filename = 'coords_' + embed_mode + '.csv'
-        data2d_df = pd.read_csv(os.path.join(DATA_FOLDER, data_filename), header=0)
-    else:
-        data2d_df = audio_processing.embed_data(user='all', embed=embed_mode, data_folder=DATA_FOLDER, export=True)
-    data2d = data2d_df.to_dict('records')
-    return data2d
+@app.route('/embed-data', methods=['POST'])
+def embed_data():
+    if request.method == 'POST':
+        embed_mode = request.form.get('embed_mode')
+        if USER_STUDY_MODE:
+            data_filename = 'coords_' + embed_mode + '.csv'
+            data2d_df = pd.read_csv(os.path.join(DATA_FOLDER, data_filename), header=0)
+        else:
+            data2d_df = audio_processing.embed_data(user='all', embed=embed_mode, data_folder=DATA_FOLDER, export=True)
+        data2d = data2d_df.to_dict('records')
+        return data2d
 
 @app.route('/data/<path:subpath>', methods=['GET']) # <string:filename> not working for path
 def get_file(subpath=''):

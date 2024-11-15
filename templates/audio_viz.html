@@ -226,17 +226,19 @@
         console.log('json:', data);
         var audioElements = {}; // dictionary-like
 
+        let selectedAlgorithm = 'umap';
+
         // 将umap和tsne状态传到后台
         document.getElementById('checkbox').addEventListener('change', function () {
-            const selectedAlgorithm = this.checked ? 'tsne' : 'umap';
+            selectedAlgorithm = this.checked ? 'tsne' : 'umap';
 
             // Create a FormData object to send data via POST
             const formData = new FormData();
             formData.append('embed_mode', selectedAlgorithm);
 
-            fetch('/embed-data/' + selectedAlgorithm, { 
+            fetch('/embed-data', { 
                 method: 'POST',
-                // body: formData
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
@@ -249,6 +251,8 @@
                 console.error('Error:', error);
             });
         });
+
+        console.log('Current Algorithm:', selectedAlgorithm);
 
 
         // // Store the URLs for both icons as variables
@@ -269,8 +273,9 @@
             // Create a FormData object to send form data via POST
             const formData = new FormData();
             formData.append('display_mode', currentMode);
+            formData.append('embed_mode', selectedAlgorithm);
 
-            fetch('/get-data/' + currentMode, {
+            fetch('/get-data', {
                 method: 'POST',
                 body: formData
             })
