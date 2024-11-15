@@ -136,17 +136,6 @@ def visualize():
     if 'logged_in' not in session or not session['logged_in']:
         return redirect(url_for('index')) # todo: pop up a warning for logging in
     username = session['username']
-
-    # if request.method == 'GET':
-    #     user = 'all'
-    # else:
-    #     # app.logger.info(request.json.get('display_mode'))
-    #     display_mode = request.form['display_mode']
-    #     app.logger.info(display_mode)
-    #     if display_mode == 'user':
-    #         user = username
-    #     else:
-    #         user = 'all'
         
     if USER_STUDY_MODE: data2d_df = pd.read_csv(os.path.join(DATA_FOLDER, 'coords_umap.csv'), header=0)
     else: data2d_df = audio_processing.embed_data(user='all', embed='umap', data_folder=DATA_FOLDER, export=True) # default display
