@@ -12,12 +12,12 @@ HOPPING = 1 # 100% hopping, 0 overlapping. for feature extraction
 
 def load_audio_pydub(filepath):
     print('file: ' + filepath)
-    file_text = filepath.rsplit('.', 1)[0].lower() # or file[:-3]
-    file_extension = filepath.rsplit('.', 1)[1].lower() # or audiofile[-3:]
-    if file_extension == "mp3":
-        wav_audio = AudioSegment.from_mp3(filepath)
-        filepath = file_text + "wav" # set new audio_path
-        wav_audio.export(filepath, format="wav")
+    # file_text = filepath.rsplit('.', 1)[0].lower() # or file[:-3]
+    # file_extension = filepath.rsplit('.', 1)[1].lower() # or audiofile[-3:]
+    # if file_extension == "mp3":
+    #     wav_audio = AudioSegment.from_mp3(filepath)
+    #     filepath = file_text + "wav" # set new audio_path
+    #     wav_audio.export(filepath, format="wav")
     sound = AudioSegment.from_file(filepath) #, format='wav')
     sound = sound.split_to_mono()[0]
     # Getting sample rate and samples

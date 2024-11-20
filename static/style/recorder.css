@@ -167,12 +167,15 @@ header .user {
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
 }
 
+*/
 #controls #recordButton {
     margin: 20px 20px 20px 40px;
     background: transparent;
-    border: 5px solid #000;
+    border: none;
     color: #000;
 }
+
+/*
 
 
 #controls #stopButton {
