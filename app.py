@@ -223,6 +223,10 @@ def upload_audio():
             app.logger.info(f'File saved to {file_path}')
             # audio_processing.main(file.filename, AUDIO_FOLDER)
             return jsonify({'success': 'File uploaded successfully', 'file_path': file_path})
+        
+@app.route('/test', methods=['GET', 'POST'])
+def recorder_test():
+    return render_template('recorder_test.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=3000, debug=True)

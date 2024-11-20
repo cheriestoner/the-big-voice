@@ -39,12 +39,13 @@
         </div> -->
         <div id="controls">
             <div class="control-button">
-                <img 
-                    id="recordButton" 
-                    src="{{ url_for('static', filename='images/recorderOff.png') }}" 
-                    data-off-src="{{ url_for('static', filename='images/recorderOff.png') }}" 
-                    data-on-src="{{ url_for('static', filename='images/recorderOn.png') }}" 
-                    alt="Record">
+                <button id="recordButton">
+                    <img 
+                        src="{{ url_for('static', filename='images/recorderOff.png') }}" 
+                        data-off-src="{{ url_for('static', filename='images/recorderOff.png') }}" 
+                        data-on-src="{{ url_for('static', filename='images/recorderOn.png') }}" 
+                        alt="Record">
+                </button>
             </div>
             <div class="control-button">
                 <img 

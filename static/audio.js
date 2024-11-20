@@ -1,5 +1,6 @@
 const loginButton = document.getElementById('loginButton');
 const recordButton = document.getElementById('recordButton');
+const recordButtonImg = recordButton.querySelector('img');
 const stopButton = document.getElementById('stopButton');
 const recordingsList = document.getElementById('recordingsList');
 const recordingTimer = document.getElementById('recordingTimer');
@@ -60,9 +61,9 @@ function stopRecordingTimer() {
 // debug recordButton
 function updateRecordButtonState(isRecording) {
     if (isRecording) {
-        recordButton.src = recordButton.getAttribute('data-on-src');
+        recordButtonImg.src = recordButtonImg.getAttribute('data-on-src');
     } else {
-        recordButton.src = recordButton.getAttribute('data-off-src');
+        recordButtonImg.src = recordButtonImg.getAttribute('data-off-src');
     }
     console.log(`Record button updated: isRecording = ${isRecording}`);
 }
@@ -115,7 +116,8 @@ recordButton.addEventListener('click', async (event) => {
             stopRecordingTimer(); 
             // recordButton.id = 'recordButton';
             // recordButton.textContent = 'Start';
-            recordButton.src = recordButton.getAttribute('data-off-src'); 
+            recordButtonImg.src = getAttribute('data-off-src');
+            // recordButton.src = recordButton.getAttribute('data-off-src');
         }, maxRecordTime);
 
         recordButton.disabled = true;
@@ -188,7 +190,7 @@ recordButton.addEventListener('click', async (event) => {
         };
     
         mediaRecorder.onstop = () => {
-            const currentAudioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const currentAudioBlob = new Blob(audioChunks, { type: 'audio/mp4' });
             const audioUrl = URL.createObjectURL(currentAudioBlob);
             audioChunks = [];
             // 停止绘图，移除Canvas
@@ -207,15 +209,16 @@ recordButton.addEventListener('click', async (event) => {
                
                 const dateTimeString = `${year}-${month}-${day}-${hours}-${minutes}-${seconds}`;
                 // return `${originalFileName}_${dateTimeString}${'.wav'}`;
-                return `${dateTimeString}${'.wav'}`;
+                // return `${dateTimeString}${'.wav'}`;
+                return `${dateTimeString}${'.mp4'}`;
             }
             
             const currentFileName = addTimeToFileName(''); //recording_2024-08-21-14-35-45.wav
 
-            // 创建录音列表
+            // 创建录音列表 create recording list
             const listItem = document.createElement('div');
             listItem.classList.add('recording-item');
-            // 创建删除键
+            // 创建删除键 create delete button
             const deleteButton = document.createElement('button');
             // deleteButton.textContent = 'Delete';
             // deleteButton.id = 'delete-button';
@@ -223,7 +226,7 @@ recordButton.addEventListener('click', async (event) => {
             deleteButton.addEventListener('click', () => {
                 recordingsList.removeChild(listItem);
             });
-            // 创建上传键
+            // 创建上传键 create upload button
             const submitButton = document.createElement('button');
             // submitButton.textContent = 'Upload';
             // submitButton.id = 'submit-button';
@@ -302,7 +305,8 @@ recordButton.addEventListener('click', async (event) => {
             // recordButton.id = 'stopButton';
             // recordButton.textContent = 'Stop';
             // 改变录音按钮的图片
-            recordButton.getAttribute('data-off-src');
+            recordButtonImg.src = recordButtonImg.getAttribute('data-off-src');
+            // recordButton.getAttribute('data-off-src');
         } else {
         // 停止录制
         // mediaRecorder.stop();
@@ -310,7 +314,8 @@ recordButton.addEventListener('click', async (event) => {
         // recordButton.id = 'recordButton';
         // recordButton.textContent = 'Start';
         // 回到默认图片
-        recordButton.src = recordButton.getAttribute('data-on-src');
+        recordButtonImg.src = recordButtonImg.getAttribute('data-on-src');
+        // recordButton.src = recordButton.getAttribute('data-on-src');
         }
     }
 });
