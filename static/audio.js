@@ -150,11 +150,11 @@ recordButton.addEventListener('click', async (event) => {
             drawVisual = requestAnimationFrame(draw);
             analyser.getByteTimeDomainData(dataArray);
         
-            canvasCtx.fillStyle = 'rgb(219, 235, 200)';
+            canvasCtx.fillStyle = 'rgb(34, 34, 34)';
             canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
         
             canvasCtx.lineWidth = 3;
-            canvasCtx.strokeStyle = 'rgb(125, 118, 101)';
+            canvasCtx.strokeStyle = 'rgb(225, 225, 225)';
         
             canvasCtx.beginPath();
             const sliceWidth = canvas.width * 1.0 / bufferLength;
@@ -225,6 +225,12 @@ recordButton.addEventListener('click', async (event) => {
             // submitButton.textContent = 'Upload';
             // submitButton.id = 'submit-button';
             submitButton.classList.add('upload-button'); 
+            // 创建like键 create like button
+            const likeButton = document.createElement('button');
+            likeButton.classList.add('like-button');
+            // 创建dislike键 create dislike button
+            const dislikeButton = document.createElement('button');
+            dislikeButton.classList.add('dislike-button');
 
             submitButton.addEventListener('click', () => {
                 if (currentAudioBlob) {
@@ -261,6 +267,8 @@ recordButton.addEventListener('click', async (event) => {
             listItem.appendChild(fileNameElement);
             listItem.appendChild(deleteButton);
             listItem.appendChild(submitButton);
+            listItem.appendChild(likeButton);
+            listItem.appendChild(dislikeButton);
             listItem.appendChild(audioElement);
             recordingsList.appendChild(listItem);
 
