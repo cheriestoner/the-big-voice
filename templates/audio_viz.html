@@ -349,7 +349,7 @@
         }
 
         const zoom = d3.zoom()
-            .scaleExtent([0.75, 4])
+            .scaleExtent([0.75, 10])
             .on("zoom", zoomed);
         const vo = svg.append("path");
         const gDot = svg.append("g");
@@ -738,13 +738,13 @@
                 }
             });
         }
-        const initialScale = 4;
-        const initialTranslate = [-width / 2, height / 2];
+        // const initialScale = 4;
+        // const initialTranslate = [-width / 2, height / 2];
 
-        // 手动设置初始视图
-        svg.call(zoom.transform, d3.zoomIdentity
-            .translate(initialTranslate[0], initialTranslate[1])
-            .scale(initialScale));
+        // // 手动设置初始视图
+        // svg.call(zoom.transform, d3.zoomIdentity
+        //     .translate(initialTranslate[0], initialTranslate[1])
+        //     .scale(initialScale));
     </script>
     <div class="textBoxContainer">
         <textarea placeholder="Enter text here..."></textarea>
