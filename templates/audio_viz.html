@@ -145,6 +145,20 @@
 
          <!-- 算法切换umap和tsne -->
          <body>
+            <div class="sample" style="position: absolute; left: 20px; top: 10%;">
+                <div class="like" style="height: 50px; margin-bottom: 10px;">
+                    <img style="width: 50px; height: 50px; background-color: #e84345; border-radius: 25px;">
+                    <span style="margin-left: 5px; font-size: 4em; font-weight: 700; line-height: 50px;">like</span>
+                </div>
+                <div class="dislike" style="height: 50px; margin-bottom: 10px;">
+                    <img style="width: 50px; height: 50px; background-color: #442d11; border-radius: 25px;">
+                    <span style="margin-left: 5px; font-size: 4em; font-weight: 700; line-height: 50px;">dislike</span>
+                </div>
+                <div class="none" style="height: 50px;">
+                    <img style="width: 50px; height: 50px; background-color: #28713E; border-radius: 25px;">
+                    <span style="margin-left: 5px; font-size: 4em; font-weight: 700; line-height: 50px;">none</span>
+                </div>
+            </div>
             <div class="switchState">
               <div class="algorithm">
                 <label  for="checkbox">
@@ -552,8 +566,8 @@
                 .attr("r", 5)
                 // .attr("fill", function(d) {return ((d.username == "{{ username }}")? dotColor : "#28713E")})
                 .attr("fill", function(d) {
-                    if (d.label == 1) {return "#E84345";}
-                    else if (d.label == -1) {return "#222";}
+                    if (d.label == 1) {return "#e84345";}
+                    else if (d.label == -1) {return "#442d11";}
                     else {return "#28713E";}
                 })
                 .style("opacity", 0.3)
