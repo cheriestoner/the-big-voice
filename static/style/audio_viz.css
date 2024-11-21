@@ -18,7 +18,7 @@ body::-webkit-scrollbar {
 body {
     position: relative;
     margin: 0;
-    background-color: #dbebc8;
+    background-color: #efefef;
     touch-action: none;
     /* background: linear-gradient(-45deg, #ff7e5f, #9970bf, #feb47b, #90b5a4, #4394a4, #9970bf, #ff7e5f); */
     /* background-size: 800% 800%; */
@@ -39,15 +39,14 @@ body {
     }
 } */
 
-
 header {
     position: fixed;
     top: 0;
     width: 100%;
     height: 150px;
     /* background: rgba(255, 255, 255, 0.1); */
-    background: #7d7665;
-    backdrop-filter: blur(10px);
+    background: #efefef;
+    /* backdrop-filter: blur(10px); */
     /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
     z-index: 1000;
     display: flex;
@@ -64,6 +63,7 @@ header {
         transform: translateY(0);
     }
 } */
+
 .info-button {
     position: absolute;
     top: 50%;
@@ -81,7 +81,7 @@ header {
 }
 
 .back {
-    position: fixed;
+    position: absolute;
     top: 52%;
     left: 0;
     transform: translateY(-50%);
@@ -224,7 +224,7 @@ article {
 
 #controls h3 {
     font-size: 2.5em;
-    color: #e37b3f;
+    color: #000000;
 }
 
 #my_dataviz {
@@ -239,8 +239,8 @@ article {
 
 #my_dataviz svg {
     overflow: visible;
-    border: 2px solid #dbebc8;
-    background-color: #dbebc8;
+    border: 2px solid #efefef;
+    background-color: #efefef;
 }
 
 
@@ -330,9 +330,14 @@ article {
 
 .controlItem img {
     cursor: pointer;
-    width: 15vw; 
+    width: 10vw; 
     height: auto;
     margin-left: 10px;
+}
+
+.controlItem p {
+    font-size: 1.8em;
+    font-weight: 500;
 }
 
 /* .switchUser{
@@ -452,8 +457,8 @@ input[type=range]::-moz-range-thumb {
 } */
 
 .body-foot {
-    width: calc(100% - 120px);
-    background-color: transparent;
+    width: 100%;
+    background-color: #efefef;
     padding: 50px 60px 20px 60px;
     position: fixed;
     bottom: 0;
@@ -467,14 +472,14 @@ input[type=range]::-moz-range-thumb {
 
 .body-foot .foot-bottom {
     display: block;
-    margin-top: 50px;
+    margin-top: 10px;
+    margin-bottom: 20px;
     width: 100%;
     text-align: center;
     font-size: 1.5em;
     font-weight: 600;
-    color: #b5c7a3;
+    color: #000000;
     font-family: futura;
-    height: 15px;
 }
 
 .catagories {

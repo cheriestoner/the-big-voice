@@ -18,7 +18,7 @@ body::-webkit-scrollbar {
 body {
     position: relative;
     margin: 0;
-    background-color: #b5c7a3;
+    background-color: #efefef;
     /* background: linear-gradient(-45deg, #ff7e5f, #9970bf, #feb47b, #90b5a4, #4394a4, #9970bf, #ff7e5f); */
     /* background-size: 800% 800%; */
     /* animation: gradientBG 20s ease infinite; */
@@ -43,9 +43,9 @@ header {
     width: 100%;
     height: 150px;
     /* background: rgba(255, 255, 255, 0.1); */
-    background: #b5c7a3;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: #efefef;
+    /* backdrop-filter: blur(10px); */
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
     z-index: 1000;
     display: flex;
     justify-content: center;
@@ -72,7 +72,7 @@ header {
 }
 
 .back {
-    position: fixed;
+    position: absolute;
     top: 52%;
     left: 0;
     transform: translateY(-50%);
@@ -168,6 +168,7 @@ header .user {
 }
 
 */
+
 #controls #recordButton {
     margin: 20px 20px 20px 40px;
     background: transparent;
@@ -175,9 +176,11 @@ header .user {
     color: #000;
 }
 
+#controls #recordButton img {
+    width: 120px;
+}
+
 /*
-
-
 #controls #stopButton {
     margin: 20px 40px 20px 385px;
     background: transparent;
@@ -187,10 +190,10 @@ header .user {
 
 #controls {
     position: fixed;
-    bottom: 153px;
+    bottom: 230px;
     left: 50%;
     transform: translateX(-50%);
-    height: 155px;
+    height: 200px;
     width: 100%;
     display: flex;
     justify-content: space-evenly;
@@ -205,8 +208,19 @@ header .user {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 140%; 
+    width: 140%;
     height: auto; 
+}
+
+#analyzerButton {
+    margin: 20px 20px 20px 40px;
+    background: transparent;
+    border: none;
+    color: #000;
+}
+
+#analyzerButton img {
+    width: 120px;
 }
 
 /* Styling for Images */
@@ -246,7 +260,7 @@ header .user {
     left: 0%;
     width: 100%;
     height: 40vh;
-    padding: 10px;
+    padding: 10px 0;
     overflow-y: auto;
 }
 
@@ -257,8 +271,8 @@ header .user {
     font-size: 3em;
     font-family: futura;
     font-weight: bold;
-    color: #e37b3f;
-    background-color: #dbebc8;
+    color: #ffffff;
+    background-color: transparent;
     padding: 5px;
     border-radius: 5px;
     display: none;                 /* Hide by default */
@@ -273,7 +287,7 @@ header .user {
     flex-wrap: wrap;
     padding: 10px 15px;
     margin-bottom: 20px;
-    background-color: #8a9473;
+    background-color: #fefefe;
     border-radius: 30px;
     /* box-shadow: 0 0 6px 3px rgba(0, 0, 0, .2); */
 }
@@ -282,12 +296,12 @@ header .user {
 .recording-item span {
     line-height: 3.5em;
     font-size: 2em;
-    font-weight: 600;
-    color: #dbebc8;
+    font-weight: 700;
+    color: #454545;
 }
 
 #recordingsList #deleteButton,
-#submitButton {
+#submitButton,#like-button,#dislike-button {
     width: 400px;
     margin: 0 0 0 40px;
     padding: 10px;
@@ -308,7 +322,7 @@ header .user {
     background-image: url('../images/delete.png'); 
     background-size: cover; 
     background-color: transparent;
-    width: 60px; 
+    width: 50px; 
     height: 60px; 
     display: block; 
     background-repeat: no-repeat; 
@@ -339,6 +353,41 @@ header .user {
     opacity: 0.8;
 }
 
+.like-button {
+    background-image: url('../images/like.png'); 
+    background-size: cover; 
+    background-color: transparent;
+    width: 70px; 
+    height: 60px; 
+    display: block; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+    border: none;
+}
+
+.like-button:hover {
+    background-image: url('../images/likeHover.png'); 
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+.dislike-button {
+    background-image: url('../images/dislike.png'); 
+    background-size: cover; 
+    background-color: transparent;
+    width: 64px; 
+    height: 60px; 
+    display: block; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+    border: none;
+}
+
+.dislike-button:hover {
+    background-image: url('../images/dislikeHover.png'); 
+    transform: scale(1.1);
+    opacity: 0.8;
+}
 
 /* #controls #recordButton:hover {
     background: linear-gradient(45deg, #3e9875, #4fb809);
@@ -419,7 +468,7 @@ audio {
     width: 100%;
     /* border: 2px solid #333; */
     border-radius: 20px;
-    background: #dbebc8;
+    background: #efefef;
     transition: box-shadow 0.3s ease-in-out;
     outline: none;
 }
@@ -429,29 +478,30 @@ audio:hover {
 }
 
 audio::-webkit-media-controls-panel {
-    background-color: #dbebc8;
+    background-color: #efefef;
 }
 
 
 audio::-webkit-media-controls-current-time-display,
 audio::-webkit-media-controls-time-remaining-display{
-    color: #8a9473; 
+    color: #232323; 
     transform: scale(1.2);
 }
 
 audio::-webkit-media-controls-played-track,
 audio::-webkit-media-controls-timeline
 {
-    filter: invert(50%) sepia(16%) saturate(385%) hue-rotate(47deg) brightness(95%) contrast(92%);
+    filter: brightness(0) saturate(100%) invert(43%) sepia(71%) saturate(5750%) hue-rotate(222deg) brightness(96%) contrast(96%);
 }
 
 audio::-webkit-media-controls-play-button,
 audio::-webkit-media-controls-pause-button,
 audio::-webkit-media-controls-mute-button {
-    filter: invert(33%) sepia(70%) saturate(600%) hue-rotate(-20deg) brightness(100%) contrast(90%);
+    filter: brightness(0) saturate(100%) invert(5%) sepia(22%) saturate(0%) hue-rotate(135deg) brightness(97%) contrast(80%);
     transform: scale(1.5); 
     transform-origin: center;
 }
+
 canvas {
     position: fixed;
     top: 0%;
@@ -469,7 +519,7 @@ canvas {
 
 .body-foot {
     width: calc(100% - 120px);
-    background-color: #b5c7a3;
+    background-color: #efefef;
     padding: 50px 60px 20px 60px;
     position: fixed;
     bottom: 0;
@@ -484,13 +534,13 @@ canvas {
 .body-foot .foot-bottom {
     display: block;
     margin-top: 10px;
+    margin-bottom: 20px;
     width: 100%;
     text-align: center;
     font-size: 1.5em;
     font-weight: 600;
-    color: #dbebc8;
+    color: #000000;
     font-family: futura;
-    height: 15px;
 }
 
 .catagories {

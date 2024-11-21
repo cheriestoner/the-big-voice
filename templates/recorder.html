@@ -45,15 +45,19 @@
                         data-off-src="{{ url_for('static', filename='images/recorderOff.png') }}" 
                         data-on-src="{{ url_for('static', filename='images/recorderOn.png') }}" 
                         alt="Record">
+                    <p style="font-size: 1.8em; font-weight: 600;">Recorder</p>
                 </button>
             </div>
             <div class="control-button">
-                <img 
-                    id="gotoRemixer" 
-                    src="{{ url_for('static', filename='images/analyzer.png') }}" 
-                    data-default-src="{{ url_for('static', filename='images/analyzer.png') }}" 
-                    data-hover-src="{{ url_for('static', filename='images/analyzerHover.png') }}" 
-                    alt="Go to Remixer">
+                <button id="analyzerButton">
+                    <img 
+                        id="gotoRemixer" 
+                        src="{{ url_for('static', filename='images/analyzer.png') }}" 
+                        data-default-src="{{ url_for('static', filename='images/analyzer.png') }}" 
+                        data-hover-src="{{ url_for('static', filename='images/analyzerHover.png') }}" 
+                        alt="Go to Remixer">
+                    <p style="font-size: 1.8em; font-weight: 600;">Analyzer</p>
+                </button>
             </div>
         </div>
         </div>
