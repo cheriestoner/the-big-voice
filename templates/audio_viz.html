@@ -205,6 +205,9 @@
         let width = window.innerWidth * 1 - margin.left - margin.right;
         let height = window.innerHeight * 0.6 - margin.top - margin.bottom;
 
+        let stopFlag = false; // global control of the recursive audio play function
+        let circleAreas = [];
+
         // Function to update the scatter plot with the new data
         function updateScatterPlot(newData) {
             // Clear existing dots
@@ -483,10 +486,42 @@
         //     console.log(audioElements);
         // }
 
+        // Function to create a circle selection
+        function createCircle(x, y, radius) {
+            // Draw the circle and store the reference
+            const circle = svg
+                .append("circle")
+                .attr("cx", x)
+                .attr("cy", y)
+                .attr("r", radius)
+                .attr("fill", "#77777780")
+                .attr("fill-opacity", 1)
+                .attr("stroke-opacity", 1)
+                .attr("class", "selection-circle");
+
+            // Add the circle to the array for later removal
+            circleAreas.push(circle);
+
+            return circle;
+        }
+
+        function deleteAllSelection() {
+            if (!circleAreas) {
+                console.error("circleAreas is not initialized.");
+                return;
+            }
+
+            // Remove all circles from the visualization
+            circleAreas.forEach(circle => circle.remove());
+            circleAreas = []; // Reset the array after removing
+        }
+
         function scatterplot_visualize(data, dotColor, audioElements) {
             /*
             dotColor: highlight sounds of the current user
             */
+            deleteAllSelection();
+            
             const z = d3.scaleOrdinal()
                 .domain(data.map(d => d.audiofile))
                 .range(d3.schemeCategory10);
@@ -506,8 +541,7 @@
             let timeouts = []; // Array to store active timeout IDs
 
             function stopAllAudio() {
-                isPlaying = false;
-
+                stopFlag = true;
                 // Pause all audio elements currently playing
                 for (const audioElement of Object.values(audioElements)) {
                     if (!audioElement.paused) {
@@ -521,7 +555,7 @@
                 timeouts = []; // Reset the timeout array
             }
 
-            // stopAllAudio();
+            stopAllAudio();
 
             // Add dots
             gDot.selectAll("circle")
@@ -612,21 +646,25 @@
                     });
                 } else {
                     if(circle) {
+                        // // Remove all circles
+                        // circleAreas.forEach(c => c.remove());
+                        // circleAreas = []; // Clear the array
                         circle.remove();
                         stopAllAudio();
                     }
 
                     // 添加一个新的圆圈到点击位置
-                    circle = svg.append("circle")
-                        .attr("cx", clickX)
-                        .attr("cy", clickY)
-                        .attr("r", 50)
-                        .attr("stroke", "#00000080")
-                        .attr("stroke-width", 3)
-                        .attr("fill", "#77777780")
-                        .attr("fill-opacity", 1)
-                        .attr("stroke-opacity", 1)
-                        .attr("class", "selection-circle");
+                    circle = createCircle(clickX, clickY, 50);
+                    // circle = svg.append("circle")
+                    //     .attr("cx", clickX)
+                    //     .attr("cy", clickY)
+                    //     .attr("r", 50)
+                    //     .attr("stroke", "#00000080")
+                    //     .attr("stroke-width", 3)
+                    //     .attr("fill", "#77777780")
+                    //     .attr("fill-opacity", 1)
+                    //     .attr("stroke-opacity", 1)
+                    //     .attr("class", "selection-circle");
 
                     const pointsInCircle = [];
                     gDot.selectAll("circle").each(function(d) {
@@ -637,24 +675,31 @@
                             pointsInCircle.push(d);
                         }
                     });
+
+                    if (pointsInCircle.length === 0) {
+                        console.log(Object.values(audioElements));
+                        stopAllAudio();
+                        // console.error("No points found in the selected circle.");
+                        console.log("No points selected. Playing stops.");
+                        if(circle) {circle.remove();}
+                        return;
+                    } else {
+                        stopFlag = false;
+                    }
                 
                     // 打乱顺序，随机播放点的音频
                     const shuffledPoints = d3.shuffle(pointsInCircle);
                 
                     function playNextAudio(index, totalDuration) {
+                        if (stopFlag) {
+                            return; // Exit if the stop flag is set
+                        }
 
                         if (totalDuration >= maxDuration) {
                             console.log("Total play time exceeded 10 seconds, stopping playback.");
                             return;
                         }
-                        if (shuffledPoints.length === 0) {
-                            console.log(Object.values(audioElements));
-                            stopAllAudio();
-                            // console.error("No points found in the selected circle.");
-                            console.log("No points selected. Playing stops.");
-                            if(circle) {circle.remove();}
-                            return;
-                        }
+                        
                         if (index >= shuffledPoints.length) {
                             index = 0;
                         }
