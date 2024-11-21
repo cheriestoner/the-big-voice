@@ -477,8 +477,13 @@
                 .attr("cx", d => x(d.embedding_x))
                 .attr("cy", d => y(d.embedding_y))
                 .attr("r", 5)
-                .attr("fill", function(d) {return ((d.username == "{{ username }}")? dotColor : "#28713E")})
-                .style("opacity", 0.5)
+                // .attr("fill", function(d) {return ((d.username == "{{ username }}")? dotColor : "#28713E")})
+                .attr("fill", function(d) {
+                    if (d.label == 1) {return "#E84345";}
+                    else if (d.label == -1) {return "#222";}
+                    else {return "#28713E";}
+                })
+                .style("opacity", 0.3)
                 // .style("stroke", "white")
                 //.on("mouseover", function(event, d) {
                 //    d3.select(this)

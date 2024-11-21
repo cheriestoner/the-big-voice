@@ -53,7 +53,7 @@ if not os.path.exists(USERS_CSV):
 if not os.path.exists(RECORDINGS_CSV):
     with open(RECORDINGS_CSV, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['username', 'filename', 'timestamp'])
+        writer.writerow(['username', 'filename', 'label'])
 
 DEV_MODE = False
 USER_STUDY_MODE = False
@@ -188,6 +188,7 @@ def upload_audio():
             app.logger.error('No file part')
             return jsonify({'error': 'No file part'})
         file = request.files['audio']
+        label = request.form.get('label')
         if file.filename == '':
             app.logger.error('No selected file')
             return jsonify({'error': 'No selected file'})
@@ -207,7 +208,7 @@ def upload_audio():
             session['filenames'].append(filename)
             with open(RECORDINGS_CSV, 'a', newline='') as csvfile:
                 writer = csv.writer(csvfile)
-                writer.writerow([session['username'], filename])
+                writer.writerow([session['username'], filename, label])
 
             app.logger.info(f'File saved to {file_path}')
             # audio_processing.main(file.filename, AUDIO_FOLDER)

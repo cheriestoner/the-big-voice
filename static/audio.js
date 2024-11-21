@@ -231,11 +231,23 @@ recordButton.addEventListener('click', async (event) => {
             // 创建dislike键 create dislike button
             const dislikeButton = document.createElement('button');
             dislikeButton.classList.add('dislike-button');
+            let selectedLabel = 0;
+            // Add event listeners for "like" and "dislike" buttons
+            likeButton.addEventListener('click', () => {
+                selectedLabel = 1; // Set label to "like"
+                console.log('Selected Label:', selectedLabel);
+            });
+
+            dislikeButton.addEventListener('click', () => {
+                selectedLabel = -1; // Set label to "dislike"
+                console.log('Selected Label:', selectedLabel);
+            });
 
             submitButton.addEventListener('click', () => {
                 if (currentAudioBlob) {
                     const formData = new FormData();
                     formData.append('audio', currentAudioBlob, currentFileName);
+                    formData.append('label', selectedLabel);
             
                     fetch('/upload-audio', {
                         method: 'POST',

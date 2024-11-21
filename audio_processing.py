@@ -117,13 +117,16 @@ def embed_data(user='all', embed='umap', data_folder='data', export=True):
     items = []
     for idx in recordings.index: # loop over all recording files
         username = recordings['username'][idx]
-        recording = recordings['recording_file'][idx] # with .wav extension
+        recording = recordings['recording_file'][idx] # with extension
+        label = recordings['label'][idx]
         data_file = os.path.join(data_folder, username, recording.rsplit('.', 1)[0], 'data.csv')
         df = pd.read_csv(data_file, header=0)
         features_i = df.iloc[:, 3:].values
         item = df.iloc[:, 0:3].values
         recording_col = np.array([[recording] for i in range(item.shape[0])])
         username_col = np.array([[username] for i in range(item.shape[0])])
+        label_col = np.array([[label] for i in range(item.shape[0])]).astype(int)
+        item = np.concatenate([label_col, item], axis=1)
         item = np.concatenate([recording_col, item], axis=1)
         item = np.concatenate([username_col, item], axis=1)
         if (np.size(features) == 0): features = features_i
@@ -149,7 +152,7 @@ def embed_data(user='all', embed='umap', data_folder='data', export=True):
     data_2d = np.append(items, features_embedded, axis=1)
     
     # save 2D coordinates
-    columns = ['username', 'audiofile', 'segment_index', 'start_time_sec', 'end_time_sec', 'embedding_x', 'embedding_y']
+    columns = ['username', 'audiofile', 'label', 'segment_index', 'start_time_sec', 'end_time_sec', 'embedding_x', 'embedding_y']
     data_df = pd.DataFrame(data_2d, columns = columns)
     if export: 
         filename = 'coords_' + embed + '.csv'
