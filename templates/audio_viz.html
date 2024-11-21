@@ -70,8 +70,11 @@
                                 <span>WET</span>
                             </td>
                         </tr> -->
-                        <div class="controlItem">
-                            <img src="{{ url_for('static', filename='images/reverb.png') }}" alt="Reverb Icon" id="reverbIcon">
+                        <div class="controlItem">  
+                            <img src="{{ url_for('static', filename='images/reverbOff.png') }}" 
+                                data-off-src="{{ url_for('static', filename='images/reverbOff.png') }}" 
+                                data-on-src="{{ url_for('static', filename='images/reverbOn.png') }}"
+                                alt="Reverb Icon" id="reverbIcon">
                             <div class="sliderWrapper" id="reverbSliderWrapper">
                                 <label for="reverbSlider"></label>
                                 <span>DRY</span>
@@ -97,7 +100,10 @@
                     </tbody>
                 </table> -->
                         <div class="controlItem">
-                            <img src="{{ url_for('static', filename='images/lpFilter.png') }}" alt="Filter Icon" id="filterIcon">
+                            <img src="{{ url_for('static', filename='images/lpFilterOff.png') }}" 
+                                data-off-src="{{ url_for('static', filename='images/lpFilterOff.png') }}" 
+                                data-on-src="{{ url_for('static', filename='images/lpFilterOn.png') }}"
+                                alt="Filter Icon" id="filterIcon">
                             <div class="sliderWrapper" id="filterSliderWrapper">
                                 <label for="filterSlider"></label>
                                 <span>LOW</span>
@@ -108,9 +114,13 @@
                         </div>
                          <!-- eraser -->
                         <div class="controlItem">
-                            <img src="{{ url_for('static', filename='images/eraser.png') }}" alt="Placeholder Icon 1" id="eraser">
+                            <img src="{{ url_for('static', filename='images/eraserOff.png') }}" 
+                                data-off-src="{{ url_for('static', filename='images/eraserOff.png') }}" 
+                                data-on-src="{{ url_for('static', filename='images/eraserOn.png') }}"
+                                alt="Placeholder Icon 1" id="eraser">
                             <p>Eraser</p>
                         </div>
+                        <!-- rate -->
 
                         <!-- user only & group switch -->
                         <!-- user/group input text control -->
@@ -126,8 +136,7 @@
                                     </div>
                                 </label>
                             </div>
-                        </div>
-                    </body>
+                            <p>Contacts</p>
                         </div>
                 </div>
             </div>
@@ -147,7 +156,15 @@
                 </label>
               </div>
             </div>
-           </body>
+            <div style="position: absolute; right: 49px; top: 300px;">
+                <img style="width: 86px; height: 86px;" src="{{ url_for('static', filename='images/rate.png') }}" alt="rate Icon" id="rate">
+                <div class="buttonWrapper" id="rateButtonWrapper">
+                    <label for="rateButton"></label>
+                    <img src="{{ url_for('static', filename='images/like.png') }}" id="likeButton">
+                    <img src="{{ url_for('static', filename='images/dislike.png') }}" id="dislikeButton">
+                </div>
+            </div>
+        </body>
 
         <!-- <img src="{{ url_for('static', filename='images/umap.png') }}" alt="UMAP Icon" class="toggle-button" id="toggleButton" onclick="toggleAlgorithm()"> -->
 
@@ -676,6 +693,13 @@
                 }
             });
         }
+        const initialScale = 4;
+        const initialTranslate = [-width / 2, height / 2];
+
+        // 手动设置初始视图
+        svg.call(zoom.transform, d3.zoomIdentity
+            .translate(initialTranslate[0], initialTranslate[1])
+            .scale(initialScale));
     </script>
     <div class="textBoxContainer">
         <textarea placeholder="Enter text here..."></textarea>
@@ -696,7 +720,7 @@
         // 只有在用户点击icon时slider才出现
         //document.getElementById('volumeIcon').addEventListener('click', function() {
         //    toggleSlider('volumeSliderWrapper');
-        //});
+        //}); 
 
         document.getElementById('reverbIcon').addEventListener('click', function() {
             toggleSlider('reverbSliderWrapper');
@@ -706,6 +730,10 @@
             toggleSlider('filterSliderWrapper');
         });
 
+        document.getElementById('rate').addEventListener('click', function() {
+            toggleButton('rateButtonWrapper');
+        });
+
         // toggle slider
         function toggleSlider(sliderId) {
             const slider = document.getElementById(sliderId);
@@ -713,6 +741,15 @@
                 slider.style.display = 'block';
             } else {
                 slider.style.display = 'none';
+            }
+        }
+
+        function toggleButton(buttonId) {
+            const button = document.getElementById(buttonId);
+            if (button.style.display === 'none' || button.style.display === '') {
+                button.style.display = 'block';
+            } else {
+                button.style.display = 'none';
             }
         }
     </script>
