@@ -314,31 +314,6 @@
             .range([height, 0]);
         }
 
-        function load_audioElements_all() {
-            var audioElements = {}; // dictionary-like
-            d3.csv('/data/recordings.csv').then(function(data) {
-                let audioFiles = data.map(function(d) { return '/' + d.username + '/' + d.recording_file; });
-                console.log(audioFiles);
-                const audioElement = document.createElement('audio');
-                audioFiles.forEach((audioSrc, index) => { // /<username>/<filename>
-                    const audioElement = document.createElement('audio');
-                    audioElement.src = '/audio'.concat(audioSrc); // concat folder with filename
-                    document.body.appendChild(audioElement);
-                    // audioElements.push(audioElement); // for let audioElement = [];
-                    audioElements[audioSrc] = audioElement;
-
-                    let track = audioContext.createMediaElementSource(audioElement);
-                    track.connect(gainNode).connect(dryGainNode).connect(filterNode).connect(audioContext.destination);
-                    track.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
-                    //gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 3);
-                    //setTimeout(() => {
-                    //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
-                    //}, 10 * 1000);
-                });
-            })
-            return audioElements;
-        }
-
         //const xAxis = d3.axisBottom(x);
         //const yAxis = d3.axisLeft(y);
 
@@ -418,38 +393,64 @@
 
         // var audioElements = {}; // dictionary-like
 
-        create_audioElements(data);
+        // create_audioElements(data);
+        load_audioElements_all();
 
         scatterplot_visualize(data, "#FF5C35", audioElements); 
 
-        function create_audioElements(data) {
-            let audioFiles_raw = data.map(function(d) { return '/' + d.username + '/' + d.audiofile; });
-            let audioFiles = Array.from(new Set(audioFiles_raw)); // merged repeated ones 
-            console.log(audioFiles); 
-            
-            audioFiles.forEach((audioSrc, index) => { // /<username>/<filename>
+        function load_audioElements_all() {
+            // var audioElements = {}; // dictionary-like
+            d3.csv('/data/recordings.csv').then(function(data) {
+                let audioFiles = data.map(function(d) { return '/' + d.username + '/' + d.recording_file; });
+                console.log(audioFiles);
                 const audioElement = document.createElement('audio');
-                
-                audioElement.src = '/audio'.concat(audioSrc); // concat folder with filename
-                audioElement.preload = 'auto'; // Explicitly set to preload
-                audioElement.addEventListener('canplaythrough', () => {
-                    console.log(`${audioSrc} is preloaded and ready to play.`);
+                audioFiles.forEach((audioSrc, index) => { // /<username>/<filename>
+                    const audioElement = document.createElement('audio');
+                    audioElement.src = '/audio'.concat(audioSrc); // concat folder with filename
+                    document.body.appendChild(audioElement);
+                    // audioElements.push(audioElement); // for let audioElement = [];
+                    audioElements[audioSrc] = audioElement;
+
+                    let track = audioContext.createMediaElementSource(audioElement);
+                    track.connect(gainNode).connect(dryGainNode).connect(filterNode).connect(audioContext.destination);
+                    track.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
+                    //gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 3);
+                    //setTimeout(() => {
+                    //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
+                    //}, 10 * 1000);
                 });
-                document.body.appendChild(audioElement);
-                // audioElements.push(audioElement); // for let audioElement = [];
-                audioElements[audioSrc] = audioElement;
-
-                let track = audioContext.createMediaElementSource(audioElement);
-                track.connect(gainNode).connect(dryGainNode).connect(filterNode).connect(audioContext.destination);
-                track.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
-                //gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 3);
-                //setTimeout(() => {
-                //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
-                //}, 10 * 1000);
-            });
-
-            console.log(audioElements);
+            })
+            // return audioElements;
         }
+
+        // function create_audioElements(data) {
+        //     let audioFiles_raw = data.map(function(d) { return '/' + d.username + '/' + d.audiofile; });
+        //     let audioFiles = Array.from(new Set(audioFiles_raw)); // merged repeated ones 
+        //     console.log(audioFiles); 
+            
+        //     audioFiles.forEach((audioSrc, index) => { // /<username>/<filename>
+        //         const audioElement = document.createElement('audio');
+                
+        //         audioElement.src = '/audio'.concat(audioSrc); // concat folder with filename
+        //         audioElement.preload = 'auto'; // Explicitly set to preload
+        //         audioElement.addEventListener('canplaythrough', () => {
+        //             console.log(`${audioSrc} is preloaded and ready to play.`);
+        //         });
+        //         document.body.appendChild(audioElement);
+        //         // audioElements.push(audioElement); // for let audioElement = [];
+        //         audioElements[audioSrc] = audioElement;
+
+        //         let track = audioContext.createMediaElementSource(audioElement);
+        //         track.connect(gainNode).connect(dryGainNode).connect(filterNode).connect(audioContext.destination);
+        //         track.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
+        //         //gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 3);
+        //         //setTimeout(() => {
+        //         //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
+        //         //}, 10 * 1000);
+        //     });
+
+        //     console.log(audioElements);
+        // }
 
         function scatterplot_visualize(data, dotColor, audioElements) {
             /*
@@ -535,6 +536,26 @@
                 }
             });
 
+            let circle = null; // currentSelection
+            let maxDuration = 30000;
+            let timeouts = []; // Array to store active timeout IDs
+
+            function stopAllAudio() {
+                isPlaying = false;
+
+                // Pause all audio elements currently playing
+                for (const audioElement of Object.values(audioElements)) {
+                    if (!audioElement.paused) {
+                        audioElement.pause();
+                        audioElement.currentTime = 0;
+                    }
+                }
+
+                // Clear all pending timeouts
+                timeouts.forEach(timeout => clearTimeout(timeout));
+                timeouts = []; // Reset the timeout array
+            }
+
             svg.on("click", function(event) {
                 // 获取点击位置
                 const [clickX, clickY] = d3.pointer(event);
@@ -552,9 +573,13 @@
                         }
                     });
                 } else {
+                    if(circle) {
+                        circle.remove();
+                        stopAllAudio();
+                    }
 
                     // 添加一个新的圆圈到点击位置
-                    const circle = svg.append("circle")
+                    circle = svg.append("circle")
                         .attr("cx", clickX)
                         .attr("cy", clickY)
                         .attr("r", 50)
@@ -580,11 +605,13 @@
                 
                     function playNextAudio(index, totalDuration) {
 
-                        if (totalDuration >= 10000) {
+                        if (totalDuration >= maxDuration) {
                             console.log("Total play time exceeded 10 seconds, stopping playback.");
                             return;
                         }
                         if (shuffledPoints.length === 0) {
+                            console.log(Object.values(audioElements));
+                            stopAllAudio();
                             console.error("No points found in the selected circle.");
                             return;
                         }
@@ -612,13 +639,15 @@
                             //    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 3);
                             //}, 2000);
                         
-                            setTimeout(() => {
+                            const timeout = setTimeout(() => {
                                 audioElement.pause();
                                 audioElement.currentTime = 0;
                             
                                 totalDuration += duration * 1000;
                                 playNextAudio(index + 1, totalDuration);
                             }, duration * 1000);
+                            // Store timeout ID to manage it later
+                            timeouts.push(timeout);
                         } else {
                             // 如果音频数据无效，跳到下一个
                             console.error("Invalid start or end time for audio:", startTime, endTime);
@@ -630,7 +659,7 @@
 
                     setTimeout(() => {
                         circle.transition()
-                            .duration(10000)
+                            .duration(maxDuration)
                             .attr("fill-opacity", 0)
                             .attr("stroke-opacity", 0)
                             .remove();
