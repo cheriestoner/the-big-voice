@@ -46,7 +46,7 @@
                                 <span>HIGH</span>
                             </td>
                         </tr> -->
-                        <div class="controlItem">
+                        <!-- <div class="controlItem">
                             <img src="{{ url_for('static', filename='images/volume.png') }}" alt="Volume Icon" id="volumeIcon">
                             <div class="sliderWrapper" id="volumeSliderWrapper">
                                 <label for="volumeSlider"></label>
@@ -54,7 +54,7 @@
                                 <input type="range" id="volumeSlider" min="0.0" max="100" value="75">
                                 <span>HIGH</span>
                             </div>
-                        </div>
+                        </div> -->
 
                         <!-- <tr id="reverb-control">
                             <td style="padding: 15px 20px 20px; font-weight: 900;">
@@ -328,7 +328,7 @@
                     audioElements[audioSrc] = audioElement;
 
                     let track = audioContext.createMediaElementSource(audioElement);
-                    track.connect(gainNode).connect(dryGainNode).connect(volumeNode).connect(filterNode).connect(audioContext.destination);
+                    track.connect(gainNode).connect(dryGainNode).connect(filterNode).connect(audioContext.destination);
                     track.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
                     //gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 3);
                     //setTimeout(() => {
@@ -370,7 +370,7 @@
         let reverbNode = audioContext.createConvolver();
         let filterNode = audioContext.createBiquadFilter();
         filterNode.type = 'lowpass';
-        let volumeNode = audioContext.createGain();
+        //let volumeNode = audioContext.createGain();
         let dryGainNode = audioContext.createGain();
         let wetGainNode = audioContext.createGain();
         const gainNode = audioContext.createGain();
@@ -404,11 +404,11 @@
             dryGainNode.gain.value = 1 - wetValue;
         });
 
-        const volumeSlider = document.getElementById('volumeSlider');
-        volumeNode.gain.value = volumeSlider.value / 100;
-        volumeSlider.addEventListener('input', function () {
-            volumeNode.gain.value = this.value / 100;
-        });
+        //const volumeSlider = document.getElementById('volumeSlider');
+        //volumeNode.gain.value = volumeSlider.value / 100;
+        //volumeSlider.addEventListener('input', function () {
+        //    volumeNode.gain.value = this.value / 100;
+        //});
 
         const filterSlider = document.getElementById('filterSlider');
         filterNode.frequency.value = filterSlider.value;
@@ -440,7 +440,7 @@
                 audioElements[audioSrc] = audioElement;
 
                 let track = audioContext.createMediaElementSource(audioElement);
-                track.connect(gainNode).connect(dryGainNode).connect(volumeNode).connect(filterNode).connect(audioContext.destination);
+                track.connect(gainNode).connect(dryGainNode).connect(filterNode).connect(audioContext.destination);
                 track.connect(gainNode).connect(wetGainNode).connect(reverbNode).connect(audioContext.destination);
                 //gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 3);
                 //setTimeout(() => {
@@ -580,7 +580,7 @@
                 
                     function playNextAudio(index, totalDuration) {
 
-                        if (totalDuration >= 5000) {
+                        if (totalDuration >= 10000) {
                             console.log("Total play time exceeded 10 seconds, stopping playback.");
                             return;
                         }
@@ -630,7 +630,7 @@
 
                     setTimeout(() => {
                         circle.transition()
-                            .duration(5000)
+                            .duration(10000)
                             .attr("fill-opacity", 0)
                             .attr("stroke-opacity", 0)
                             .remove();
@@ -656,9 +656,9 @@
 
     <script>
         // 只有在用户点击icon时slider才出现
-        document.getElementById('volumeIcon').addEventListener('click', function() {
-            toggleSlider('volumeSliderWrapper');
-        });
+        //document.getElementById('volumeIcon').addEventListener('click', function() {
+        //    toggleSlider('volumeSliderWrapper');
+        //});
 
         document.getElementById('reverbIcon').addEventListener('click', function() {
             toggleSlider('reverbSliderWrapper');
