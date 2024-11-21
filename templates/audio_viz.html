@@ -470,6 +470,28 @@
                 isUserInteracted = true;
             });
 
+            let circle = null; // currentSelection
+            let maxDuration = 30000;
+            let timeouts = []; // Array to store active timeout IDs
+
+            function stopAllAudio() {
+                isPlaying = false;
+
+                // Pause all audio elements currently playing
+                for (const audioElement of Object.values(audioElements)) {
+                    if (!audioElement.paused) {
+                        audioElement.pause();
+                        audioElement.currentTime = 0;
+                    }
+                }
+
+                // Clear all pending timeouts
+                timeouts.forEach(timeout => clearTimeout(timeout));
+                timeouts = []; // Reset the timeout array
+            }
+
+            // stopAllAudio();
+
             // Add dots
             gDot.selectAll("circle")
                 .data(data)
@@ -541,26 +563,6 @@
                 }
             });
 
-            let circle = null; // currentSelection
-            let maxDuration = 30000;
-            let timeouts = []; // Array to store active timeout IDs
-
-            function stopAllAudio() {
-                isPlaying = false;
-
-                // Pause all audio elements currently playing
-                for (const audioElement of Object.values(audioElements)) {
-                    if (!audioElement.paused) {
-                        audioElement.pause();
-                        audioElement.currentTime = 0;
-                    }
-                }
-
-                // Clear all pending timeouts
-                timeouts.forEach(timeout => clearTimeout(timeout));
-                timeouts = []; // Reset the timeout array
-            }
-
             svg.on("click", function(event) {
                 // 获取点击位置
                 const [clickX, clickY] = d3.pointer(event);
@@ -617,7 +619,9 @@
                         if (shuffledPoints.length === 0) {
                             console.log(Object.values(audioElements));
                             stopAllAudio();
-                            console.error("No points found in the selected circle.");
+                            // console.error("No points found in the selected circle.");
+                            console.log("No points selected. Playing stops.");
+                            if(circle) {circle.remove();}
                             return;
                         }
                         if (index >= shuffledPoints.length) {
