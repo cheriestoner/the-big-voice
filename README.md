@@ -1,5 +1,7 @@
 # Keylab - The Big Voice
 
+[by Sound Studies Group](https://soundstudiesgroup.net)
+
 **Team:** 
 
 Lio (Frontend dev)
